@@ -1,19 +1,17 @@
 <template>
-  <section id="app">
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-menu is-active">
-        <div class="navbar-end">
-          <router-link to="login">Log In</router-link>
-        </div>
-      </div>
-    </nav>
+  <div id="app">
+    <dwcmnav></dwcmnav>
     <router-view></router-view>
-  </section>
+  </div>
 </template>
 
 <script>
+import dwcmnav from '@/components/DWCMNav'
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    dwcmnav
+  }
 }
 </script>
 
