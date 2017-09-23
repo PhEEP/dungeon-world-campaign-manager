@@ -1,6 +1,11 @@
 <template>
-  <nav class="ui navbar">
-    <a href="#" @click.prevent="logOut" v-show="showLogout" class="ui">Log Out</a>
+  <nav class="ui fixed inverted menu" v-show="loggedIn">
+    <div class="ui container">
+      <div class="item header">
+        Dungeon World Campaign Manager
+      </div>
+      <a href="#" @click.prevent="logOut" class="item">Log Out</a>
+    </div>
   </nav>
 </template>
 
@@ -10,7 +15,7 @@ export default {
   name: 'dwcm-nav',
   data () {
     return {
-      showLogout: false
+      loggedIn: false
     }
   },
   methods: {
@@ -24,7 +29,7 @@ export default {
   mounted () {
     let currentUser = firebase.auth().currentUser
 
-    if (currentUser) this.showLogout = true
+    if (currentUser) this.loggedIn = true
   },
   computed: {
 

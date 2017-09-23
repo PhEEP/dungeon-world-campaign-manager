@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="ui">
+  <div id="app">
     <dwcm-nav></dwcm-nav>
     <router-view></router-view>
   </div>
@@ -16,5 +16,7 @@ export default {
 </script>
 
 <style>
-
+#app {
+  height:100%
+}
 </style>

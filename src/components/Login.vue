@@ -1,15 +1,35 @@
 <template>
-  <div class="login ui">
-    <h1 class="ui title">Sign In</h1>
-    <div class="ui input">
-      <input type="text" placeholder="Email" v-model="email">
+<div class="ui middle aligned center aligned grid">
+  <div class="column login">
+    <h2 class="ui orange image header">
+      <img src="http://placehold.it/50x50?color=red" alt="" class="image">
+      <div class="content">Speak, friend, and enter</div>
+    </h2>
+    <div class="ui large form">
+      <div class="ui stacked segment">
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" placeholder="Email" v-model="email">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" placeholder="Password" v-model="password">
+          </div>
+        </div>
+        <button class="ui fluid large orange submit button" @click="login">Connection</button>
+      </div>
     </div>
-    <div class="ui input">
-      <input type="password" placeholder="Password" v-model="password">
+    <div class="ui message">
+      <p>Don't have an account?
+        <router-link to="/signup">Create one!</router-link>
+      </p>
     </div>
-    <button class="ui button" @click="login">Connection</button>
-    <p>Don't have an account? <router-link to="/signup">Create one!</router-link></p>
   </div>
+</div>
+
 </template>
 
 <script>
@@ -27,9 +47,10 @@ export default {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
       .then(
         (user) => {
-          alert('connected!')
+          this.$router.replace('hello')
         },
         (err) => {
+          console.log(err)
           alert('Oops, ' + err.message)
         }
       )
@@ -39,7 +60,10 @@ export default {
 </script>
 
 <style>
-.login {
-  max-width: 400px;
+.grid {
+  height:100%;
+}
+.column {
+  max-width:400px;
 }
 </style>
