@@ -1,27 +1,33 @@
 <template>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <div class="navbar-item">
-          <img src="https://placehold.it/150x40?text=DWCM" alt="">
-        </div>
-      </div>
-      <div class="navbar-menu" v-bind:class="{'is-active': showMenu}">
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <a href="#" class="navbar-link">Log Out</a>
-          </div>
-        </div>
-      </div>
-    </nav>
+  <nav class="ui navbar">
+    <a href="#" @click.prevent="logOut" v-show="showLogout" class="ui">Log Out</a>
+  </nav>
 </template>
 
 <script>
+import firebase from 'firebase'
 export default {
   name: 'dwcm-nav',
   data () {
     return {
-      showMenu: false
+      showLogout: false
     }
+  },
+  methods: {
+    logOut () {
+      firebase.auth().signOut()
+      .then(() => {
+        this.$router.replace('login')
+      })
+    }
+  },
+  mounted () {
+    let currentUser = firebase.auth().currentUser
+
+    if (currentUser) this.showLogout = true
+  },
+  computed: {
+
   }
 }
 </script>

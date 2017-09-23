@@ -1,9 +1,13 @@
 <template>
-  <div class="login container">
-    <h1 class="title">Sign In</h1>
-    <input class="input" type="text" placeholder="Email" v-model="email">
-    <input class="input" type="password" placeholder="Password" v-model="password">
-    <button class="button" @click="login">Connection</button>
+  <div class="login ui">
+    <h1 class="ui title">Sign In</h1>
+    <div class="ui input">
+      <input type="text" placeholder="Email" v-model="email">
+    </div>
+    <div class="ui input">
+      <input type="password" placeholder="Password" v-model="password">
+    </div>
+    <button class="ui button" @click="login">Connection</button>
     <p>Don't have an account? <router-link to="/signup">Create one!</router-link></p>
   </div>
 </template>
