@@ -1,13 +1,13 @@
 <template>
-<div class="ui middle aligned center aligned grid">
-  <div class="column login">
+<div class="ui middle aligned center aligned grid login">
+  <div class="column ui segment">
     <h2 class="ui orange image header">
       <img src="http://placehold.it/50x50?color=red" alt="" class="image">
       <div class="content">Speak, friend, and enter</div>
     </h2>
     <div class="ui large form">
       <div class="ui stacked segment">
-        <div class="field">
+        <div class="field" :class="">
           <div class="ui left icon input">
             <i class="user icon"></i>
             <input type="text" placeholder="Email" v-model="email">
@@ -65,5 +65,12 @@ export default {
 }
 .column {
   max-width:400px;
+}
+/* replace this with some calculated image from an api or something */
+.login {
+  background-image: url('https://placeimg.com/1920/1080/nature');
+  background-size: cover;
+  background-position: center;
+  background-repeat:no-repeat;
 }
 </style>
