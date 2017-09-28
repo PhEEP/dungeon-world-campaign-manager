@@ -4,9 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import firebase from 'firebase'
-import config from './firebase'
+import { config } from './helpers/firebaseConfig'
 import '../node_modules/semantic-ui-css/semantic.min.css'
-// import semantic from 'semantic'
 
 Vue.config.productionTip = false
 

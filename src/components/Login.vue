@@ -20,6 +20,7 @@
           </div>
         </div>
         <button class="ui fluid large orange submit button" @click="login">Connection</button>
+        <button class="ui fluid large blue submit button" @click="loginWithGoogle" >Got Google?</button>
       </div>
     </div>
     <div class="ui message">
@@ -34,6 +35,7 @@
 
 <script>
 import firebase from 'firebase'
+const provider = new firebase.auth.GoogleAuthProvider()
 export default {
   name: 'login',
   data () {
@@ -45,6 +47,18 @@ export default {
   methods: {
     login () {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+      .then(
+        (user) => {
+          this.$router.replace('hello')
+        },
+        (err) => {
+          console.log(err)
+          alert('Oops, ' + err.message)
+        }
+      )
+    },
+    loginWithGoogle () {
+      firebase.auth().signInWithPopup(provider)
       .then(
         (user) => {
           this.$router.replace('hello')
