@@ -7,6 +7,12 @@
       <div class="item">
         <router-link to="/campaigns">Campaigns</router-link>
       </div>
+      <div class="item">
+        <router-link to="/characters">Characters</router-link>
+      </div>
+      <div class="item">
+        <router-link to="/compendium">Compendium</router-link>
+      </div>
       <div class="right item">
         <router-link to="/profile">
           <img class="ui avatar image" :src="userPhoto">

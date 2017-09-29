@@ -4,6 +4,8 @@ import Hello from '@/components/Hello'
 import Login from '@/components/Login'
 import SignUp from '@/components/SignUp'
 import Campaigns from '@/components/Campaigns'
+import Characters from '@/components/Characters'
+import Compendium from '@/components/Compendium'
 import Profile from '@/components/Profile'
 import DWCMNav from '@/components/DWCMNav'
 import firebase from 'firebase'
@@ -33,6 +35,24 @@ let router = new Router({
       path: '/campaigns',
       name: 'Campaigns',
       components: { default: Campaigns, nav: DWCMNav },
+      props: { default: true, nav: true },
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/characters',
+      name: 'Characters',
+      components: { default: Characters, nav: DWCMNav },
+      props: { default: true, nav: true },
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/compendium',
+      name: 'Compendium',
+      components: { default: Compendium, nav: DWCMNav },
       props: { default: true, nav: true },
       meta: {
         requiresAuth: true
