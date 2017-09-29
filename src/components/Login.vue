@@ -19,8 +19,8 @@
             <input type="password" placeholder="Password" v-model="password">
           </div>
         </div>
-        <button class="ui fluid large orange submit button" @click="login">Connection</button>
-        <button class="ui fluid large blue submit button" @click="loginWithGoogle" >Got Google?</button>
+        <button class="ui fluid large orange submit button" @click="login">Log In</button>
+        <button class="ui fluid large blue submit button" @click="loginWithGoogle" >With Google</button>
       </div>
     </div>
     <div class="ui message">
@@ -35,6 +35,7 @@
 
 <script>
 import firebase from 'firebase'
+import { handleUserLogin } from '../helpers/handleUserLogin'
 const provider = new firebase.auth.GoogleAuthProvider()
 export default {
   name: 'login',
@@ -49,6 +50,7 @@ export default {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
       .then(
         (user) => {
+          handleUserLogin(user)
           this.$router.replace('hello')
         },
         (err) => {
@@ -61,6 +63,7 @@ export default {
       firebase.auth().signInWithPopup(provider)
       .then(
         (user) => {
+          handleUserLogin(user)
           this.$router.replace('hello')
         },
         (err) => {

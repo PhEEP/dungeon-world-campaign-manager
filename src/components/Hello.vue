@@ -3,7 +3,7 @@
     <dwcm-nav></dwcm-nav>
     <div class="ui main container">
       <section class="ui section">
-        <h1 class="title">Dungeon World Campaign Manager</h1>
+          <p>Welcome to the Dungeon World Campaign Manager (DWCM)!</p>
       </section>
     </div>
   </div>
@@ -18,11 +18,15 @@ export default {
   },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      noCampaigns: true,
+      campaignName: ''
     }
   },
-  mounted () {
-    console.log('mounted hello')
+  methods: {
+    createNewCampaign () {
+      alert(this.campaignName)
+    }
   }
 }
 </script>

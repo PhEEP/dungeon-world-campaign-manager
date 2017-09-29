@@ -20,7 +20,6 @@
           </div>
         </div>
         <button class="ui fluid large orange submit button" @click="signUp">Sign Up</button>
-        <button class="ui fluid large blue submit button" @click="loginWithGoogle" >Got Google?</button>
       </div>
     </div>
     <div class="ui message">
@@ -34,7 +33,6 @@
 
 <script>
 import firebase from 'firebase'
-const provider = new firebase.auth.GoogleAuthProvider()
 export default {
   name: 'signup',
   data () {
@@ -47,22 +45,17 @@ export default {
     signUp () {
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
       .then((user) => {
+        firebase.database().ref('users/' + user.uid).set({
+          displayName: user.displayName,
+          email: user.email,
+          avatar: user.photoURL,
+          userID: user.uid
+        })
         alert('Your Account has been created!')
+        this.$router.replace('hello')
       }, (err) => {
         alert('Oops, ' + err.message)
       })
-    },
-    loginWithGoogle () {
-      firebase.auth().signInWithPopup(provider)
-      .then(
-        (user) => {
-          this.$router.replace('hello')
-        },
-        (err) => {
-          console.log(err)
-          alert('Oops, ' + err.message)
-        }
-      )
     }
   }
 }

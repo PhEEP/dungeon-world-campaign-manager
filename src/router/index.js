@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import Hello from '@/components/Hello'
 import Login from '@/components/Login'
 import SignUp from '@/components/SignUp'
+import Campaigns from '@/components/Campaigns'
+import Profile from '@/components/Profile'
+import DWCMNav from '@/components/DWCMNav'
 import firebase from 'firebase'
 
 Vue.use(Router)
@@ -20,7 +23,26 @@ let router = new Router({
     {
       path: '/hello',
       name: 'Hello',
-      component: Hello,
+      components: { default: Hello, nav: DWCMNav },
+      props: { default: true, nav: true },
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/campaigns',
+      name: 'Campaigns',
+      components: { default: Campaigns, nav: DWCMNav },
+      props: { default: true, nav: true },
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      components: { default: Profile, nav: DWCMNav },
+      props: { default: true, nav: true },
       meta: {
         requiresAuth: true
       }

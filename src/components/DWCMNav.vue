@@ -2,11 +2,16 @@
   <div class="ui fixed inverted pointing menu" v-show="loggedIn">
     <div class="ui container">
       <div class="item header">
-        Dungeon World Campaign Manager
+        <router-link to="/">DWCM</router-link>
+      </div>
+      <div class="item">
+        <router-link to="/campaigns">Campaigns</router-link>
       </div>
       <div class="right item">
-        <img class="ui avatar image" :src="userPhoto">
-        <span>{{ userName }}</span>
+        <router-link to="/profile">
+          <img class="ui avatar image" :src="userPhoto">
+          <span>{{ userName }}</span>
+        </router-link>
       </div>
       <a href="#" @click.prevent="logOut" class="item">Log Out</a>
     </div>
