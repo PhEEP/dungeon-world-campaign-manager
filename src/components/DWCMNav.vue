@@ -46,9 +46,7 @@ export default {
     }
   },
   mounted () {
-    console.log('mounted nav')
     let currentUser = firebase.auth().currentUser
-    console.log(currentUser)
     if (currentUser) {
       this.loggedIn = true
       this.userName = currentUser.displayName
@@ -58,7 +56,6 @@ export default {
     }
   },
   updated () {
-    console.log('updated nav')
     let currentUser = firebase.auth().currentUser
     if (currentUser) {
       this.loggedIn = true
