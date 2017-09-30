@@ -22,6 +22,16 @@
         <h2 v-for="campaign in campaigns" v-bind:key="campaign.key">
           {{ campaign.name }}
         </h2>
+        <div class="ui form">
+          <div class="ui field">
+            <label for="">Notes</label>
+            <textarea rows="3" v-model="note"></textarea>
+          </div>
+          <div class="ui field button" @click="submitNote">Submit</div>
+        </div>
+        <ul>
+          <li v-for="note in campaignNotes" v-bind:key="note.key">{{ note }}</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -39,37 +49,70 @@ export default {
       noCampaigns: true,
       campaignName: '',
       userId: '',
-      campaigns: ''
+      campaigns: '',
+      campaignId: '',
+      note: '',
+      campaignNotes: []
     }
   },
   components: {
     'dwcm-nav': DWCMNav
   },
-  mounted () {
+  created () {
     let user = firebase.auth().currentUser
     if (user) {
       this.userId = user.uid
       this.getUserCampaigns(this.userId)
     }
   },
+  mounted () {
+
+  },
   updated () {
+
   },
   methods: {
     createNewCampaign () {
-      console.log('creating new campaign')
       handleCampaignCreate(this.userId, this.campaignName)
       this.getUserCampaigns(this.userId)
     },
     getUserCampaigns (userId) {
-      console.log('getting campaigns')
       firebase.database().ref('users/' + userId + '/campaigns').once('value')
       .then((snapshot) => {
         if (snapshot.val()) {
+          for (var thecampaign in snapshot.val()) {
+            this.campaignId = thecampaign
+            this.getNotes(thecampaign)
+          }
           this.campaigns = snapshot.val()
           this.campaignName = snapshot.val().name
           this.noCampaigns = false
         }
       })
+    },
+    getNotes (campaignId) {
+      let campaignNotesRef = firebase.database().ref('campaigns/' + this.campaignId + '/notes')
+      campaignNotesRef.on('child_added', (snapshot) => {
+        console.log(snapshot.val())
+        let note = snapshot.val()
+        this.notes.unshift(note)
+      })
+      campaignNotesRef.on('value', (snapshot) => {
+        console.log('value from campaign notes ref value')
+        let campaignNotes = snapshot.val()
+        console.log(campaignNotes)
+        this.campaignNotes = campaignNotes
+      })
+    },
+    submitNote () {
+      if (this.note.trim()) {
+        firebase.database().ref('campaigns/' + this.campaignId + '/notes').push(this.note, (err) => {
+          if (err) {
+            throw err
+          }
+          this.note = ''
+        })
+      }
     }
   }
 }
