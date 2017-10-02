@@ -5,34 +5,27 @@
       <div class="ui vertical segment">
         <h1 class="header">Campaigns</h1>
       </div>
-      <section v-if="noCampaigns"class="ui section">
-          <form action="#" class="ui large form" @submit.prevent="createNewCampaign">
-            <p>Looks like you don't have any campaigns, fill out the form below to create one!</p>
-            <div class="ui stacked segment">
-              <div class="field">
-                <div class="ui input">
-                  <input type="text" placeholder="Your engaging campaign name!" v-model="campaignName">
+      <transition name="fade">
+        <section v-if="noCampaigns" class="ui section">
+            <form action="#" class="ui large form" @submit.prevent="createNewCampaign">
+              <p>Looks like you don't have any campaigns, fill out the form below to create one!</p>
+              <div class="ui stacked segment">
+                <div class="field">
+                  <div class="ui input">
+                    <input type="text" placeholder="Your engaging campaign name!" v-model="campaignName">
+                  </div>
                 </div>
+                <button class="ui button">Create Campaign</button>
               </div>
-              <button class="ui button">Create Campaign</button>
-            </div>
-          </form>
-      </section>
-      <div class="ui vertical segment">
-        <h2 v-for="campaign in campaigns" v-bind:key="campaign.key">
-          {{ campaign.name }}
-        </h2>
-        <div class="ui form">
-          <div class="ui field">
-            <label for="">Notes</label>
-            <textarea rows="3" v-model="note"></textarea>
-          </div>
-          <div class="ui field button" @click="submitNote">Submit</div>
+            </form>
+        </section>
+      </transition>
+      <transition name="fade">
+        <div class="ui vertical segment" v-if="!noCampaigns">
+          <h2 v-text="campaignName"></h2>
+          <campaign-notes v-bind:campaignId="campaignId"></campaign-notes>
         </div>
-        <ul>
-          <li v-for="note in campaignNotes" v-bind:key="note.key">{{ note }}</li>
-        </ul>
-      </div>
+      </transition>
     </div>
   </div>
 </div>
@@ -41,6 +34,7 @@
 <script>
 import DWCMNav from '@/components/DWCMNav'
 import { handleCampaignCreate } from '@/helpers/handleCampaignCreate'
+import CampaignNotes from '@/components/CampaignNotes'
 import firebase from 'firebase'
 export default {
   name: 'campaigns',
@@ -50,13 +44,12 @@ export default {
       campaignName: '',
       userId: '',
       campaigns: '',
-      campaignId: '',
-      note: '',
-      campaignNotes: []
+      campaignId: ''
     }
   },
   components: {
-    'dwcm-nav': DWCMNav
+    'dwcm-nav': DWCMNav,
+    'campaign-notes': CampaignNotes
   },
   created () {
     let user = firebase.auth().currentUser
@@ -71,6 +64,11 @@ export default {
   updated () {
 
   },
+  computed: {
+    descendingCampaignNotes () {
+      return this.campaignNotes.reverse()
+    }
+  },
   methods: {
     createNewCampaign () {
       handleCampaignCreate(this.userId, this.campaignName)
@@ -79,44 +77,26 @@ export default {
     getUserCampaigns (userId) {
       firebase.database().ref('users/' + userId + '/campaigns').once('value')
       .then((snapshot) => {
-        if (snapshot.val()) {
-          for (var thecampaign in snapshot.val()) {
-            this.campaignId = thecampaign
-            this.getNotes(thecampaign)
-          }
-          this.campaigns = snapshot.val()
-          this.campaignName = snapshot.val().name
+        snapshot.forEach((childSnapshot) => {
+          let thisCampaign = childSnapshot.val()
+          console.log(thisCampaign, 'this campaign')
+          this.campaignId = thisCampaign.campaignId
+          this.campaigns = thisCampaign
+          this.campaignName = thisCampaign.name
           this.noCampaigns = false
-        }
-      })
-    },
-    getNotes (campaignId) {
-      let campaignNotesRef = firebase.database().ref('campaigns/' + this.campaignId + '/notes')
-      campaignNotesRef.on('child_added', (snapshot) => {
-        console.log(snapshot.val())
-        let note = snapshot.val()
-        this.notes.unshift(note)
-      })
-      campaignNotesRef.on('value', (snapshot) => {
-        console.log('value from campaign notes ref value')
-        let campaignNotes = snapshot.val()
-        console.log(campaignNotes)
-        this.campaignNotes = campaignNotes
-      })
-    },
-    submitNote () {
-      if (this.note.trim()) {
-        firebase.database().ref('campaigns/' + this.campaignId + '/notes').push(this.note, (err) => {
-          if (err) {
-            throw err
-          }
-          this.note = ''
+          return true
         })
-      }
+      })
     }
   }
 }
 </script>
 
 <style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0
+}
 </style>

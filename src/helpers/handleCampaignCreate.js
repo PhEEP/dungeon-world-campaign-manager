@@ -5,8 +5,16 @@ export const handleCampaignCreate = (userId, campaignName) => {
   let campaignKey = campaignsRef.push().getKey()
   let campaignData = {
     name: campaignName,
-    gm: userId
+    gm: userId,
+    notes: [],
+    characters: [],
+    compendium: []
   }
   campaignsRef.child(campaignKey).set(campaignData)
-  userRef.push({name: campaignName})
+  userRef.push(
+    {
+      name: campaignName,
+      campaignId: campaignKey
+    }
+  )
 }
