@@ -1,8 +1,8 @@
 <template>
 <div>
+  <div class="ui header">Notes</div>
   <div class="ui form">
       <div class="ui field">
-        <label for="">Notes</label>
         <textarea rows="3" v-model="note"></textarea>
       </div>
       <div class="ui field button" @click="submitNote">Submit</div>

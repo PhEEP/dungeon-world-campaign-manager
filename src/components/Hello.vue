@@ -1,6 +1,5 @@
 <template>
   <div>
-    <dwcm-nav></dwcm-nav>
     <div class="ui main container">
       <div class="ui vertical masthead center aligned segment">
         <div class="ui text container">
@@ -39,12 +38,8 @@
 
 <script>
 import firebase from 'firebase'
-import DWCMNav from '@/components/DWCMNav'
 export default {
   name: 'hello',
-  components: {
-    'dwcm-nav': DWCMNav
-  },
   data () {
     return {
       userName: ''
