@@ -7,11 +7,10 @@
       </div>
       <div class="ui field button" @click="submitNote">Submit</div>
     </div>
-  <campaign-note v-for="( note, id ) in reversedCampaignNotes" v-bind:key="id">
-    <h5 slot="header">{{ note.noteCreateDate }}</h5>
-    {{id}}
-    <p slot="body">{{ note.note }}</p>
-  </campaign-note>
+    <campaign-note v-for="( note, id ) in campaignNotes" v-bind:key="id">
+      <h5 slot="date">{{ note.noteCreateDate }}</h5>
+      <p slot="body">{{ note.note }}</p>
+    </campaign-note>
 </div>
 </template>
 
@@ -31,16 +30,14 @@ export default {
   components: {
     'campaign-note': CampaignNote
   },
-  created () {
+  mounted () {
     this.getNotes(this.campaignId)
   },
   methods: {
     getNotes (campaignId) {
       let campaignNotesRef = firebase.database().ref('campaigns/' + this.campaignId + '/notes')
-      campaignNotesRef.once('value', (snapshot) => {
-        snapshot.forEach((data) => {
-          this.campaignNotes.push(data)
-        })
+      campaignNotesRef.orderByChild('noteCreateDate').on('child_added', (snapshot) => {
+        this.campaignNotes.unshift(snapshot.val())
       })
     },
     submitNote () {
@@ -56,7 +53,6 @@ export default {
           }
           this.note = ''
         })
-        this.campaignNotes.push(newNote)
       }
     }
   },
