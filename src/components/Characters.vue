@@ -13,6 +13,9 @@ export default {
     return {
       characters: ''
     }
+  },
+  mounted () {
+
   }
 }
 </script>

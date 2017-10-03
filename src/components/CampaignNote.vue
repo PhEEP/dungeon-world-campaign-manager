@@ -1,5 +1,6 @@
 <template>
 <div>
+  <slot name="title"></slot>
   <slot name="date">
     Create Date
   </slot>

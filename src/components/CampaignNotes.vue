@@ -3,12 +3,16 @@
   <div class="ui header">Notes</div>
   <div class="ui form">
       <div class="ui field">
+        <input type="text" v-model="noteTitle">
+      </div>
+      <div class="ui field">
         <textarea rows="3" v-model="note"></textarea>
       </div>
       <div class="ui field button" @click="submitNote">Submit</div>
     </div>
 
       <campaign-note v-for="( note, id ) in campaignNotes" v-bind:key="id">
+        <h3 slot="title">{{ note.noteTitle }}</h3>
         <h5 slot="date">{{ note.noteCreateDate }}</h5>
         <p slot="body">{{ note.note }}</p>
       </campaign-note>
@@ -25,7 +29,8 @@ export default {
   data () {
     return {
       campaignNotes: [],
-      note: ''
+      note: '',
+      noteTitle: ''
     }
   },
   props: ['campaignId'],
@@ -46,6 +51,7 @@ export default {
       if (this.note.trim()) {
         let now = moment().format()
         let newNote = {
+          noteTitle: this.noteTitle,
           noteCreateDate: now,
           note: this.note
         }
