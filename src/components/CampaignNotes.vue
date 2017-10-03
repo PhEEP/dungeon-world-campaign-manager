@@ -12,6 +12,7 @@
     </div>
 
       <campaign-note v-for="( note, id ) in campaignNotes" v-bind:key="id">
+        //@TODO MAKE THESE HEADER/SUBHEADER
         <h3 slot="title">{{ note.noteTitle }}</h3>
         <h5 slot="date">{{ note.noteCreateDate }}</h5>
         <p slot="body">{{ note.note }}</p>
