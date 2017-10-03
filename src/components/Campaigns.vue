@@ -4,21 +4,19 @@
       <div class="ui vertical segment">
         <h1 class="header">Campaigns</h1>
       </div>
-      <transition name="fade">
-        <section v-if="noCampaigns" class="ui section">
-            <form action="#" class="ui large form" @submit.prevent="createNewCampaign">
-              <p>Looks like you don't have any campaigns, fill out the form below to create one!</p>
-              <div class="ui stacked segment">
-                <div class="field">
-                  <div class="ui input">
-                    <input type="text" placeholder="Your engaging campaign name!" v-model="campaignName">
-                  </div>
+      <section v-if="noCampaigns" class="ui section">
+          <form action="#" class="ui large form" @submit.prevent="createNewCampaign">
+            <p>Looks like you don't have any campaigns, fill out the form below to create one!</p>
+            <div class="ui stacked segment">
+              <div class="field">
+                <div class="ui input">
+                  <input type="text" placeholder="Your engaging campaign name!" v-model="campaignName">
                 </div>
-                <button class="ui button">Create Campaign</button>
               </div>
-            </form>
-        </section>
-      </transition>
+              <button class="ui button">Create Campaign</button>
+            </div>
+          </form>
+      </section>
       <transition name="fade">
         <div class="ui vertical segment" v-if="!noCampaigns">
           <h2 v-text="campaignName"></h2>

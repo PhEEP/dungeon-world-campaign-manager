@@ -7,10 +7,12 @@
       </div>
       <div class="ui field button" @click="submitNote">Submit</div>
     </div>
-    <campaign-note v-for="( note, id ) in campaignNotes" v-bind:key="id">
-      <h5 slot="date">{{ note.noteCreateDate }}</h5>
-      <p slot="body">{{ note.note }}</p>
-    </campaign-note>
+
+      <campaign-note v-for="( note, id ) in campaignNotes" v-bind:key="id">
+        <h5 slot="date">{{ note.noteCreateDate }}</h5>
+        <p slot="body">{{ note.note }}</p>
+      </campaign-note>
+
 </div>
 </template>
 

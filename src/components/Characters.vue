@@ -8,7 +8,12 @@
 
 <script>
 export default {
-  name: 'characters'
+  name: 'characters',
+  data () {
+    return {
+      characters: ''
+    }
+  }
 }
 </script>
 

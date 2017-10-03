@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <slot name="date">
-      Create Date
-    </slot>
-    <slot name="body">
-      Body Text
-    </slot>
-    <hr>
-  </div>
+<div>
+  <slot name="date">
+    Create Date
+  </slot>
+  <slot name="body">
+    Body Text
+  </slot>
+  <hr>
+</div>
 </template>
 
 <script>
@@ -18,7 +18,5 @@
 </script>
 
 <style>
-
-
 </style>
 
