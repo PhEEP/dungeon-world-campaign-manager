@@ -6,8 +6,8 @@
 
 <script>
 export default {
-  name: 'campaign-characters',
-  props: ['campaignId']
+  name: 'CampaignCharacters',
+  props: [ 'campaignId' ]
 }
 </script>
 

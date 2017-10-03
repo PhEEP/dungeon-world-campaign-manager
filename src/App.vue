@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <dwcm-nav></dwcm-nav>
+    <DWCMNav />
     <transition name="slide">
       <router-view></router-view>
     </transition>
@@ -10,14 +10,17 @@
 <script>
 import DWCMNav from '@/components/DWCMNav'
 export default {
-  name: 'app',
+  name: 'App',
   components: {
-    'dwcm-nav': DWCMNav
+    DWCMNav
   }
 }
 </script>
 
 <style>
+#app {
+  height:100%;
+}
 .main {
   margin-top:7rem;
 }

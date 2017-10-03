@@ -55,9 +55,9 @@
           </div>
           <hr>
           <transition name="fade">
-            <campaign-notes v-bind:campaignId="campaignId" v-if="activeSection === 'notes'"></campaign-notes>
-            <campaign-characters v-bind:campaignId="campaignId" v-if="activeSection === 'characters'"></campaign-characters>
-            <campaign-compendium v-bind:campaignId="campaignId" v-if="activeSection === 'compendium'"></campaign-compendium>
+            <CampaignNotes v-bind:campaignId="campaignId" v-if="activeSection === 'notes'" />
+            <CampaignCharacters v-bind:campaignId="campaignId" v-if="activeSection === 'characters'" />
+            <CampaignCompendium v-bind:campaignId="campaignId" v-if="activeSection === 'compendium'" />
           </transition>
         </div>
       </transition>
@@ -72,7 +72,7 @@ import CampaignCharacters from '@/components/CampaignCharacters'
 import CampaignCompendium from '@/components/CampaignCompendium'
 import firebase from 'firebase'
 export default {
-  name: 'campaigns',
+  name: 'Campaigns',
   data () {
     return {
       noCampaigns: true,
@@ -84,9 +84,7 @@ export default {
     }
   },
   components: {
-    'campaign-notes': CampaignNotes,
-    'campaign-characters': CampaignCharacters,
-    'campaign-compendium': CampaignCompendium
+    CampaignNotes, CampaignCharacters, CampaignCompendium
   },
   created () {
     let user = firebase.auth().currentUser

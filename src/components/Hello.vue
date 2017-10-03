@@ -39,7 +39,7 @@
 <script>
 import firebase from 'firebase'
 export default {
-  name: 'hello',
+  name: 'Hello',
   data () {
     return {
       userName: ''

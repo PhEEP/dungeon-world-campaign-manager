@@ -1,5 +1,5 @@
 <template>
-<div class="ui middle aligned center aligned grid signup">
+<div class="ui middle aligned center aligned centerAligned grid signup">
   <div class="column ui segment">
     <h2 class="ui orange image header">
       <img src="http://placehold.it/50x50?color=red" alt="" class="image">
@@ -34,7 +34,7 @@
 <script>
 import firebase from 'firebase'
 export default {
-  name: 'signup',
+  name: 'Signup',
   data () {
     return {
       email: '',
@@ -61,7 +61,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.centerAligned {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
 .grid {
   height:100%;
 }

@@ -7,8 +7,8 @@
 
 <script>
 export default {
-  name: 'campaign-compendium',
-  props: ['campaignId']
+  name: 'CampaignCompendium',
+  props: [ 'campaignId' ]
 }
 </script>
 

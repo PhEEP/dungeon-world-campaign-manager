@@ -12,7 +12,7 @@
 <script>
 import firebase from 'firebase'
 export default {
-  name: 'characters',
+  name: 'Characters',
   data () {
     return {
       characters: ''

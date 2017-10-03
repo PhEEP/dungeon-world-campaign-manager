@@ -34,9 +34,9 @@ export default {
       noteTitle: ''
     }
   },
-  props: ['campaignId'],
+  props: [ 'campaignId' ],
   components: {
-    'campaign-note': CampaignNote
+    CampaignNote
   },
   mounted () {
     this.getNotes(this.campaignId)

@@ -1,5 +1,5 @@
 <template>
-<div class="ui middle aligned center aligned grid login">
+<div class="ui middle aligned center aligned centerAligned grid login">
   <div class="column ui segment">
     <h2 class="ui orange image header">
       <img src="http://placehold.it/50x50?color=red" alt="" class="image">
@@ -38,7 +38,7 @@ import firebase from 'firebase'
 import { handleUserLogin } from '../helpers/handleUserLogin'
 const provider = new firebase.auth.GoogleAuthProvider()
 export default {
-  name: 'login',
+  name: 'Login',
   data () {
     return {
       email: '',
@@ -76,7 +76,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.centerAligned {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
 .grid {
   height:100%;
 }

@@ -27,7 +27,7 @@
 <script>
 import firebase from 'firebase'
 export default {
-  name: 'dwcm-nav',
+  name: 'DWCMNav',
   data () {
     return {
       loggedIn: false,
