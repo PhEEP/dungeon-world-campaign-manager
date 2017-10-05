@@ -33,6 +33,7 @@
 
 <script>
 import firebase from 'firebase'
+require('firebase/firestore') //this line is crucial, firebase >=4.5.0 required
 export default {
   name: 'Signup',
   data () {
@@ -45,6 +46,19 @@ export default {
     signUp () {
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
       .then((user) => {
+        firebase.firestore().doc('users/' + user.uid).set({
+          displayName: user.displayName,
+          email: user.email,
+          avatar: user.photoURL,
+          userID: user.uid
+        })
+        .then(() => {
+          console.log('User added to Firestore!')
+          this.$router.replace('hello')
+        })
+        .catch((err) => {
+          console.log(err)
+        })
         firebase.database().ref('users/' + user.uid).set({
           displayName: user.displayName,
           email: user.email,
