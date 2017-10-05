@@ -33,7 +33,7 @@
 
 <script>
 import firebase from 'firebase'
-require('firebase/firestore') //this line is crucial, firebase >=4.5.0 required
+require('firebase/firestore')
 export default {
   name: 'Signup',
   data () {
