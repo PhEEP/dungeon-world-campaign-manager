@@ -5,6 +5,7 @@ import Login from '@/components/Login'
 import SignUp from '@/components/SignUp'
 import Campaigns from '@/components/Campaigns'
 import Characters from '@/components/Characters'
+import CharacterNew from '@/components/CharacterNew'
 import Compendium from '@/components/Compendium'
 import Profile from '@/components/Profile'
 import DWCMNav from '@/components/DWCMNav'
@@ -21,6 +22,16 @@ let router = new Router({
     {
       path: '/',
       redirect: '/login'
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/signup',
+      name: 'SignUp',
+      component: SignUp
     },
     {
       path: '/hello',
@@ -50,6 +61,13 @@ let router = new Router({
       }
     },
     {
+      path: '/characters/new/:className',
+      name: 'New Character',
+      components: { default: CharacterNew, nav: DWCMNav },
+      props: { default: true, nav: true },
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/compendium',
       name: 'Compendium',
       components: { default: Compendium, nav: DWCMNav },
@@ -66,16 +84,6 @@ let router = new Router({
       meta: {
         requiresAuth: true
       }
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/signup',
-      name: 'SignUp',
-      component: SignUp
     }
   ]
 })
