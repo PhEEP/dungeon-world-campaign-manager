@@ -17,6 +17,8 @@
             <input type="text" name="characterName" class="ui" placeholder="Who are you?" v-model="characterName">
           </div>
         </div>
+      </div>
+      <div class="ui stackable grid">
         <div class="four wide column">
           <h3 class="ui header">Drive
             <div class="sub header">Choose one or write your own</div>
@@ -27,15 +29,17 @@
             </div>
             <div class="ui form">
               <div class="field">
-                <textarea rows="4" v-model="drive.description" :placeholder="baseClass.drive.description"/>
+                <textarea rows="4" v-model="drive.description" :placeholder="baseClass.drive.description" />
               </div>
-              <CharacterDrives
-                v-bind:cClass="classId"
-                @selected="selectDrive">
-              </CharacterDrives>
             </div>
           </div>
         </div>
+        <div class="twelve wide column">
+          <CharacterDrives v-bind:cClass="classId" @selected="selectDrive">
+          </CharacterDrives>
+        </div>
+      </div>
+      <div class="ui stackable grid">
         <div class="ui four wide column">
           <h3 class="ui header">
             Background
@@ -45,28 +49,13 @@
             <input type="text" v-model="background.title" :placeholder="baseClass.background.title">
           </div>
           <div class="ui form">
-              <textarea name="backgroundBeforeTrigger" rows="4" v-model="background.beforeTrigger" :placeholder="baseClass.background.beforeTrigger" />
-              <textarea name="backgroundTrigger" class="trigger" rows="4" v-model="background.trigger" :placeholder="baseClass.background.trigger"></textarea>
-              <textarea name="backgroundAfterTrigger" rows="4" v-model="background.afterTrigger" :placeholder="baseClass.background.afterTrigger"></textarea>
+            <textarea name="backgroundBeforeTrigger" rows="4" v-model="background.beforeTrigger" :placeholder="baseClass.background.beforeTrigger"
+            />
+            <textarea name="backgroundTrigger" class="trigger" rows="4" v-model="background.trigger" :placeholder="baseClass.background.trigger"></textarea>
+            <textarea name="backgroundAfterTrigger" rows="4" v-model="background.afterTrigger" :placeholder="baseClass.background.afterTrigger"></textarea>
           </div>
-          <CharacterBackgrounds
-            v-bind:cClass="classId"
-            @selected="selectBackground">
+          <CharacterBackgrounds v-bind:cClass="classId" @selected="selectBackground">
           </CharacterBackgrounds>
-        </div>
-        <div class="ui four wide column">
-          <div class="ui labeled input">
-            <div class="ui label">
-              Armour
-            </div>
-            <input type="number" name="armour" class="ui" :placeholder="baseClass.armour" disabled>
-          </div>
-          <div class="ui labeled input">
-            <div class="ui label">
-              Coins
-            </div>
-            <input type="number" name="coins" class="ui" :placeholder="baseClass.coins">
-          </div>
         </div>
         <div class="ui eight wide column">
           <pre>
@@ -79,7 +68,6 @@
           </pre>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -142,8 +130,8 @@
 </script>
 
 <style>
-.trigger {
-  font-weight:bold;
-}
-</style>
+  .trigger {
+    font-weight: bold;
+  }
 
+</style>

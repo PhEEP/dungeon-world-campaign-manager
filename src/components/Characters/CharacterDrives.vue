@@ -1,10 +1,14 @@
 <template>
-  <div>
-    <div class="inline field"  v-for="(drive, index) in drives" v-bind:key="index">
-      <div class="ui radio">
-        <input type="radio" name="drive" :value="drive" v-model="selectedDrive" @change="selectDrive">
-        <label for="drive"><strong>{{drive.title}}</strong></label>
-        <p>{{drive.description}}</p>
+  <div class="ui three column grid">
+    <div class="row">
+      <div class="column"  v-for="(drive, index) in drives" v-bind:key="index">
+        <div class="inline field" >
+          <div class="ui radio">
+            <input type="radio" name="drive" :value="drive" v-model="selectedDrive" @change="selectDrive">
+            <label for="drive"><strong>{{drive.title}}</strong></label>
+            <p>{{drive.description}}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

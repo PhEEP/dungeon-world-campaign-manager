@@ -1,14 +1,18 @@
 <template>
-  <div>
-    <div class="inline field"  v-for="(background, index) in backgrounds" v-bind:key="index">
-      <div class="ui radio">
-        <input type="radio" name="background" :value="background" v-model="selectedBackground" @change="selectBackground">
-        <label for="background"><strong>{{background.title}}</strong></label>
-        <p>
-          <span v-if="background.beforeTrigger">{{background.beforeTrigger}} </span>
-          <span v-if="background.trigger"><strong>{{background.trigger}} </strong></span>
-          <span v-if="background.afterTrigger">{{background.afterTrigger}}</span>
-        </p>
+  <div class="ui three column grid">
+    <div class="row">
+      <div class="column" v-for="(background, index) in backgrounds" v-bind:key="index">
+        <div class="inline field">
+          <div class="ui radio">
+            <input type="radio" name="background" :value="background" v-model="selectedBackground" @change="selectBackground">
+            <label for="background"><strong>{{background.title}}</strong></label>
+            <p>
+              <span v-if="background.beforeTrigger">{{background.beforeTrigger}} </span>
+              <span v-if="background.trigger"><strong>{{background.trigger}} </strong></span>
+              <span v-if="background.afterTrigger">{{background.afterTrigger}}</span>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
