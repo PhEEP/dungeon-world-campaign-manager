@@ -1,7 +1,20 @@
 <template>
-  <div class="ui three column grid">
-    <div class="row">
-      <div class="column"  v-for="(drive, index) in drives" v-bind:key="index">
+<div class="row">
+  <div class="ui stackable grid">
+      <div class="sixteen wide column">
+        <h3 class="ui header">Drive
+          <div class="sub header">Choose one or write your own</div>
+        </h3>
+      </div>
+      <div class="four wide column">
+        <div class="ui labeled input">
+          <input type="text" v-model="currentDrive.title" placeholder="Drive Title">
+        </div>
+        <div class="field">
+          <textarea rows="4" v-model="currentDrive.description" placeholder="Drive Description" />
+        </div>
+      </div>
+      <div class="four wide column"  v-for="(drive, index) in drives" v-bind:key="index">
         <div class="inline field" >
           <div class="ui radio">
             <input type="radio" name="drive" :value="drive" v-model="selectedDrive" @change="selectDrive">
@@ -10,8 +23,8 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -25,13 +38,14 @@
       return {
         drives: [],
         selectedDrive: {},
+        currentDrive: {},
         error: '',
         classId: this.cClass
       }
     },
     methods: {
       selectDrive () {
-        console.log('selected')
+        this.currentDrive = this.selectedDrive
         this.$emit('selected', this.selectedDrive)
       }
     },
@@ -54,6 +68,5 @@
 </script>
 
 <style>
-
 
 </style>

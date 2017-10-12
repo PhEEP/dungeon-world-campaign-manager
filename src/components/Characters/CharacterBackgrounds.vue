@@ -1,7 +1,21 @@
 <template>
-  <div class="ui three column grid">
-    <div class="row">
-      <div class="column" v-for="(background, index) in backgrounds" v-bind:key="index">
+  <div class="row">
+    <div class="ui stackable grid">
+      <div class="sixteen wide column">
+        <h3 class="ui header">Background
+            <div class="sub header">Choose one or write your own</div>
+          </h3>
+      </div>
+      <div class="ui four wide column">
+        <div class="ui labeled input">
+          <input type="text" v-model="selectedBackground.title" placeholder="selectedBackground.title">
+        </div>
+          <textarea name="backgroundBeforeTrigger" rows="4" v-model="selectedBackground.beforeTrigger" placeholder="selectedBackground.beforeTrigger"
+          />
+          <textarea name="backgroundTrigger" class="trigger" rows="4" v-model="selectedBackground.trigger" placeholder="selectedBackground.trigger"></textarea>
+          <textarea name="backgroundAfterTrigger" rows="4" v-model="selectedBackground.afterTrigger" placeholder="selectedBackground.afterTrigger"></textarea>
+      </div>
+      <div class="four wide column" v-for="(background, index) in backgrounds" v-bind:key="index">
         <div class="inline field">
           <div class="ui radio">
             <input type="radio" name="background" :value="background" v-model="selectedBackground" @change="selectBackground">
@@ -35,7 +49,6 @@
     },
     methods: {
       selectBackground () {
-        console.log(this.selectedBackground)
         this.$emit('selected', this.selectedBackground)
       }
     },
