@@ -4,8 +4,8 @@ import Hello from '@/components/Hello'
 import Login from '@/components/Login'
 import SignUp from '@/components/SignUp'
 import Campaigns from '@/components/Campaigns'
-import Characters from '@/components/Characters'
-import CharacterNew from '@/components/CharacterNew'
+import Characters from '@/components/Characters/Characters'
+import CharacterNew from '@/components/Characters/CharacterNew'
 import Compendium from '@/components/Compendium'
 import Profile from '@/components/Profile'
 import DWCMNav from '@/components/DWCMNav'
@@ -37,7 +37,6 @@ let router = new Router({
       path: '/hello',
       name: 'Hello',
       components: { default: Hello, nav: DWCMNav },
-      props: { default: true, nav: true },
       meta: {
         requiresAuth: true
       }
@@ -46,7 +45,6 @@ let router = new Router({
       path: '/campaigns',
       name: 'Campaigns',
       components: { default: Campaigns, nav: DWCMNav },
-      props: { default: true, nav: true },
       meta: {
         requiresAuth: true
       }
@@ -55,7 +53,6 @@ let router = new Router({
       path: '/characters',
       name: 'Characters',
       components: { default: Characters, nav: DWCMNav },
-      props: { default: true, nav: true },
       meta: {
         requiresAuth: true
       }
@@ -64,14 +61,12 @@ let router = new Router({
       path: '/characters/new/:className',
       name: 'New Character',
       components: { default: CharacterNew, nav: DWCMNav },
-      props: { default: true, nav: true },
       meta: { requiresAuth: true }
     },
     {
       path: '/compendium',
       name: 'Compendium',
       components: { default: Compendium, nav: DWCMNav },
-      props: { default: true, nav: true },
       meta: {
         requiresAuth: true
       }
@@ -80,7 +75,6 @@ let router = new Router({
       path: '/profile',
       name: 'Profile',
       components: { default: Profile, nav: DWCMNav },
-      props: { default: true, nav: true },
       meta: {
         requiresAuth: true
       }

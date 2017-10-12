@@ -4,7 +4,6 @@
     <h1 class="header">Characters</h1>
     <div class="ui stackable grid"  v-for="cClass in characterClasses" v-bind:key="cClass.id">
       <div class="sixteen wide column">
-
       <h2>{{ cClass.name }}</h2>
       </div>
       <div class="four wide column">
