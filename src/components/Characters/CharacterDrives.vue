@@ -1,6 +1,6 @@
 <template>
 <div class="row">
-  <div class="ui stackable grid">
+  <div class="ui stackable grid segment">
       <div class="sixteen wide column">
         <h3 class="ui header">Drive
           <div class="sub header">Choose one or write your own</div>
@@ -45,7 +45,7 @@
     },
     methods: {
       selectDrive () {
-        this.currentDrive = this.selectedDrive
+        this.currentDrive = Object.assign({}, this.selectedDrive)
         this.$emit('selected', this.selectedDrive)
       }
     },

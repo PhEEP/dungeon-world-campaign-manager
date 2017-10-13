@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="ui stackable grid">
+    <div class="ui stackable grid segment">
       <div class="sixteen wide column">
         <h3 class="ui header">Background
             <div class="sub header">Choose one or write your own</div>
@@ -8,12 +8,12 @@
       </div>
       <div class="ui four wide column">
         <div class="ui labeled input">
-          <input type="text" v-model="selectedBackground.title" placeholder="selectedBackground.title">
+          <input type="text" v-model="currentBackground.title" placeholder="Background Title">
         </div>
-          <textarea name="backgroundBeforeTrigger" rows="4" v-model="selectedBackground.beforeTrigger" placeholder="selectedBackground.beforeTrigger"
+          <textarea name="backgroundBeforeTrigger" rows="4" v-model="currentBackground.beforeTrigger" placeholder="Before Trigger"
           />
-          <textarea name="backgroundTrigger" class="trigger" rows="4" v-model="selectedBackground.trigger" placeholder="selectedBackground.trigger"></textarea>
-          <textarea name="backgroundAfterTrigger" rows="4" v-model="selectedBackground.afterTrigger" placeholder="selectedBackground.afterTrigger"></textarea>
+          <textarea name="backgroundTrigger" class="trigger" rows="4" v-model="currentBackground.trigger" placeholder="Trigger"></textarea>
+          <textarea name="backgroundAfterTrigger" rows="4" v-model="currentBackground.afterTrigger" placeholder="After Trigger"></textarea>
       </div>
       <div class="four wide column" v-for="(background, index) in backgrounds" v-bind:key="index">
         <div class="inline field">
@@ -43,12 +43,14 @@
       return {
         backgrounds: [],
         selectedBackground: {},
+        currentBackground: {},
         error: '',
         classId: this.cClass
       }
     },
     methods: {
       selectBackground () {
+        this.currentBackground = { ...this.selectedBackground }
         this.$emit('selected', this.selectedBackground)
       }
     },

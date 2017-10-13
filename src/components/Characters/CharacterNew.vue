@@ -23,7 +23,7 @@
       </div>
       <CharacterDrives v-bind:cClass="classId" @selected="selectDrive"></CharacterDrives>
       <CharacterBackgrounds v-bind:cClass="classId" @selected="selectBackground"></CharacterBackgrounds>
-      <CharacterBonds v-bind:cClass="classId" v-bind:startingBonds="classData.startingBonds" @selected="selectBonds"></CharacterBonds>
+      <CharacterBonds v-bind:cClass="classId" v-bind:startingBonds="classData.startingBonds" @updatedBonds="updatedBonds"></CharacterBonds>
     </div>
   </div>
 </template>
@@ -34,6 +34,7 @@
   import CharacterDrives from '@/components/Characters/CharacterDrives'
   import CharacterBackgrounds from '@/components/Characters/CharacterBackgrounds'
   import CharacterBonds from '@/components/Characters/CharacterBonds'
+
   export default {
     name: 'CharacterNew',
     data () {
@@ -44,6 +45,7 @@
         characterName: '',
         drive: {},
         background: {},
+        bonds: [],
         avatarUrl: null,
         avatar: ''
       }
@@ -59,6 +61,9 @@
       },
       selectBackground (value) {
         this.background = value
+      },
+      updatedBonds (value) {
+        this.bonds = value
       },
       onFilePicked (event) {
         const files = event.target.files
