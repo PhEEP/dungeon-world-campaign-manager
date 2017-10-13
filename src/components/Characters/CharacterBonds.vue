@@ -13,7 +13,7 @@
         <div class="ui form">
           <div class="ui mini right labeled input">
             <div class="ui label" v-if="bond.beforeBond" v-text="bond.beforeBond"></div>
-            <input type="text" class="ui bondTarget" placeholder="Someone McSomeone" v-model="bond.target" @input="updateBonds" :disabled="underBondLimit && !bond.target">
+            <input type="text" class="ui bondTarget" placeholder="Someone McSomeone" v-model="bond.bond" @input="updateBonds" :disabled="underBondLimit && !bond.bond">
             <div class="ui label" v-if="bond.afterBond" v-text="bond.afterBond"></div>
           </div>
         </div>
@@ -42,7 +42,7 @@
       updateBonds () {
         this.$emit('updatedBonds', this.bonds)
         this.currentBonds = _.filter(this.bonds, (o) => {
-          return _.has(o, 'target') && o.target.length > 0
+          return _.has(o, 'bond') && o.bond.length > 0
         }).length
       }
     },
