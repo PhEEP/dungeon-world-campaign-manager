@@ -9,11 +9,17 @@
           You start with {{ startingBonds }} bonds, divided between the other members of your party. Each is a statement about how you relate to them.
         </p>
       </div>
-      <div class="four wide column"  v-for="(bond, index) in bonds" v-bind:key="index">
-        <div class="field" >
-          {{ bond.beforeBond }}
-          <input type="text" class="ui">
-          {{ bond.afterBond }}
+      <div class="sixteen wide column"  v-for="(bond, index) in bonds" v-bind:key="index">
+        <div class="ui form">
+          <div class="ui right labeled input">
+            <div class="ui label" v-if="bond.beforeBond">
+              {{ bond.beforeBond }}
+            </div>
+            <input type="text" class="ui">
+            <div class="ui label" v-if="bond.afterBond">
+              {{ bond.afterBond }}
+            </div>
+          </div>
         </div>
       </div>
   </div>
