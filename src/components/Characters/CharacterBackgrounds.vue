@@ -56,9 +56,9 @@
     },
     mounted () {
       console.log(this.classId)
-      firebase.firestore().collection('characters/' + this.classId + '/background').get()
+      firebase.firestore().collection('characters/' + this.classId + '/backgrounds').get()
         .then((querySnapshot) => {
-          console.log(querySnapshot, 'characters/' + this.classId + '/background')
+          console.log(querySnapshot, 'characters/' + this.classId + '/backgrounds')
           querySnapshot.forEach((doc) => {
             this.backgrounds.push(doc.data())
           })
