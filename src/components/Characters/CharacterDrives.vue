@@ -16,7 +16,7 @@
       </div>
       <div class="four wide column"  v-for="(drive, index) in drives" v-bind:key="index">
         <div class="inline field" >
-          <div class="ui radio">
+          <div class="ui radio checkbox">
             <input type="radio" name="drive" :value="drive" v-model="selectedDrive" @change="selectDrive">
             <label for="drive"><strong>{{drive.title}}</strong></label>
             <p>{{drive.description}}</p>

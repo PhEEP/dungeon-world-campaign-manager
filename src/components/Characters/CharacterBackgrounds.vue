@@ -10,21 +10,14 @@
         <div class="ui labeled input">
           <input type="text" v-model="currentBackground.title" placeholder="Background Title">
         </div>
-          <textarea name="backgroundBeforeTrigger" rows="4" v-model="currentBackground.beforeTrigger" placeholder="Before Trigger"
-          />
-          <textarea name="backgroundTrigger" class="trigger" rows="4" v-model="currentBackground.trigger" placeholder="Trigger"></textarea>
-          <textarea name="backgroundAfterTrigger" rows="4" v-model="currentBackground.afterTrigger" placeholder="After Trigger"></textarea>
+          <textarea name="background" rows="6" v-model="currentBackground.text" id="backgroundText"></textarea>
       </div>
       <div class="four wide column" v-for="(background, index) in backgrounds" v-bind:key="index">
         <div class="inline field">
-          <div class="ui radio">
+          <div class="ui radio checkbox">
             <input type="radio" name="background" :value="background" v-model="selectedBackground" @change="selectBackground">
             <label for="background"><strong>{{background.title}}</strong></label>
-            <p>
-              <span v-if="background.beforeTrigger">{{background.beforeTrigger}} </span>
-              <span v-if="background.trigger"><strong>{{background.trigger}} </strong></span>
-              <span v-if="background.afterTrigger">{{background.afterTrigger}}</span>
-            </p>
+            <div v-html="markDown(background.text)" v-if="background.text"></div>
           </div>
         </div>
       </div>
@@ -35,6 +28,19 @@
 <script>
   import firebase from 'firebase'
   require('firebase/firestore')
+  import marked from 'marked'
+  import _ from 'lodash'
+
+  marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: true,
+    pedantic: false,
+    sanitize: true,
+    smartLists: true,
+    smartypants: false
+  })
 
   export default {
     name: 'CharacterBackgrounds',
@@ -52,6 +58,11 @@
       selectBackground () {
         this.currentBackground = { ...this.selectedBackground }
         this.$emit('selected', this.selectedBackground)
+      },
+      markDown (text) {
+        let newText = _.unescape(text)
+        console.log(newText)
+        return marked(_.unescape(text), { sanitize: true })
       }
     },
     mounted () {
