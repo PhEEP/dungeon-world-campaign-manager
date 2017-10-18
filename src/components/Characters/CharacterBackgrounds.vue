@@ -8,16 +8,16 @@
       </div>
       <div class="ui four wide column">
         <div class="ui labeled input">
-          <input type="text" v-model="currentBackground.title" placeholder="Background Title">
+          <input type="text" v-model="currentBackground.title" placeholder="Background Title" @input="updateBackground">
         </div>
-          <textarea name="background" rows="6" v-model="currentBackground.text" id="backgroundText"></textarea>
+          <vue-editor v-model="currentBackground.text" :editorToolbar="customToolbar" placeholder="Background description" id="background-editor" @input="updateBackground"></vue-editor>
       </div>
       <div class="four wide column" v-for="(background, index) in backgrounds" v-bind:key="index">
         <div class="inline field">
           <div class="ui radio checkbox">
             <input type="radio" name="background" :value="background" v-model="selectedBackground" @change="selectBackground">
-            <label for="background"><strong>{{background.title}}</strong></label>
-            <div v-html="markDown(background.text)" v-if="background.text"></div>
+            <label for="background"><strong>{{ background.title }}</strong>
+            <div v-html="background.text" v-if="background.text"></div></label>
           </div>
         </div>
       </div>
@@ -28,19 +28,8 @@
 <script>
   import firebase from 'firebase'
   require('firebase/firestore')
-  import marked from 'marked'
-  import _ from 'lodash'
-
-  marked.setOptions({
-    renderer: new marked.Renderer(),
-    gfm: true,
-    tables: true,
-    breaks: true,
-    pedantic: false,
-    sanitize: true,
-    smartLists: true,
-    smartypants: false
-  })
+  import { VueEditor } from 'vue2-editor'
+  // import _ from 'lodash'
 
   export default {
     name: 'CharacterBackgrounds',
@@ -51,18 +40,23 @@
         selectedBackground: {},
         currentBackground: {},
         error: '',
-        classId: this.cClass
+        classId: this.cClass,
+        customToolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'bullet' }]
+        ]
       }
+    },
+    components: {
+      VueEditor
     },
     methods: {
       selectBackground () {
         this.currentBackground = { ...this.selectedBackground }
         this.$emit('selected', this.selectedBackground)
       },
-      markDown (text) {
-        let newText = _.unescape(text)
-        console.log(newText)
-        return marked(_.unescape(text), { sanitize: true })
+      updateBackground () {
+        this.$emit('updateBackground', this.currentBackground)
       }
     },
     mounted () {
@@ -84,5 +78,7 @@
 </script>
 
 <style>
-
+#background-editor {
+  height: 200px;
+}
 </style>

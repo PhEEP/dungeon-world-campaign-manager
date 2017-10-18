@@ -11,6 +11,7 @@
               </div>
               <input type="text" name="characterName" class="ui" placeholder="Who are you?" v-model="characterName">
             </div>
+            <em v-if="classData.exampleNames">{{ classData.exampleNames }}</em>
           </div>
           <div class="four wide column">
             <img :src="avatarUrl !== null ? avatarUrl : 'http://placehold.it/120/120'" :alt="classData.name" :title="classData.name" class="ui centered small circular image">
@@ -21,9 +22,10 @@
           </div>
         </div>
       </div>
-      <CharacterDrives v-bind:cClass="classId" @selected="selectDrive"></CharacterDrives>
-      <CharacterBackgrounds v-bind:cClass="classId" @selected="selectBackground"></CharacterBackgrounds>
+      <CharacterDrives v-bind:cClass="classId" @selected="selectDrive" @updateDrive="updatedDrive"></CharacterDrives>
+      <CharacterBackgrounds v-bind:cClass="classId" @selected="selectBackground" @updateBackground="updatedBackground"></CharacterBackgrounds>
       <CharacterBonds v-bind:cClass="classId" v-bind:startingBonds="classData.startingBonds" @updatedBonds="updatedBonds"></CharacterBonds>
+      <CharacterLooks v-bind:classLook="classData.look" @updateLook="updatedLook"></CharacterLooks>
     </div>
   </div>
 </template>
@@ -34,6 +36,7 @@
   import CharacterDrives from '@/components/Characters/CharacterDrives'
   import CharacterBackgrounds from '@/components/Characters/CharacterBackgrounds'
   import CharacterBonds from '@/components/Characters/CharacterBonds'
+  import CharacterLooks from '@/components/Characters/CharacterLooks'
 
   export default {
     name: 'CharacterNew',
@@ -46,6 +49,7 @@
         drive: {},
         background: {},
         bonds: [],
+        look: '',
         avatarUrl: null,
         avatar: ''
       }
@@ -53,17 +57,28 @@
     components: {
       CharacterDrives,
       CharacterBackgrounds,
-      CharacterBonds
+      CharacterBonds,
+      CharacterLooks
     },
     methods: {
       selectDrive (value) {
         this.drive = value
       },
+      updatedDrive (value) {
+        this.drive = value
+      },
       selectBackground (value) {
+        this.background = value
+      },
+      updatedBackground (value) {
         this.background = value
       },
       updatedBonds (value) {
         this.bonds = value
+      },
+      updatedLook (value) {
+        console.log(value)
+        this.look = value
       },
       onFilePicked (event) {
         const files = event.target.files
@@ -112,5 +127,7 @@
   .trigger {
     font-weight: bold
   }
-
+  .quillWrapper * {
+    font-family: Lato;
+  }
 </style>

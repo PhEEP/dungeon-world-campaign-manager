@@ -5,10 +5,11 @@ import App from './App'
 import router from './router'
 import firebase from 'firebase'
 import { config } from './helpers/firebaseConfig'
+import Titlecase from 'vue-titlecase'
 import '../node_modules/semantic-ui-css/semantic.min.css'
 
 Vue.config.productionTip = false
-
+Vue.use(Titlecase)
 let app
 
 firebase.initializeApp(config)

@@ -2,71 +2,57 @@
 <div class="row">
   <div class="ui stackable grid segment">
       <div class="sixteen wide column">
-        <h3 class="ui header">Drive
-          <div class="sub header">Choose one or write your own</div>
+        <h3 class="ui header">Look
+          <div class="sub header"> Pick as many that apply</div>
         </h3>
       </div>
-      <div class="four wide column">
-        <div class="ui labeled input">
-          <input type="text" v-model="currentDrive.title" placeholder="Drive Title">
-        </div>
-        <div class="field">
-          <textarea rows="4" v-model="currentDrive.description" placeholder="Drive Description" />
-        </div>
+      <div class="eight wide column">
+        <h4 class="ui header">
+          Some examples
+        </h4>
+        <ul>
+          <li v-for="(look, index) in this.classLook" v-bind:key="index">
+            {{ look }}
+          </li>
+        </ul>
       </div>
-      <div class="four wide column"  v-for="(drive, index) in drives" v-bind:key="index">
-        <div class="inline field" >
-          <div class="ui radio">
-            <input type="radio" name="drive" :value="drive" v-model="selectedDrive" @change="selectDrive">
-            <label for="drive"><strong>{{drive.title}}</strong></label>
-            <p>{{drive.description}}</p>
-          </div>
-        </div>
+      <div class="eight wide column">
+        <vue-editor :editorToolbar="customToolbar" placeholder="What do you look like?" id="looks-editor" @input="updateLook" v-model="looks"></vue-editor>
       </div>
   </div>
 </div>
 </template>
 
 <script>
-  import firebase from 'firebase'
-  require('firebase/firestore')
+  import { VueEditor } from 'vue2-editor'
 
   export default {
-    name: 'CharacterDrives',
-    props: ['cClass'],
+    name: 'CharacterLooks',
+    props: ['classLook'],
     data () {
       return {
-        drives: [],
-        selectedDrive: {},
-        currentDrive: {},
+        looks: '',
         error: '',
-        classId: this.cClass
+        customToolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'bullet' }]
+        ]
       }
+    },
+    components: {
+      VueEditor
     },
     methods: {
-      selectDrive () {
-        this.currentDrive = Object.assign({}, this.selectedDrive)
-        this.$emit('selected', this.selectedDrive)
+      updateLook () {
+        this.$emit('updateLook', this.looks)
       }
-    },
-    mounted () {
-      console.log(this.classId)
-      firebase.firestore().collection('characters/' + this.classId + '/drives').get()
-        .then((querySnapshot) => {
-          console.log(querySnapshot, 'characters/' + this.classId + '/drives')
-          querySnapshot.forEach((doc) => {
-            this.drives.push(doc.data())
-          })
-        })
-        .catch((error) => {
-          console.log('error')
-          this.error = error
-        })
     }
   }
 
 </script>
 
 <style>
-
+#looks-editor {
+  height: 200px;
+}
 </style>

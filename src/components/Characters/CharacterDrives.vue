@@ -8,18 +8,18 @@
       </div>
       <div class="four wide column">
         <div class="ui labeled input">
-          <input type="text" v-model="currentDrive.title" placeholder="Drive Title">
+          <input type="text" v-model="currentDrive.title" placeholder="Drive Title" @input="updateDrive">
         </div>
         <div class="field">
-          <textarea rows="4" v-model="currentDrive.description" placeholder="Drive Description" />
+          <textarea rows="4" v-model="currentDrive.description" placeholder="Drive Description" @input="updateDrive"/>
         </div>
       </div>
       <div class="four wide column"  v-for="(drive, index) in drives" v-bind:key="index">
         <div class="inline field" >
           <div class="ui radio checkbox">
             <input type="radio" name="drive" :value="drive" v-model="selectedDrive" @change="selectDrive">
-            <label for="drive"><strong>{{drive.title}}</strong></label>
-            <p>{{drive.description}}</p>
+            <label for="drive"><strong>{{drive.title}}</strong>
+            <p>{{drive.description}}</p></label>
           </div>
         </div>
       </div>
@@ -45,8 +45,11 @@
     },
     methods: {
       selectDrive () {
-        this.currentDrive = Object.assign({}, this.selectedDrive)
+        this.currentDrive = { ...this.selectedDrive }
         this.$emit('selected', this.selectedDrive)
+      },
+      updateDrive () {
+        this.$emit('updateDrive', this.currentDrive)
       }
     },
     mounted () {
