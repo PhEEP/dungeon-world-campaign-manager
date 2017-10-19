@@ -6,6 +6,7 @@ import SignUp from '@/components/SignUp'
 import Campaigns from '@/components/Campaigns'
 import Characters from '@/components/Characters/Characters'
 import CharacterNew from '@/components/Characters/CharacterNew'
+import Character from '@/components/Character/Character'
 import Compendium from '@/components/Compendium'
 import Profile from '@/components/Profile'
 import DWCMNav from '@/components/DWCMNav'
@@ -53,6 +54,14 @@ let router = new Router({
       path: '/characters',
       name: 'Characters',
       components: { default: Characters, nav: DWCMNav },
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/character/:id',
+      name: 'Character',
+      components: { default: Character, nav: DWCMNav },
       meta: {
         requiresAuth: true
       }

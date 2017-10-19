@@ -22,10 +22,13 @@
           </div>
         </div>
       </div>
-      <CharacterDrives v-bind:cClass="classId" @selected="selectDrive" @updateDrive="updatedDrive"></CharacterDrives>
+      <CharacterDrives v-bind:cClass="classId" @selected="selectDrive" @updateDrive="updatedDrive" :disabled="submitting"></CharacterDrives>
       <CharacterBackgrounds v-bind:cClass="classId" @selected="selectBackground" @updateBackground="updatedBackground"></CharacterBackgrounds>
       <CharacterBonds v-bind:cClass="classId" v-bind:startingBonds="classData.startingBonds" @updatedBonds="updatedBonds"></CharacterBonds>
       <CharacterLooks v-bind:classLook="classData.look" @updateLook="updatedLook"></CharacterLooks>
+      <button class="ui primary button" @click="saveCharacter" :disabled="submitting">
+        Save
+      </button>
     </div>
   </div>
 </template>
@@ -51,7 +54,8 @@
         bonds: [],
         look: '',
         avatarUrl: null,
-        avatar: ''
+        avatar: '',
+        submitting: false
       }
     },
     components: {
@@ -77,7 +81,6 @@
         this.bonds = value
       },
       updatedLook (value) {
-        console.log(value)
         this.look = value
       },
       onFilePicked (event) {
@@ -93,6 +96,41 @@
         })
         fileReader.readAsDataURL(files[0])
         this.avatar = files[0]
+      },
+      saveCharacter () {
+        this.submitting = true
+        let user = firebase.auth().currentUser
+        let userId = user.uid
+        let newChar = {
+          name: this.characterName,
+          drive: this.drive,
+          background: this.background,
+          bonds: this.bonds,
+          look: this.look,
+          className: this.classData.name
+        }
+        let imageUrl
+        let docId
+        firebase.firestore().collection('users/' + userId + '/characters').add(newChar)
+          .then((docRef) => {
+            docId = docRef.id
+            return docId
+          })
+          .then(docId => {
+            const filename = this.avatar.name
+            const ext = filename.slice(filename.lastIndexOf('.'))
+            return firebase.storage().ref('characters/' + docId + ext).put(this.avatar)
+          })
+          .then(fileData => {
+            imageUrl = fileData.metadata.downloadURLs[0]
+            return firebase.firestore().doc('users/' + userId + '/characters/' + docId).update({avatarUrl: imageUrl})
+          })
+          .then(() => {
+            this.$router.push({ name: 'Character', params: {id: docId} })
+          })
+          .catch((error) => {
+            console.log(error)
+          })
       }
     },
     mounted () {
