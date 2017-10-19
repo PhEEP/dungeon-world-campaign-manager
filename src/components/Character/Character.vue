@@ -1,31 +1,25 @@
 <template>
-  <div>
-    <div class="ui main container">
-      <h1 class="ui header">{{ character.name }}
-        <div class="sub header">{{ character.className }}</div>
-      </h1>
-      <div class="ui stackable grid segment">
-        <div class="four wide column">
-          <div class="ui center aligned centered image">
-            <img :src="character.avatarUrl" alt="">
-          </div>
-          <div v-html="character.look"></div>
+  <div class="ui main container" v-if="character !== {}">
+    <h1 class="ui header">{{ character.name }}
+      <div class="sub header">{{ character.className }}</div>
+    </h1>
+    <div class="ui stackable grid segment">
+      <div class="four wide column">
+        <div class="ui center aligned centered image">
+          <img :src="character.avatarUrl" alt="">
         </div>
-        <div class="four wide column">
-          <h3 class="ui header">{{ character.drive.title }}</h3>
-          <p>{{ character.drive.description }}</p>
-        </div>
-        <div class="four wide column">
-          <h3 class="ui header">{{ character.background.title }}</h3>
-          <div v-html="character.background.text"></div>
-        </div>
-        <div class="four wide column">
-          <ul>
-            <li v-for="(bond, index) in attachedBonds" v-bind:key="index" v-if="typeof bond.bond !== 'undefined'">
-              {{ bond.beforeBond }} <strong v-text="bond.bond"></strong> {{ bond.afterBond }}
-            </li>
-          </ul>
-        </div>
+      </div>
+      <div class="four wide column">
+        <h3 class="ui header">{{ character.drive.title }}</h3>
+        <p>{{ character.drive.description }}</p>
+      </div>
+      <div class="four wide column">
+        <h3 class="ui header">{{ character.background.title }}</h3>
+        <div v-html="character.background.text"></div>
+      </div>
+      <div class="four wide column">
+        <h3 class="ui header"></h3>
+        <div v-html="character.look" ></div>
       </div>
     </div>
   </div>

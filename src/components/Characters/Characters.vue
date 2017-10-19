@@ -1,8 +1,12 @@
 <template>
-<div>
-  <div class="ui main container">
+  <div class="ui main text container">
     <h1 class="header">Characters</h1>
-    <div class="ui stackable grid"  v-for="cClass in characterClasses" v-bind:key="cClass.id">
+    <div class="ui stackable grid container" >
+      <div class="ui row" v-for="(character, index) in createdCharacters" v-bind:key="index">
+        <router-link :to="'/character/' + character.id">{{character.name}}</router-link>
+
+      </div>
+      <div class="ui row"  v-for="cClass in characterClasses" v-bind:key="cClass.id">
       <div class="sixteen wide column">
       <h2>{{ cClass.name }}</h2>
       </div>
@@ -17,9 +21,9 @@
           <router-link :to="'/characters/new/' + cClass.id">Create {{ cClass.name }}</router-link>
         </button>
       </div>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -30,10 +34,26 @@ export default {
   data () {
     return {
       characters: '',
-      characterClasses: []
+      characterClasses: [],
+      createdCharacters: []
     }
   },
   mounted () {
+    let user = firebase.auth().currentUser
+
+    firebase.firestore().collection('users/' + user.uid + '/characters').get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          this.createdCharacters.push({
+            id: doc.id,
+            name: doc.data().name,
+            avatar: doc.data().avatarUrl
+          })
+        })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     firebase.firestore().doc('characters/baseClass').get()
     .then((doc) => {
       if (doc.exists) {

@@ -24,7 +24,7 @@
       </div>
       <CharacterDrives v-bind:cClass="classId" @selected="selectDrive" @updateDrive="updatedDrive" :disabled="submitting"></CharacterDrives>
       <CharacterBackgrounds v-bind:cClass="classId" @selected="selectBackground" @updateBackground="updatedBackground"></CharacterBackgrounds>
-      <CharacterBonds v-bind:cClass="classId" v-bind:startingBonds="classData.startingBonds" @updatedBonds="updatedBonds"></CharacterBonds>
+      <!-- <CharacterBonds v-bind:cClass="classId" v-bind:startingBonds="classData.startingBonds" @updatedBonds="updatedBonds"></CharacterBonds> -->
       <CharacterLooks v-bind:classLook="classData.look" @updateLook="updatedLook"></CharacterLooks>
       <button class="ui primary button" @click="saveCharacter" :disabled="submitting">
         Save
@@ -38,7 +38,7 @@
   require('firebase/firestore')
   import CharacterDrives from '@/components/Characters/CharacterDrives'
   import CharacterBackgrounds from '@/components/Characters/CharacterBackgrounds'
-  import CharacterBonds from '@/components/Characters/CharacterBonds'
+  // import CharacterBonds from '@/components/Characters/CharacterBonds'
   import CharacterLooks from '@/components/Characters/CharacterLooks'
 
   export default {
@@ -51,7 +51,7 @@
         characterName: '',
         drive: {},
         background: {},
-        bonds: [],
+        // bonds: [],
         look: '',
         avatarUrl: null,
         avatar: '',
@@ -61,7 +61,7 @@
     components: {
       CharacterDrives,
       CharacterBackgrounds,
-      CharacterBonds,
+      // CharacterBonds,
       CharacterLooks
     },
     methods: {
@@ -105,9 +105,9 @@
           name: this.characterName,
           drive: this.drive,
           background: this.background,
-          bonds: this.bonds,
           look: this.look,
-          className: this.classData.name
+          className: this.classData.name,
+          classId: this.classId
         }
         let imageUrl
         let docId
@@ -129,6 +129,7 @@
             this.$router.push({ name: 'Character', params: {id: docId} })
           })
           .catch((error) => {
+            this.submitting = false
             console.log(error)
           })
       }

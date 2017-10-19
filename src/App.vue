@@ -18,9 +18,9 @@ export default {
 </script>
 
 <style>
-#app {
+/* #app {
   height:100%;
-}
+} */
 .main {
   margin-top:7rem;
 }

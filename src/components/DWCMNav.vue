@@ -1,7 +1,6 @@
 <template>
-  <div class="ui fixed inverted pointing menu" v-show="loggedIn">
-    <div class="ui container">
-      <div class="item header">
+  <div class="ui inverted fixed menu" v-show="loggedIn">
+      <div class="header item">
         <router-link to="/">DWCM</router-link>
       </div>
       <div class="item">
@@ -18,9 +17,8 @@
           <img class="ui avatar image" :src="userPhoto">
           <span>{{ userName }}</span>
         </router-link>
+        <a href="#" @click.prevent="logOut" class="item">Log Out</a>
       </div>
-      <a href="#" @click.prevent="logOut" class="item">Log Out</a>
-    </div>
   </div>
 </template>
 

@@ -52,6 +52,7 @@
     },
     methods: {
       selectBackground () {
+        console.log(this.selectedBackground)
         this.currentBackground = { ...this.selectedBackground }
         this.$emit('selected', this.selectedBackground)
       },
