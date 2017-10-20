@@ -5,13 +5,13 @@
     </h1>
     <div class="ui stackable grid">
       <div class="ui four wide column">
-        <CharacterBackstory
+        <CharacterDetails
           :avatarUrl="character.avatarUrl"
           :drive="character.drive"
           :background="character.background"
           :look="character.look"
           >
-        </CharacterBackstory>
+        </CharacterDetails>
       </div>
     </div>
   </div>
@@ -26,7 +26,7 @@
 import firebase from 'firebase'
 require('firebase/firestore')
 import _ from 'lodash'
-import CharacterBackstory from '@/components/Character/CharacterBackstory'
+import CharacterDetails from '@/components/Character/CharacterDetails'
 
 export default {
   name: 'Character',

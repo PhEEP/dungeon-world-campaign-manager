@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'CharacterBackstory',
+  name: 'CharacterDetails',
   props: ['drive', 'background', 'avatarUrl', 'look']
 }
 </script>
