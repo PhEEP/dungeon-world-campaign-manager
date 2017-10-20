@@ -25,7 +25,7 @@
           <p>
             {{ cClass.flavorText }}
           </p>
-          <router-link :to="'/characters/new/' + cClass.id" class="ui primary button" v-if="characterCount < 4">Create {{ cClass.name }}</router-link>
+          <router-link :to="'/characters/new/' + cClass.id" class="ui primary button" v-if="characterCount <= 4">Create {{ cClass.name }}</router-link>
         </div>
       </div>
     </div>
