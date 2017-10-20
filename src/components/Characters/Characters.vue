@@ -24,7 +24,7 @@
           <p>
             {{ cClass.flavorText }}
           </p>
-          <button class="ui button" :disabled="characterCount > 1">
+          <button class="ui button" :disabled="characterCount >= 5">
             <router-link :to="'/characters/new/' + cClass.id">Create {{ cClass.name }}</router-link>
           </button>
         </div>
