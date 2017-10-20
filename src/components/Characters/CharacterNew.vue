@@ -26,7 +26,7 @@
       <CharacterBackgrounds v-bind:cClass="classId" @selected="selectBackground" @updateBackground="updatedBackground"></CharacterBackgrounds>
       <!-- <CharacterBonds v-bind:cClass="classId" v-bind:startingBonds="classData.startingBonds" @updatedBonds="updatedBonds"></CharacterBonds> -->
       <CharacterLooks v-bind:classLook="classData.look" @updateLook="updatedLook"></CharacterLooks>
-      <button class="ui primary button" @click="saveCharacter" :disabled="submitting">
+      <button class="ui primary button" @click="saveCharacter" :disabled="submitting || aboveCharacterCount">
         Save
       </button>
     </div>
@@ -51,7 +51,7 @@
         characterName: '',
         drive: {},
         background: {},
-        // bonds: [],
+        characterCount: 0,
         look: '',
         avatarUrl: null,
         avatar: '',
@@ -63,6 +63,11 @@
       CharacterBackgrounds,
       // CharacterBonds,
       CharacterLooks
+    },
+    computed: {
+      aboveCharacterCount () {
+        return this.characterCount >= 5
+      }
     },
     methods: {
       selectDrive (value) {
@@ -135,6 +140,7 @@
       }
     },
     mounted () {
+      let user = firebase.auth().currentUser
       firebase.firestore().doc('characters/baseClass').get()
         .then((doc) => {
           if (doc.exists) {
@@ -156,6 +162,12 @@
         })
         .catch((err) => {
           console.log('Error: ', err)
+        })
+      firebase.firestore().collection('users/' + user.uid + '/characters').get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.characterCount++
+          })
         })
     }
   }
