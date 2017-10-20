@@ -1,30 +1,38 @@
 <template>
-  <div class="ui main text container">
+  <div class="ui main container">
     <h1 class="header">Characters</h1>
-    <div class="ui stackable grid container" >
-      <div class="ui row" v-for="(character, index) in createdCharacters" v-bind:key="index">
-        <router-link :to="'/character/' + character.id">{{character.name}}</router-link>
-
+    <div class="ui stackable grid container">
+      <div class="ui five stackable link cards">
+        <router-link class="card" :to="'/character/' + character.id" v-for="(character, index) in createdCharacters" v-bind:key="index">
+          <div class="image">
+            <img :src="character.avatar" alt="">
+          </div>
+          <div class="content">
+            <div class="header">{{ character.name }}</div>
+            <div class="meta">{{ character.className }}</div>
+          </div>
+        </router-link>
       </div>
-      <div class="ui row"  v-for="cClass in characterClasses" v-bind:key="cClass.id">
-      <div class="sixteen wide column">
-      <h2>{{ cClass.name }}</h2>
-      </div>
-      <div class="four wide column">
-        <img src="http://placehold.it/120/120" alt="" class="ui centered medium image">
-      </div>
-      <div class="twelve wide column">
-        <p>
-          {{ cClass.flavorText }}
-        </p>
-        <button class="ui button">
-          <router-link :to="'/characters/new/' + cClass.id">Create {{ cClass.name }}</router-link>
-        </button>
-      </div>
+      <div class="ui row" v-for="cClass in characterClasses" v-bind:key="cClass.id">
+        <div class="sixteen wide column">
+          <h2>{{ cClass.name }}</h2>
+        </div>
+        <div class="four wide column">
+          <img src="http://placehold.it/120/120" alt="" class="ui centered medium image">
+        </div>
+        <div class="twelve wide column">
+          <p>
+            {{ cClass.flavorText }}
+          </p>
+          <button class="ui button" :disabled="characterCount > 1">
+            <router-link :to="'/characters/new/' + cClass.id">Create {{ cClass.name }}</router-link>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import firebase from 'firebase'
@@ -35,7 +43,8 @@ export default {
     return {
       characters: '',
       characterClasses: [],
-      createdCharacters: []
+      createdCharacters: [],
+      characterCount: 0
     }
   },
   mounted () {
@@ -44,10 +53,12 @@ export default {
     firebase.firestore().collection('users/' + user.uid + '/characters').get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
+          this.characterCount ++
           this.createdCharacters.push({
             id: doc.id,
             name: doc.data().name,
-            avatar: doc.data().avatarUrl
+            avatar: doc.data().avatarUrl,
+            className: doc.data().className
           })
         })
       })
