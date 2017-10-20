@@ -1,8 +1,8 @@
 <template>
-  <div class="ui main container">
-    <div class="ui main stackable grid container">
-    <h1 class="header">Characters</h1>
-      <div class="ui five stackable link cards">
+  <div class="ui main fluid container">
+    <div class="ui stackable grid">
+      <h1 class="header">Characters</h1>
+      <div class="ui five doubling link cards">
         <router-link class="card" :to="'/character/' + character.id" v-for="(character, index) in createdCharacters" v-bind:key="index">
           <div class="image">
             <img :src="character.avatar" alt="">
@@ -13,8 +13,10 @@
           </div>
         </router-link>
       </div>
+    </div>
+    <div class="ui stackable grid">
       <div class="ui red segment text container" v-if="characterCount >= 5">You've hit max characters, kill one to give another life!</div>
-      <div class="ui row" v-for="cClass in characterClasses" v-bind:key="cClass.id">
+      <div class="ui stackable grid" v-for="cClass in characterClasses" v-bind:key="cClass.id">
         <div class="sixteen wide column">
           <h2>{{ cClass.name }}</h2>
         </div>

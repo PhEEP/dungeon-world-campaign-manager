@@ -22,7 +22,8 @@ export default {
   height:100%;
 } */
 .main {
-  margin-top:7rem;
+  margin-top:4rem;
+  padding: 1rem;
 }
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */

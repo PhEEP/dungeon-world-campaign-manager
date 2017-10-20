@@ -1,26 +1,23 @@
 <template>
-  <div class="ui main container" v-if="character !== {}">
+  <div class="ui main fluid container" v-if="character !== {}">
     <h1 class="ui header">{{ character.name }}
       <div class="sub header">{{ character.className }}</div>
     </h1>
-    <div class="ui stackable grid segment">
-      <div class="four wide column">
-        <div class="ui center aligned centered image">
-          <img :src="character.avatarUrl" alt="">
-        </div>
+    <div class="ui stackable grid">
+      <div class="ui four wide column">
+        <CharacterBackstory
+          :avatarUrl="character.avatarUrl"
+          :drive="character.drive"
+          :background="character.background"
+          :look="character.look"
+          >
+        </CharacterBackstory>
       </div>
-      <div class="four wide column">
-        <h3 class="ui header">{{ character.drive.title }}</h3>
-        <p>{{ character.drive.description }}</p>
-      </div>
-      <div class="four wide column">
-        <h3 class="ui header">{{ character.background.title }}</h3>
-        <div v-html="character.background.text"></div>
-      </div>
-      <div class="four wide column">
-        <h3 class="ui header"></h3>
-        <div v-html="character.look" ></div>
-      </div>
+    </div>
+  </div>
+  <div v-else>
+    <div class="ui orange text container segment">
+      oops, looks like you need to create a character
     </div>
   </div>
 </template>
@@ -29,6 +26,7 @@
 import firebase from 'firebase'
 require('firebase/firestore')
 import _ from 'lodash'
+import CharacterBackstory from '@/components/Character/CharacterBackstory'
 
 export default {
   name: 'Character',
@@ -55,6 +53,9 @@ export default {
           console.log('no character data')
         }
       })
+  },
+  components: {
+    CharacterBackstory
   }
 }
 </script>

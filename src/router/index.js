@@ -88,7 +88,8 @@ let router = new Router({
         requiresAuth: true
       }
     }
-  ]
+  ],
+  linkActiveClass: 'active'
 })
 
 router.beforeEach((to, from, next) => {

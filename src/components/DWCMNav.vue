@@ -1,24 +1,14 @@
 <template>
   <div class="ui inverted fixed menu" v-show="loggedIn">
-      <div class="header item">
-        <router-link to="/">DWCM</router-link>
-      </div>
-      <div class="item">
-        <router-link to="/campaigns">Campaigns</router-link>
-      </div>
-      <div class="item">
-        <router-link to="/characters">Characters</router-link>
-      </div>
-      <div class="item">
-        <router-link to="/compendium">Compendium</router-link>
-      </div>
-      <div class="right item">
-        <router-link to="/profile">
-          <img class="ui avatar image" :src="userPhoto">
-          <span>{{ userName }}</span>
-        </router-link>
-        <a href="#" @click.prevent="logOut" class="item">Log Out</a>
-      </div>
+    <router-link to="/hello" class="header item" active-class="banana">WoACM</router-link>
+    <!-- <router-link to="/campaigns" class="item">Campaigns</router-link> -->
+    <router-link to="/characters" class="item">Characters</router-link>
+    <!-- <router-link to="/compendium" class="item">Compendium</router-link> -->
+    <router-link to="/profile" class="right item">
+      <img class="ui avatar image" :src="userPhoto">
+      <span>{{ userName }}</span>
+    </router-link>
+    <a href="#" @click.prevent="logOut" class="item">Log Out</a>
   </div>
 </template>
 
@@ -41,27 +31,26 @@ export default {
         this.userName = ''
         this.userPhoto = ''
       })
+    },
+    isLoggedIn () {
+      console.log('mounted')
+      let currentUser = firebase.auth().currentUser
+      if (currentUser) {
+        this.loggedIn = true
+        this.userName = currentUser.displayName
+        this.userPhoto = currentUser.photoURL
+      } else {
+        this.loggedIn = false
+      }
     }
+  },
+  watch: {
+    '$route': 'isLoggedIn'
   },
   mounted () {
-    let currentUser = firebase.auth().currentUser
-    if (currentUser) {
-      this.loggedIn = true
-      this.userName = currentUser.displayName
-      this.userPhoto = currentUser.photoURL
-    } else {
-      this.loggedIn = false
-    }
+    this.isLoggedIn()
   },
   updated () {
-    let currentUser = firebase.auth().currentUser
-    if (currentUser) {
-      this.loggedIn = true
-      this.userName = currentUser.displayName
-      this.userPhoto = currentUser.photoURL
-    } else {
-      this.loggedIn = false
-    }
   }
 }
 </script>
