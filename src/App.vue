@@ -1,41 +1,74 @@
 <template>
-  <div id="app">
-    <DWCMNav />
-    <transition name="slide">
-      <router-view></router-view>
-    </transition>
-  </div>
+  <v-app>
+    <v-toolbar color="primary" v-show="loggedIn">
+      <v-btn icon @click="$router.push('hello')" >
+        <v-icon>home</v-icon>
+      </v-btn>
+      <!-- <v-btn flat @click="$router.push('campaigns')">Campaigns</v-btn> -->
+      <v-btn flat @click="$router.push('characters')">Characters</v-btn>
+      <!-- <v-btn flat @click="$router.push('compendium')">Compendium</v-btn> -->
+      <v-spacer></v-spacer>
+      <v-btn fab flat @click="$router.push('profile')">
+        <v-avatar size="36px"  >
+          <img :src="userPhoto" >
+        </v-avatar>
+      </v-btn>
+      <v-btn flat href="#" @click.prevent="logOut">Log Out</v-btn>
+    </v-toolbar>
+    <main>
+      <v-content>
+          <v-slide-y-transition mode="out-in">
+            <router-view></router-view>
+          </v-slide-y-transition>
+      </v-content>
+    </main>
+  </v-app>
 </template>
 
 <script>
-import DWCMNav from '@/components/DWCMNav'
+import firebase from 'firebase'
 export default {
   name: 'App',
   components: {
-    DWCMNav
+  },
+  data () {
+    return {
+      loggedIn: false,
+      userName: '',
+      userPhoto: ''
+    }
+  },
+  methods: {
+    logOut () {
+      firebase.auth().signOut()
+      .then(() => {
+        this.$router.replace('login')
+        this.userName = ''
+        this.userPhoto = ''
+      })
+    },
+    isLoggedIn () {
+      console.log('mounted')
+      let currentUser = firebase.auth().currentUser
+      if (currentUser) {
+        this.loggedIn = true
+        this.userName = currentUser.displayName
+        this.userPhoto = currentUser.photoURL
+      } else {
+        this.loggedIn = false
+      }
+    }
+  },
+  watch: {
+    '$route': 'isLoggedIn'
+  },
+  mounted () {
+    this.isLoggedIn()
+  },
+  updated () {
   }
 }
 </script>
 
 <style>
-/* #app {
-  height:100%;
-} */
-.main {
-  margin-top:4rem;
-  padding: 1rem;
-}
-/* Enter and leave animations can use different */
-/* durations and timing functions.              */
-.slide-enter-active {
-  transition: all .3s ease;
-}
-.slide-leave-active {
-  transition: all .3s ease;
-}
-.slide-enter, .slide-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(10px);
-  opacity: 0;
-}
 </style>

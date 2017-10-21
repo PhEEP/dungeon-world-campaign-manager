@@ -1,15 +1,19 @@
 <template>
-  <div class="ui inverted fixed menu" v-show="loggedIn">
-    <router-link to="/hello" class="header item" active-class="banana">WoACM</router-link>
-    <!-- <router-link to="/campaigns" class="item">Campaigns</router-link> -->
-    <router-link to="/characters" class="item">Characters</router-link>
-    <!-- <router-link to="/compendium" class="item">Compendium</router-link> -->
-    <router-link to="/profile" class="right item">
-      <img class="ui avatar image" :src="userPhoto">
-      <span>{{ userName }}</span>
-    </router-link>
-    <a href="#" @click.prevent="logOut" class="item">Log Out</a>
-  </div>
+  <v-toolbar color="primary" v-show="loggedIn">
+    <v-btn icon @click="$router.push('hello')" >
+      <v-icon>home</v-icon>
+    </v-btn>
+    <!-- <v-btn flat @click="$router.push('campaigns')">Campaigns</v-btn> -->
+    <v-btn flat @click="$router.push('characters')">Characters</v-btn>
+    <!-- <v-btn flat @click="$router.push('compendium')">Compendium</v-btn> -->
+    <v-spacer></v-spacer>
+    <v-btn fab flat >
+      <v-avatar size="36px" @click="$router.push('profile')" >
+        <img :src="userPhoto" >
+      </v-avatar>
+    </v-btn>
+    <v-btn flat href="#" @click.prevent="logOut">Log Out</v-btn>
+  </v-toolbar>
 </template>
 
 <script>

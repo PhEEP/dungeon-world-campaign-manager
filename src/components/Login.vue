@@ -1,36 +1,27 @@
 <template>
-<div class="ui middle aligned center aligned centerAligned grid login">
-  <div class="column ui segment">
-    <h2 class="ui orange image header">
-      <img src="http://placehold.it/50x50?color=red" alt="" class="image">
-      <div class="content">Speak, friend, and enter</div>
-    </h2>
-    <div class="ui large form">
-      <div class="ui stacked segment">
-        <div class="field" :class="">
-          <div class="ui left icon input">
-            <i class="user icon"></i>
-            <input type="text" placeholder="Email" v-model="email">
-          </div>
-        </div>
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="lock icon"></i>
-            <input type="password" placeholder="Password" v-model="password">
-          </div>
-        </div>
-        <button class="ui fluid large orange submit button" @click="login">Log In</button>
-        <button class="ui fluid large blue submit button" @click="loginWithGoogle" >With Google</button>
-      </div>
-    </div>
-    <div class="ui message">
-      <p>Don't have an account?
-        <router-link to="/signup">Create one!</router-link>
-      </p>
-    </div>
-  </div>
-</div>
+  <v-container fluid fill-height class="login">
+    <v-layout row wrap align-center>
+      <v-flex md4 offset-md4 sm6 offset-sm3>
+        <v-card light>
+          <v-card-title primary-title>
+            <h3 class="headline mb-2">
+              Speak, friend, and enter
+            </h3>
+          </v-card-title>
+          <v-card-text>
 
+          <v-text-field label="Email" placeholder="Email" v-model="email"></v-text-field>
+          <v-text-field type="password" label="Password" placeholder="Password" v-model="password"></v-text-field>
+          <v-btn flat color="primary"@click="login">Log In</v-btn>
+          <v-btn color="primary"@click="loginWithGoogle">With Google</v-btn>
+          <div>
+              Don't have an account?<router-link to="/signup">Create one!</router-link>
+          </div>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -77,17 +68,6 @@ export default {
 </script>
 
 <style scoped>
-.centerAligned {
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-}
-.grid {
-  height:100%;
-}
-.column {
-  max-width:400px;
-}
 /* replace this with some calculated image from an api or something */
 .login {
   background-image: url('https://placeimg.com/1920/1080/nature');
@@ -96,5 +76,8 @@ export default {
   background-repeat:no-repeat;
   height: 100vh;
   margin: 0;
+}
+.fullHeightLayout {
+  height:100%;
 }
 </style>
