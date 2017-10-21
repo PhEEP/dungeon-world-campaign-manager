@@ -3,27 +3,27 @@
     <div class="ui vertical masthead center aligned segment">
       <div class="ui text container">
         <h1 class="ui header">
-          Dungeon World Campaign Manager
+          Worlds of Adventure Campaign Manager
           <div class="sub header">Keep everything in order</div>
         </h1>
-        <div class="ui huge primary button">
+        <div class="ui huge primary button" @click="$router.push('/characters')">
           Allons-y
         </div>
       </div>
     </div>
-    <div class="ui vertical segment">
-      <div class="ui vertical">
-        <h2 class="ui header">Campaigns</h2>
-        <p>Keep your notes in order, your players informed, and your creations at your fingertips</p>
-      </div>
-    </div>
-    <div class="ui vertical segment">
+    <div class="ui vertical green segment">
       <div class="ui vertical">
         <h2 class="ui header">Characters</h2>
         <p>Manage your character sheets, keep track of the small stuff, have fun!</p>
       </div>
     </div>
-    <div class="ui vertical segment">
+    <div class="ui vertical orange segment">
+      <div class="ui vertical">
+        <h2 class="ui header">Campaigns</h2>
+        <p>Keep your notes in order, your players informed, and your creations at your fingertips</p>
+      </div>
+    </div>
+    <div class="ui vertical red segment">
       <div class="ui vertical">
         <h2 class="ui header">Compendium</h2>
         <p>Browse the accumulated knowledge of the ages, create new NPCs, find treasure</p>

@@ -10,6 +10,7 @@
           :drive="character.drive"
           :background="character.background"
           :look="character.look"
+          :sampleBonds="character.sampleBonds"
           >
         </CharacterDetails>
       </div>
@@ -55,7 +56,7 @@ export default {
       })
   },
   components: {
-    CharacterBackstory
+    CharacterDetails
   }
 }
 </script>

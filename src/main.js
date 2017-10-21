@@ -1,15 +1,15 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
+import Vuetify from 'vuetify'
 import router from './router'
 import firebase from 'firebase'
 import { config } from './helpers/firebaseConfig'
-import Titlecase from 'vue-titlecase'
-import '../node_modules/semantic-ui-css/semantic.min.css'
+import './stylus/main.styl'
+import App from './App'
 
 Vue.config.productionTip = false
-Vue.use(Titlecase)
+Vue.use(Vuetify)
 let app
 
 firebase.initializeApp(config)
