@@ -1,21 +1,20 @@
 <template>
-  <div class="ui main fluid container" v-if="character !== {}">
-    <h1 class="ui header">{{ character.name }}
-      <div class="sub header">{{ character.className }}</div>
-    </h1>
-    <div class="ui stackable grid">
-      <div class="ui four wide column">
+  <v-container fluid grid-list-lg v-if="character !== {}">
+    <v-layout row wrap>
+      <v-flex sm4 md3>
         <CharacterDetails
           :avatarUrl="character.avatarUrl"
           :drive="character.drive"
           :background="character.background"
           :look="character.look"
           :sampleBonds="character.sampleBonds"
+          :name="character.name"
+          :className="character.className"
           >
         </CharacterDetails>
-      </div>
-    </div>
-  </div>
+      </v-flex>
+    </v-layout>
+  </v-container>
   <div v-else>
     <div class="ui orange text container segment">
       oops, looks like you need to create a character

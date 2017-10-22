@@ -1,37 +1,40 @@
 <template>
-  <div class="ui main fluid container">
-    <div class="ui stackable grid">
-      <h1 class="header">Characters</h1>
-      <div class="ui five doubling link cards">
-        <router-link class="card" :to="'/character/' + character.id" v-for="(character, index) in createdCharacters" v-bind:key="index">
-          <div class="image">
-            <img :src="character.avatar" alt="">
-          </div>
-          <div class="content">
-            <div class="header">{{ character.name }}</div>
-            <div class="meta">{{ character.className }}</div>
-          </div>
-        </router-link>
-      </div>
-    </div>
-    <div class="ui stackable grid">
-      <div class="ui red segment text container" v-if="characterCount >= 5">You've hit max characters, kill one to give another life!</div>
-      <div class="ui stackable grid" v-for="cClass in characterClasses" v-bind:key="cClass.id">
-        <div class="sixteen wide column">
-          <h2>{{ cClass.name }}</h2>
-        </div>
-        <div class="four wide column">
-          <img :src="cClass.classIcon" :title="cClass.classIconAttribution" class="ui centered medium image">
-        </div>
-        <div class="twelve wide column">
-          <p>
-            {{ cClass.flavorText }}
-          </p>
-          <router-link :to="'/characters/new/' + cClass.id" class="ui primary button" v-if="characterCount <= 4">Create {{ cClass.name }}</router-link>
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-container fluid grid-list-lg>
+      <v-layout row wrap>
+        <v-flex md3 v-for="(character, index) in createdCharacters" v-bind:key="index">
+          <v-card>
+            <v-card-media :src="character.avatar || 'http://placehold.it/200/200'" height="200px"></v-card-media>
+            <v-card-title primary-title>
+              <div>
+                <h3 class="headline mb-0">{{ character.name }}</h3>
+                <div>{{ character.className }}</div>
+              </div>
+            </v-card-title>
+            <v-card-actions>
+              <v-btn block color="secondary" @click="$router.push('/character/' + character.id)">{{ character.name }}</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+        <v-flex xs12 >
+          <v-card dark tile color="error" v-if="characterCount >= 4"><v-card-text>You've hit max characters, kill one to give another life!</v-card-text></v-card>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs12 sm6 md4 lg3 v-for="cClass in characterClasses" v-bind:key="cClass.id">
+          <v-card>
+            <v-card-media height="200px" :src="cClass.classIcon" :title="cClass.classIconAttribution">
+            </v-card-media>
+            <v-card-title primary-title >
+              <h4 mb-0>{{ cClass.name }}</h4>
+              {{ cClass.flavorText }}
+            </v-card-title>
+            <v-card-actions v-if="characterCount < 4">
+              <v-btn block color="secondary" @click="$router.push('/characters/new/' + cClass.id)">Create {{ cClass.name }}</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+  </v-container>
 </template>
 
 

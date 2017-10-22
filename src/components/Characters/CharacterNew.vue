@@ -1,36 +1,31 @@
 <template>
-  <div class="ui main container">
-    <div class="ui small form">
-      <h1 class="header">{{ classData.name }} : {{ characterName }}</h1>
-      <div class="ui stackable grid" v-if="typeof baseClass !== 'string'">
-        <div class="row">
-          <div class="four wide column">
-            <div class="ui labeled input">
-              <div class="ui label">
-                Name
-              </div>
-              <input type="text" name="characterName" class="ui" placeholder="Who are you?" v-model="characterName">
-            </div>
-            <em v-if="classData.exampleNames">{{ classData.exampleNames }}</em>
-          </div>
-          <div class="four wide column">
-            <img :src="avatarUrl !== null ? avatarUrl : 'http://placehold.it/120/120'" :alt="classData.name" :title="classData.name" class="ui centered small circular image">
-            <input type="file" name="characterAvatar" id="" @change="onFilePicked" accept="image/*">
-          </div>
-          <div class="eight wide column">
-            <p>{{ classData.flavorText }}</p>
-          </div>
+  <v-container fluid grid-list-lg>
+    <h1 class="display-2">{{ characterName }} <h1 class="subheading"> {{ classData.name }}</h1></h1>
+    <v-layout row wrap>
+      <v-flex md6 lg3 v-if="typeof baseClass !== 'string'">
+        <v-text-field label="Name" placeholder="Who are you?" v-model="characterName"></v-text-field>
+        <em v-if="classData.exampleNames">{{ classData.exampleNames }}</em>
+        <div class="four wide column">
+          <img :src="avatarUrl !== null ? avatarUrl : 'http://placehold.it/120/120'" :alt="classData.name" :title="classData.name" class="ui centered small circular image">
+          <input type="file" name="characterAvatar" id="" @change="onFilePicked" accept="image/*">
         </div>
-      </div>
-      <CharacterDrives v-bind:cClass="classId" @selected="selectDrive" @updateDrive="updatedDrive" :disabled="submitting"></CharacterDrives>
-      <CharacterBackgrounds v-bind:cClass="classId" @selected="selectBackground" @updateBackground="updatedBackground"></CharacterBackgrounds>
-      <!-- <CharacterBonds v-bind:cClass="classId" v-bind:startingBonds="classData.startingBonds" @updatedBonds="updatedBonds"></CharacterBonds> -->
-      <CharacterLooks v-bind:classLook="classData.look" @updateLook="updatedLook"></CharacterLooks>
-      <button class="ui primary button" @click="saveCharacter" :disabled="submitting || aboveCharacterCount">
+          <p>{{ classData.flavorText }}</p>
+        </div>
+      </v-flex>
+      <v-flex md6 lg3>
+        <CharacterDrives v-bind:cClass="classId" @selected="selectDrive" @updateDrive="updatedDrive" :disabled="submitting"></CharacterDrives>
+      </v-flex>
+      <v-flex md6 lg3>
+        <CharacterBackgrounds v-bind:cClass="classId" @selected="selectBackground" @updateBackground="updatedBackground"></CharacterBackgrounds>
+      </v-flex>
+      <v-flex md6 lg3>
+        <CharacterLooks v-bind:classLook="classData.look" @updateLook="updatedLook"></CharacterLooks>
+      </v-flex>
+      <v-btn block color="primary" @click="saveCharacter" :disabled="submitting || aboveCharacterCount">
         Save
-      </button>
-    </div>
-  </div>
+      </v-btn>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -38,7 +33,6 @@
   require('firebase/firestore')
   import CharacterDrives from '@/components/Characters/CharacterDrives'
   import CharacterBackgrounds from '@/components/Characters/CharacterBackgrounds'
-  // import CharacterBonds from '@/components/Characters/CharacterBonds'
   import CharacterLooks from '@/components/Characters/CharacterLooks'
 
   export default {
@@ -61,7 +55,6 @@
     components: {
       CharacterDrives,
       CharacterBackgrounds,
-      // CharacterBonds,
       CharacterLooks
     },
     computed: {

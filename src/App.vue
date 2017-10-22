@@ -1,14 +1,16 @@
 <template>
   <v-app>
-    <v-toolbar color="primary" v-show="loggedIn">
-      <v-btn icon @click="$router.push('hello')" >
+    <v-toolbar dark fixed color="primary" v-show="loggedIn" app>
+      <v-btn icon @click="$router.push('/hello')" >
         <v-icon>home</v-icon>
       </v-btn>
       <!-- <v-btn flat @click="$router.push('campaigns')">Campaigns</v-btn> -->
-      <v-btn flat @click="$router.push('characters')">Characters</v-btn>
+      <v-btn icon @click="$router.push('/characters')">
+        <v-icon>recent_actors</v-icon>
+      </v-btn>
       <!-- <v-btn flat @click="$router.push('compendium')">Compendium</v-btn> -->
       <v-spacer></v-spacer>
-      <v-btn fab flat @click="$router.push('profile')">
+      <v-btn fab flat @click="$router.push('/profile')">
         <v-avatar size="36px"  >
           <img :src="userPhoto" >
         </v-avatar>
