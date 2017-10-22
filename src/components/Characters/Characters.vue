@@ -11,8 +11,23 @@
               </div>
             </v-card-title>
             <v-card-actions>
-              <v-btn block color="secondary" @click="$router.push('/character/' + character.id)">{{ character.name }}</v-btn>
+              <v-btn block color="secondary" @click="$router.push('/character/' + character.id)">View {{ character.name }}</v-btn>
+              <v-btn icon color="error" outline @click.stop="promptDelete = true, deathRow = character.name, deathRowId = character.id"><v-icon>delete</v-icon></v-btn>
             </v-card-actions>
+            <v-dialog v-model="promptDelete">
+              <v-card>
+                <v-card-title primary-title>
+                  Delete {{deathRow}}?
+                </v-card-title>
+                <v-card-text color="warning">
+                  Deleting a character is irreversible!
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn block raised color="success" @click.stop="promptDelete=false">Go back</v-btn>
+                  <v-btn icon color="error" dark @click="deleteCharacter(deathRowId)"><v-icon>delete</v-icon></v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-card>
         </v-flex>
         <v-flex xs12 >
@@ -48,27 +63,43 @@ export default {
       characters: '',
       characterClasses: [],
       createdCharacters: [],
-      characterCount: 0
+      characterCount: 0,
+      promptDelete: false
+    }
+  },
+  methods: {
+    deleteCharacter (characterId) {
+      let user = firebase.auth().currentUser
+      console.log(characterId)
+      firebase.firestore().doc('users/' + user.uid + '/characters/' + characterId).delete().then(() => {
+        this.createdCharacters = []
+        this.characterCount = 0
+        console.log('Document successfully deleted!')
+      }).catch((error) => {
+        console.error('Error removing document: ', error)
+      })
+    },
+    getUserCharacters (user) {
+      firebase.firestore().collection('users/' + user.uid + '/characters').get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.characterCount++
+            this.createdCharacters.push({
+              id: doc.id,
+              name: doc.data().name,
+              avatar: doc.data().avatarUrl,
+              className: doc.data().className
+            })
+          })
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   },
   mounted () {
     let user = firebase.auth().currentUser
-
-    firebase.firestore().collection('users/' + user.uid + '/characters').get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          this.characterCount++
-          this.createdCharacters.push({
-            id: doc.id,
-            name: doc.data().name,
-            avatar: doc.data().avatarUrl,
-            className: doc.data().className
-          })
-        })
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    this.getUserCharacters(user)
     firebase.firestore().doc('characters/baseClass').get()
     .then((doc) => {
       if (doc.exists) {

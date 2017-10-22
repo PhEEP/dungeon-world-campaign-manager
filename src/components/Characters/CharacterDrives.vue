@@ -1,30 +1,14 @@
 <template>
-<div class="row">
-  <div class="ui stackable grid segment">
-      <div class="sixteen wide column">
-        <h3 class="ui header">Drive
-          <div class="sub header">Choose one or write your own</div>
-        </h3>
-      </div>
-      <div class="four wide column">
-        <div class="ui labeled input">
-          <input type="text" v-model="currentDrive.title" placeholder="Drive Title" @input="updateDrive">
-        </div>
-        <div class="field">
-          <textarea rows="4" v-model="currentDrive.description" placeholder="Drive Description" @input="updateDrive"/>
-        </div>
-      </div>
-      <div class="four wide column"  v-for="(drive, index) in drives" v-bind:key="index">
-        <div class="inline field" >
-          <div class="ui radio checkbox">
-            <input type="radio" name="drive" :value="drive" v-model="selectedDrive" @change="selectDrive">
-            <label for="drive"><strong>{{drive.title}}</strong>
-            <p>{{drive.description}}</p></label>
-          </div>
-        </div>
-      </div>
+  <div>
+    <h5 class="title">Drive
+      <h5 class="subheading">Choose one or write your own</h5>
+    </h5>
+    <v-text-field v-model="currentDrive.title" @input="updateDrive" placeholder="Title"></v-text-field>
+    <v-text-field multi-line v-model="currentDrive.description" placeholder="Drive Description" @input="updateDrive"/>
+    <v-radio-group v-model="selectedDrive" :mandatory="false" @change="selectDrive">
+      <v-radio v-for="(drive, index) in drives" :key="index" :label="drive.title" :value="drive" ></v-radio>
+    </v-radio-group>
   </div>
-</div>
 </template>
 
 <script>

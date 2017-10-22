@@ -1,28 +1,15 @@
 <template>
-  <div class="row">
-    <div class="ui stackable grid segment">
-      <div class="sixteen wide column">
-        <h3 class="ui header">Background
-            <div class="sub header">Choose one or write your own</div>
-          </h3>
-      </div>
-      <div class="ui four wide column">
-        <div class="ui labeled input">
-          <input type="text" v-model="currentBackground.title" placeholder="Background Title" @input="updateBackground">
-        </div>
-          <vue-editor v-model="currentBackground.text" :editorToolbar="customToolbar" placeholder="Background description" id="background-editor" @input="updateBackground"></vue-editor>
-      </div>
-      <div class="four wide column" v-for="(background, index) in backgrounds" v-bind:key="index">
-        <div class="inline field">
-          <div class="ui radio checkbox">
-            <input type="radio" name="background" :value="background" v-model="selectedBackground" @change="selectBackground">
-            <label for="background"><strong>{{ background.title }}</strong>
-            <div v-html="background.text" v-if="background.text"></div></label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div>
+  <h5 class="title">Background
+    <h5 class="subheading">Choose one or write your own</h5>
+  </h5>
+  <v-text-field  v-model="currentBackground.title" placeholder="Background Title" @input="updateBackground">
+  </v-text-field>
+  <vue-editor v-model="currentBackground.text" :editorToolbar="customToolbar" placeholder="Background description" id="background-editor" @input="updateBackground"></vue-editor>
+  <v-radio-group v-model="selectedBackground" :mandatory="false" @change="selectBackground">
+    <v-radio v-for="(background, index) in backgrounds" v-bind:key="index" :label="background.title" :value="background" ></v-radio>
+  </v-radio-group>
+</div>
 </template>
 
 <script>

@@ -1,13 +1,10 @@
 <template>
-<div class="row">
-  <div class="ui stackable grid segment">
-      <div class="sixteen wide column">
-        <h3 class="ui header">Look
-          <div class="sub header"> Pick as many that apply</div>
-        </h3>
-      </div>
-      <div class="eight wide column">
-        <h4 class="ui header">
+<div >
+        <h5 class="title">Look
+          <div class="subheading"> Pick as many that apply</div>
+        </h5>
+        <vue-editor :editorToolbar="customToolbar" placeholder="What do you look like?" id="looks-editor" @input="updateLook" v-model="looks"></vue-editor>
+        <h4 class="caption">
           Some examples
         </h4>
         <ul>
@@ -15,11 +12,6 @@
             {{ look }}
           </li>
         </ul>
-      </div>
-      <div class="eight wide column">
-        <vue-editor :editorToolbar="customToolbar" placeholder="What do you look like?" id="looks-editor" @input="updateLook" v-model="looks"></vue-editor>
-      </div>
-  </div>
 </div>
 </template>
 

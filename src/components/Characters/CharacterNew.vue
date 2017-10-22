@@ -1,16 +1,18 @@
 <template>
   <v-container fluid grid-list-lg>
-    <h1 class="display-2">{{ characterName }} <h1 class="subheading"> {{ classData.name }}</h1></h1>
+
     <v-layout row wrap>
       <v-flex md6 lg3 v-if="typeof baseClass !== 'string'">
+        <h1 class="display-2">{{ characterName }} <h1 class="subheading"> {{ classData.name }}</h1></h1>
         <v-text-field label="Name" placeholder="Who are you?" v-model="characterName"></v-text-field>
         <em v-if="classData.exampleNames">{{ classData.exampleNames }}</em>
-        <div class="four wide column">
-          <img :src="avatarUrl !== null ? avatarUrl : 'http://placehold.it/120/120'" :alt="classData.name" :title="classData.name" class="ui centered small circular image">
-          <input type="file" name="characterAvatar" id="" @change="onFilePicked" accept="image/*">
-        </div>
-          <p>{{ classData.flavorText }}</p>
-        </div>
+        <v-layout column wrap>
+          <v-card-media :src="avatarUrl !== null ? avatarUrl : 'http://placehold.it/120/120?text=lorem+picture'" height="200px" contain>
+          </v-card-media>
+          <v-btn color="primary" block @click="onPickFile">Add Image</v-btn>
+          <input style="display:none;" type="file" name="characterAvatar" id="" @change="onFilePicked" accept="image/*" ref="avatarInput">
+        </v-layout>
+        <p class="body-1">{{ classData.flavorText }}</p>
       </v-flex>
       <v-flex md6 lg3>
         <CharacterDrives v-bind:cClass="classId" @selected="selectDrive" @updateDrive="updatedDrive" :disabled="submitting"></CharacterDrives>
@@ -81,6 +83,9 @@
       updatedLook (value) {
         this.look = value
       },
+      onPickFile () {
+        this.$refs.avatarInput.click()
+      },
       onFilePicked (event) {
         const files = event.target.files
         console.log(files[0])
@@ -96,6 +101,7 @@
         this.avatar = files[0]
       },
       saveCharacter () {
+        // @TODO PREVENT SAVE IF CHARACTER LIMIT REACHED
         this.submitting = true
         let user = firebase.auth().currentUser
         let userId = user.uid
@@ -105,7 +111,8 @@
           background: this.background,
           look: this.look,
           className: this.classData.name,
-          classId: this.classId
+          classId: this.classId,
+          sampleBonds: this.classData.sampleBonds
         }
         let imageUrl
         let docId
@@ -172,6 +179,6 @@
     font-weight: bold
   }
   .quillWrapper * {
-    font-family: Lato;
+    font-family: Roboto;
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-media :src="this.avatarUrl" height="200px"></v-card-media>
+    <v-card-media :src="this.avatarUrl" height="200px" contain></v-card-media>
     <v-card-title primary-title>
       <div>
         <h1 class="display-1">{{ this.name }}
@@ -31,15 +31,15 @@
       </div>
         <v-dialog fullscreen transition="dialog-bottom-transition" :overlay="false" v-model="dialog">
           <v-card>
-            <v-toolbar dark color="accent">
-              <v-btn icon @click.native="dialog = false" dark>
+            <v-toolbar color="accent">
+              <v-btn icon @click.native="dialog = false">
                 <v-icon>close</v-icon>
               </v-btn>
               <v-toolbar-title>Choose 4 to start</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
               <vue-editor v-model="bonds" :editorToolbar="customToolbar" id="bondsEditor"></vue-editor>
-              <div v-for="(bond, index) in this.sampleBonds" :key="index" class="column"><v-btn icon flat color="primary" @click="bonds += bond"><v-icon>add</v-icon> </v-btn>{{ bond }}</div>
+              <div v-for="(bond, index) in this.sampleBonds" :key="index"><v-btn icon flat color="primary" @click="bonds += bond"><v-icon>add</v-icon> </v-btn>{{ bond }}</div>
             </v-card-text>
           </v-card>
         </v-dialog>

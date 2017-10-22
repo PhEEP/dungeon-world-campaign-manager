@@ -12,7 +12,7 @@
     <v-flex sm12 md4>
       <h3 class="display-2">Characters</h3>
       <p class="body-1">Manage your character sheets, keep track of the small stuff, have fun!</p>
-      <v-btn block color="accent" dark @click="$router.push('/characters')">Create/Manage Characters</v-btn>
+      <v-btn raised block color="secondary" dark @click="$router.push('/characters')">Create/Manage Characters</v-btn>
     </v-flex>
     <v-flex sm12 md4>
       <h3 class="display-2">Campaigns</h3>
