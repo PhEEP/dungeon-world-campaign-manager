@@ -5,6 +5,7 @@ import Login from '@/components/Login'
 import SignUp from '@/components/SignUp'
 import Campaigns from '@/components/Campaigns'
 import Characters from '@/components/Characters/Characters'
+import CharactersAdmin from '@/components/CharactersAdmin/CA'
 import CharacterNew from '@/components/Characters/CharacterNew'
 import Character from '@/components/Character/Character'
 import Compendium from '@/components/Compendium'
@@ -70,6 +71,12 @@ let router = new Router({
       path: '/characters/new/:className',
       name: 'New Character',
       components: { default: CharacterNew, nav: DWCMNav },
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/characters/admin/:className',
+      name: 'CharactersAdmin',
+      components: { default: CharactersAdmin, nav: DWCMNav },
       meta: { requiresAuth: true }
     },
     {
