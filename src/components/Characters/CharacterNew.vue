@@ -2,29 +2,93 @@
   <v-container fluid grid-list-lg>
 
     <v-layout row wrap>
-      <v-flex md6 lg3 v-if="typeof baseClass !== 'string'">
+      <v-flex md4 v-if="typeof baseClass !== 'string'">
         <h1 class="display-2">{{ characterName }} <h1 class="subheading"> {{ classData.name }}</h1></h1>
-        <v-text-field label="Name" placeholder="Who are you?" v-model="characterName"></v-text-field>
+        <v-text-field
+          label="Name"
+          placeholder="Who are you?"
+          v-model="characterName"
+          :error-messages="errors.collect('Character Name')"
+          v-validate="'required'"
+          data-vv-name="Character Name"
+          required
+        ></v-text-field>
         <em v-if="classData.exampleNames">{{ classData.exampleNames }}</em>
         <v-layout column wrap>
-          <v-card-media :src="avatarUrl !== null ? avatarUrl : 'http://placehold.it/120/120?text=lorem+picture'" height="200px" contain>
+          <v-card-media :src="avatarUrl" height="200px" contain>
           </v-card-media>
           <v-btn color="primary" block @click="onPickFile">Add Image</v-btn>
           <input style="display:none;" type="file" name="characterAvatar" id="" @change="onFilePicked" accept="image/*" ref="avatarInput">
         </v-layout>
         <p class="body-1">{{ classData.flavorText }}</p>
       </v-flex>
-      <v-flex md6 lg3>
-        <CharacterDrives v-bind:cClass="classId" @selected="selectDrive" @updateDrive="updatedDrive" :disabled="submitting"></CharacterDrives>
+      <v-flex md4>
+        <h5 class="title">Drive
+          <h5 class="subheading">Choose one or write your own</h5>
+        </h5>
+        <v-text-field
+          v-model="drive.title"
+          label="Drive Title"
+          :error-messages="errors.collect('Drive Title')"
+          v-validate="'required'"
+          data-vv-name="Drive Title"
+          required
+        ></v-text-field>
+        <v-alert v-show="errors.has('Drive Description')" color="error">{{ errors.first('Drive Description') }}</v-alert>
+        <v-text-field
+          multi-line
+          v-model="drive.description"
+          label="Drive Description"
+          :error-messages="errors.collect('Drive Description')"
+          data-vv-name="Drive Description"
+          v-validate="'required'"
+          required
+        ></v-text-field>
+        <CharacterDrives
+          v-bind:cClass="classId"
+          @selected="selectDrive"
+          :disabled="submitting"
+        ></CharacterDrives>
       </v-flex>
-      <v-flex md6 lg3>
+      <v-flex md4>
+        <h5 class="title">Background
+          <h5 class="subheading">Choose one or write your own</h5>
+        </h5>
+        <v-text-field
+          v-model="background.title"
+          label="Background Title"
+          v-validate="'required'"
+          :error-messages="errors.collect('Background Title')"
+          data-vv-name="Background Title"
+          required
+        ></v-text-field>
+        <v-alert v-show="errors.has('Background Description')" color="error">{{ errors.first('Background Description') }}</v-alert>
+        <vue-editor
+          v-model="background.text"
+          :editorToolbar="customToolbar"
+          placeholder="Background description"
+          id="background-editor"
+        ></vue-editor>
+        <v-text-field
+          textarea
+          style="display:none;"
+          v-model="background.text"
+          v-validate="'required'"
+          data-vv-name="Background Description"
+          :has-error="errors.has('Background Description')"
+          required
+        ></v-text-field>
         <CharacterBackgrounds v-bind:cClass="classId" @selected="selectBackground" @updateBackground="updatedBackground"></CharacterBackgrounds>
       </v-flex>
-      <v-flex md6 lg3>
-        <CharacterLooks v-bind:classLook="classData.look" @updateLook="updatedLook"></CharacterLooks>
+      <v-flex md4 xs12>
+        <h5 class="title">Look
+          <div class="subheading"> Pick as many that apply</div>
+        </h5>
+        <vue-editor :editorToolbar="customToolbar" placeholder="What do you look like?" id="looks-editor" v-model="look"></vue-editor>
       </v-flex>
-      <v-btn block color="primary" @click="saveCharacter" :disabled="submitting || aboveCharacterCount">
-        Save
+      <CharacterLooks v-bind:classLook="classData.look" @updateLook="updatedLook"></CharacterLooks>
+      <v-btn fab fixed bottom right icon :color="errors.items.length > 0 ? 'error' : 'accent'" @click="saveCharacter" :disabled="submitting || aboveCharacterCount">
+        <v-icon>save</v-icon>
       </v-btn>
     </v-layout>
   </v-container>
@@ -36,7 +100,7 @@
   import CharacterDrives from '@/components/Characters/CharacterDrives'
   import CharacterBackgrounds from '@/components/Characters/CharacterBackgrounds'
   import CharacterLooks from '@/components/Characters/CharacterLooks'
-
+  import { VueEditor } from 'vue2-editor'
   export default {
     name: 'CharacterNew',
     data () {
@@ -51,13 +115,18 @@
         look: '',
         avatarUrl: null,
         avatar: '',
-        submitting: false
+        submitting: false,
+        customToolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'bullet' }]
+        ]
       }
     },
     components: {
       CharacterDrives,
       CharacterBackgrounds,
-      CharacterLooks
+      CharacterLooks,
+      VueEditor
     },
     computed: {
       aboveCharacterCount () {
@@ -66,22 +135,16 @@
     },
     methods: {
       selectDrive (value) {
-        this.drive = value
-      },
-      updatedDrive (value) {
-        this.drive = value
+        this.drive = {...value}
       },
       selectBackground (value) {
-        this.background = value
+        this.background = {...value}
       },
       updatedBackground (value) {
         this.background = value
       },
-      updatedBonds (value) {
-        this.bonds = value
-      },
       updatedLook (value) {
-        this.look = value
+        this.look = value.join(' ')
       },
       onPickFile () {
         this.$refs.avatarInput.click()
@@ -103,40 +166,47 @@
       saveCharacter () {
         // @TODO PREVENT SAVE IF CHARACTER LIMIT REACHED
         this.submitting = true
-        let user = firebase.auth().currentUser
-        let userId = user.uid
-        let newChar = {
-          name: this.characterName,
-          drive: this.drive,
-          background: this.background,
-          look: this.look,
-          className: this.classData.name,
-          classId: this.classId,
-          sampleBonds: this.classData.sampleBonds
-        }
-        let imageUrl
-        let docId
-        firebase.firestore().collection('users/' + userId + '/characters').add(newChar)
-          .then((docRef) => {
-            docId = docRef.id
-            return docId
-          })
-          .then(docId => {
-            const filename = this.avatar.name
-            const ext = filename.slice(filename.lastIndexOf('.'))
-            return firebase.storage().ref('characters/' + docId + ext).put(this.avatar)
-          })
-          .then(fileData => {
-            imageUrl = fileData.metadata.downloadURLs[0]
-            return firebase.firestore().doc('users/' + userId + '/characters/' + docId).update({avatarUrl: imageUrl})
-          })
-          .then(() => {
-            this.$router.push({ name: 'Character', params: {id: docId} })
-          })
-          .catch((error) => {
-            this.submitting = false
-            console.log(error)
-          })
+        this.$validator.validateAll().then((result) => {
+          if (result) {
+            let user = firebase.auth().currentUser
+            let userId = user.uid
+            let newChar = {
+              name: this.characterName,
+              drive: this.drive,
+              background: this.background,
+              look: this.look,
+              className: this.classData.name,
+              classId: this.classId,
+              sampleBonds: this.classData.sampleBonds
+            }
+            let imageUrl
+            let docId
+            firebase.firestore().collection('users/' + userId + '/characters').add(newChar)
+              .then((docRef) => {
+                docId = docRef.id
+                return docId
+              })
+              .then(docId => {
+                const filename = this.avatar.name
+                const ext = filename.slice(filename.lastIndexOf('.'))
+                return firebase.storage().ref('characters/' + docId + ext).put(this.avatar)
+              })
+              .then(fileData => {
+                imageUrl = fileData.metadata.downloadURLs[0]
+                return firebase.firestore().doc('users/' + userId + '/characters/' + docId).update({avatarUrl: imageUrl})
+              })
+              .then(() => {
+                this.$router.push({ name: 'Character', params: {id: docId} })
+              })
+              .catch((error) => {
+                this.submitting = false
+                console.log(error)
+              })
+            return
+          }
+          this.submitting = false
+          alert(JSON.stringify(this.errors, null, 2))
+        })
       }
     },
     mounted () {

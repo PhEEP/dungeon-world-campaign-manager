@@ -17,7 +17,7 @@
             <v-dialog v-model="promptDelete">
               <v-card>
                 <v-card-title primary-title>
-                  Delete {{deathRow}}?
+                  Delete {{ deathRow }}?
                 </v-card-title>
                 <v-card-text color="warning">
                   Deleting a character is irreversible!
@@ -64,7 +64,8 @@ export default {
       characterClasses: [],
       createdCharacters: [],
       characterCount: 0,
-      promptDelete: false
+      promptDelete: false,
+      deathRow: ''
     }
   },
   methods: {
