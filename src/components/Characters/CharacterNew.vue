@@ -205,7 +205,6 @@
             return
           }
           this.submitting = false
-          alert(JSON.stringify(this.errors, null, 2))
         })
       }
     },
@@ -245,9 +244,6 @@
 </script>
 
 <style>
-  .trigger {
-    font-weight: bold
-  }
   .quillWrapper * {
     font-family: Roboto;
   }

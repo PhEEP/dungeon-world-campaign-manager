@@ -41,7 +41,7 @@
             </v-card-media>
             <v-card-title primary-title >
               <h4 mb-0>{{ cClass.name }}</h4>
-              {{ cClass.flavorText }}
+              <div v-html="cClass.flavorText"></div>
             </v-card-title>
             <v-card-actions v-if="characterCount < 4">
               <v-btn block color="secondary" @click="$router.push('/characters/new/' + cClass.id)">Create {{ cClass.name }}</v-btn>

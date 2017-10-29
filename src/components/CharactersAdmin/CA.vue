@@ -20,11 +20,34 @@
         <vue-editor :id="'background' + index.split(' ').join('_')" v-model="background.text" :editorToolbar="customToolbar"></vue-editor>
       </v-flex>
       <v-flex md4 card>
-        <v-text-field v-model="tempBackground.title" label="Background title" ></v-text-field>
+        <v-text-field v-model="tempBackground.title" label="Background Title" ></v-text-field>
         <vue-editor id="tempBackground" v-model="tempBackground.text" :editorToolbar="customToolbar" placeholder="Background text"></vue-editor>
         <v-btn color="secondary" dark @click="addBackground">Add background</v-btn>
       </v-flex>
     </v-layout>
+    <h3 block>Drives</h3>
+    <v-layout row wrap v-if="drives != {}">
+      <v-flex md4 v-for="(drive, index) in drives" :key="index">
+        <v-text-field v-model="drive.title"></v-text-field>
+        <v-text-field textarea v-model="drive.description"></v-text-field>
+      </v-flex>
+      <v-flex md4 card>
+        <v-text-field v-model="tempDrive.title" label="Drive Title" ></v-text-field>
+        <v-text-field textarea id="tempDrive" v-model="tempDrive.description" label="Drive Text"></v-text-field>
+        <v-btn color="secondary" dark @click="addDrive">Add drive</v-btn>
+      </v-flex>
+    </v-layout>
+    <h3 block>Bonds</h3>
+    <v-layout row wrap v-if="bonds != {}">
+      <v-flex xs12 sm6 v-for="(bond, index) in bonds" :key="index">
+        <v-text-field :value="bond"></v-text-field>
+      </v-flex>
+      <v-flex xs12 sm6 card>
+        <v-text-field v-model="tempBond" label="Bond" ></v-text-field>
+        <v-btn color="secondary" dark @click="addBond">Add bond</v-btn>
+      </v-flex>
+    </v-layout>
+
     <v-btn fab fixed bottom right color="primary" dark @click="updateBaseInfo">
       <v-icon>save</v-icon>
     </v-btn>
@@ -46,11 +69,13 @@ export default {
       baseData: {},
       exampleNames: {},
       backgrounds: {},
-      tempBackground: { title: '', text: '' },
       drives: {},
-      flavorText: '',
       look: {},
-      sampleBonds: [],
+      bonds: [],
+      tempBackground: { title: '', text: '' },
+      tempDrive: { title: '', description: '' },
+      tempBond: '',
+      flavorText: '',
       startingBonds: 0,
       customToolbar: [
           ['bold', 'italic', 'underline'],
@@ -77,6 +102,14 @@ export default {
         })
         this.backgrounds = { ...tempBGs }
       })
+    charRef.collection('drives').get()
+      .then((querySnapshot) => {
+        let tempDrives = {}
+        querySnapshot.forEach((doc) => {
+          tempDrives[doc.id] = { ...doc.data() }
+        })
+        this.drives = { ...tempDrives }
+      })
   },
   methods: {
     updateBaseInfo () {
@@ -84,13 +117,19 @@ export default {
       let updatedBaseInfo = {
         exampleNames: this.baseData.exampleNames,
         name: this.baseData.name,
-        flavorText: this.baseData.flavorText
+        flavorText: this.baseData.flavorText,
+        sampleBonds: this.bonds
       }
       batch.update(charRef, updatedBaseInfo)
 
       for (let background in this.backgrounds) {
         let bgRef = charRef.collection('backgrounds').doc(background)
         batch.set(bgRef, this.backgrounds[background])
+      }
+
+      for (let drive in this.drives) {
+        let driveRef = charRef.collection('drives').doc(drive)
+        batch.set(driveRef, this.drives[drive])
       }
 
       batch.commit(updatedBaseInfo)
@@ -105,6 +144,15 @@ export default {
       this.backgrounds[this.tempBackground.title.replace(/[^\w]/g, '_')] = { ...this.tempBackground }
       this.tempBackground.title = ''
       this.tempBackground.text = ''
+    },
+    addDrive () {
+      this.drives[this.tempDrive.title.replace(/[^\w]/g, '_')] = { ...this.tempDrive }
+      this.tempDrive.title = ''
+      this.tempDrive.description = ''
+    },
+    addBond () {
+      this.bonds.push(this.tempBond)
+      this.tempBond = ''
     }
   }
 }
