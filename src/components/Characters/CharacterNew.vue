@@ -144,7 +144,7 @@
         this.background = value
       },
       updatedLook (value) {
-        this.look = value.join(' ')
+        this.look = value.join(', ')
       },
       onPickFile () {
         this.$refs.avatarInput.click()

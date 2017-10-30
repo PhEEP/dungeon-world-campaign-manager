@@ -56,6 +56,8 @@
 <script>
 import firebase from 'firebase'
 require('firebase/firestore')
+import _ from 'lodash'
+
 export default {
   name: 'Characters',
   data () {
@@ -71,14 +73,15 @@ export default {
   methods: {
     deleteCharacter (characterId) {
       let user = firebase.auth().currentUser
-      console.log(characterId)
       firebase.firestore().doc('users/' + user.uid + '/characters/' + characterId).delete().then(() => {
-        this.createdCharacters = []
-        this.characterCount = 0
-        console.log('Document successfully deleted!')
+        this.createdCharacters = _.filter(this.createdCharacters, (o) => {
+          return o.id !== characterId
+        })
+        this.characterCount = this.createdCharacters.length
       }).catch((error) => {
         console.error('Error removing document: ', error)
       })
+      this.promptDelete = false
     },
     getUserCharacters (user) {
       firebase.firestore().collection('users/' + user.uid + '/characters').get()
