@@ -6,23 +6,23 @@ import VeeValidate from 'vee-validate'
 import router from './router'
 import firebase from 'firebase'
 import { config } from './helpers/firebaseConfig'
+import { store } from './store'
 import './stylus/main.styl'
+import AlertCmp from './components/Shared/Alert.vue'
 import App from './App'
 
 Vue.config.productionTip = false
 Vue.use(Vuetify)
 Vue.use(VeeValidate)
-let app
+Vue.component('app-alert', AlertCmp)
 
 firebase.initializeApp(config)
 
-firebase.auth().onAuthStateChanged((user) => {
-  if (!app) {
-    app = new Vue({
-      el: '#app',
-      router,
-      template: '<App/>',
-      components: { App }
-    })
-  }
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  store,
+  template: '<App/>',
+  components: { App }
 })

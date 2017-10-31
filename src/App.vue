@@ -1,21 +1,49 @@
 <template>
   <v-app>
-    <v-toolbar dark fixed color="primary" v-show="loggedIn" app>
-      <v-btn icon @click="$router.push('/hello')" >
-        <v-icon>home</v-icon>
-      </v-btn>
-      <!-- <v-btn flat @click="$router.push('campaigns')">Campaigns</v-btn> -->
-      <v-btn icon @click="$router.push('/characters')">
-        <v-icon>recent_actors</v-icon>
-      </v-btn>
-      <!-- <v-btn flat @click="$router.push('compendium')">Compendium</v-btn> -->
+    <v-navigation-drawer temporary v-model="sideNav">
+      <v-list>
+        <v-list-tile
+          v-for="item in menuItems"
+          :key="item.title"
+          router
+          :to="item.link"
+        >
+          <v-list-tile-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>{{ item.title }}</v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar dark fixed color="primary" app>
+
+      <v-toolbar-side-icon
+        @click.native.stop="sideNav = !sideNav"
+        class="hidden-md-and-up"
+      ></v-toolbar-side-icon>
+      <v-toolbar-title>
+        WoACM
+      </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn fab flat @click="$router.push('/profile')">
-        <v-avatar size="36px"  >
-          <img :src="userPhoto" >
-        </v-avatar>
-      </v-btn>
-      <v-btn flat href="#" @click.prevent="logOut">Log Out</v-btn>
+      <v-toolbar-items class="hidden-sm-only" v-if="loggedIn">
+        <v-btn
+          flat
+          v-for="item in menuItems"
+          :key="item.title"
+          router
+          :to="item.link"
+          :disabled="!item.active"
+        >
+          <v-icon left dark>{{ item.icon }}</v-icon>
+          {{ item.title }}
+        </v-btn>
+        <v-btn fab flat @click="$router.push('/profile')">
+          <v-avatar size="36px"  >
+            <img :src="userPhoto" >
+          </v-avatar>
+        </v-btn>
+        <v-btn flat href="#" @click.prevent="logOut">Log Out</v-btn>
+      </v-toolbar-items>
     </v-toolbar>
     <main>
       <v-content>
@@ -37,7 +65,14 @@ export default {
     return {
       loggedIn: false,
       userName: '',
-      userPhoto: ''
+      userPhoto: '',
+      menuItems: [
+        { icon: 'home', title: 'Home', link: '/hello', active: true },
+        { icon: 'recent_actors', title: 'Characters', link: '/characters', active: true },
+        { icon: 'book', title: 'Compendium', link: '/compendium', active: false },
+        { icon: 'local_library', title: 'Campaigns', link: '/campaigns', active: false }
+      ],
+      sideNav: false
     }
   },
   methods: {
