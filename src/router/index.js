@@ -10,8 +10,6 @@ import CharacterNew from '@/components/Characters/CharacterNew'
 import Character from '@/components/Character/Character'
 import Compendium from '@/components/Compendium'
 import Profile from '@/components/Profile'
-import DWCMNav from '@/components/DWCMNav'
-import firebase from 'firebase'
 import AuthGuard from '@/router/auth-guard'
 
 Vue.use(Router)
@@ -39,15 +37,12 @@ let router = new Router({
     {
       path: '/hello',
       name: 'Hello',
-      components: { default: Hello, nav: DWCMNav },
-      meta: {
-        requiresAuth: true
-      }
+      components: { default: Hello }
     },
     {
       path: '/campaigns',
       name: 'Campaigns',
-      components: { default: Campaigns, nav: DWCMNav },
+      components: { default: Campaigns },
       meta: {
         requiresAuth: true
       }
@@ -55,61 +50,43 @@ let router = new Router({
     {
       path: '/characters',
       name: 'Characters',
-      components: { default: Characters, nav: DWCMNav },
-      meta: {
-        requiresAuth: true
-      },
+      components: { default: Characters },
       beforeEnter: AuthGuard
     },
     {
       path: '/character/:id',
       name: 'Character',
-      components: { default: Character, nav: DWCMNav },
-      meta: {
-        requiresAuth: true
-      }
+      components: { default: Character },
+      beforeEnter: AuthGuard
     },
     {
       path: '/characters/new/:className',
       name: 'New Character',
-      components: { default: CharacterNew, nav: DWCMNav },
-      meta: { requiresAuth: true }
+      components: { default: CharacterNew },
+      beforeEnter: AuthGuard,
+      props: { default: true }
     },
     {
       path: '/characters/admin/:className',
       name: 'CharactersAdmin',
-      components: { default: CharactersAdmin, nav: DWCMNav },
-      meta: { requiresAuth: true },
-      props: true
+      components: { default: CharactersAdmin },
+      beforeEnter: AuthGuard,
+      props: { default: true }
     },
     {
       path: '/compendium',
       name: 'Compendium',
-      components: { default: Compendium, nav: DWCMNav },
-      meta: {
-        requiresAuth: true
-      }
+      components: { default: Compendium }
     },
     {
       path: '/profile',
       name: 'Profile',
-      components: { default: Profile, nav: DWCMNav },
-      meta: {
-        requiresAuth: true
-      }
+      components: { default: Profile },
+      beforeEnter: AuthGuard
     }
   ],
   linkActiveClass: 'active',
   mode: 'history'
-})
-
-router.beforeEach((to, from, next) => {
-  let currentUser = firebase.auth().currentUser
-  let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-
-  if (requiresAuth && !currentUser) next('login')
-  else if (!requiresAuth && currentUser) next('hello')
-  else next()
 })
 
 export default router

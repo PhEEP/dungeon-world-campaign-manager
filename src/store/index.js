@@ -19,6 +19,7 @@ export const store = new Vuex.Store({
     loading: false,
     error: null,
     user: null,
+    userIsAdmin: false,
     createdCharacters: [],
     characterClasses: []
   },
@@ -40,6 +41,9 @@ export const store = new Vuex.Store({
     },
     setCharacterClasses (state, payload) {
       state.characterClasses = payload
+    },
+    setUserIsAdmin (state, payload) {
+      state.userIsAdmin = payload
     }
   },
   actions: {
@@ -54,6 +58,7 @@ export const store = new Vuex.Store({
               id: user.uid
             }
             commit('setUser', newUser)
+            store.dispatch('setUserRole', user.uid)
           }
         )
         .catch(
@@ -74,6 +79,7 @@ export const store = new Vuex.Store({
               id: user.uid
             }
             commit('setUser', newUser)
+            store.dispatch('setUserRole', user.uid)
           }
         )
         .catch(
@@ -93,6 +99,7 @@ export const store = new Vuex.Store({
             const newUser = {
               id: user.uid
             }
+            store.dispatch('setUserRole', user.uid)
             commit('setUser', newUser)
           }
         )
@@ -100,16 +107,26 @@ export const store = new Vuex.Store({
           error => {
             commit('setLoading', false)
             commit('setError', error)
-            console.log(error)
           }
         )
     },
     autoSignIn ({commit}, payload) {
       commit('setUser', {id: payload.uid})
+      store.dispatch('setUserRole', payload.uid)
+    },
+    setUserRole ({commit}, payload) {
+      firebase.firestore().doc('users/' + payload).get()
+        .then(
+          (doc) => {
+            if (doc.exists) {
+              commit('setUserIsAdmin', _.get(doc.data(), 'role', 'user') === 'admin')
+            }
+          })
     },
     logout ({commit}) {
       firebase.auth().signOut()
       commit('setUser', null)
+      commit('setUserIsAdmin', false)
     },
     clearError ({commit}) {
       commit('clearError')
@@ -202,6 +219,9 @@ export const store = new Vuex.Store({
     },
     getCharacterClasses (state) {
       return state.characterClasses
+    },
+    getUserRole (state) {
+      return state.userIsAdmin
     }
   }
 })

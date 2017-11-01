@@ -87,6 +87,10 @@ export default {
     VueEditor
   },
   props: ['className'],
+  created () {
+    console.log(this.className)
+    this.$store.dispatch('characterAdmin/loadClassData', this.className)
+  },
   mounted () {
     charRef = firebase.firestore().doc('characters/' + this.className)
     charRef.get()

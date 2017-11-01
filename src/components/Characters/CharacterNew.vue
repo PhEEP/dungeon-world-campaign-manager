@@ -45,7 +45,7 @@
           required
         ></v-text-field>
         <CharacterDrives
-          v-bind:cClass="classId"
+          v-bind:cClass="className"
           @selected="selectDrive"
           :disabled="submitting"
         ></CharacterDrives>
@@ -78,7 +78,7 @@
           :has-error="errors.has('Background Description')"
           required
         ></v-text-field>
-        <CharacterBackgrounds v-bind:cClass="classId" @selected="selectBackground" @updateBackground="updatedBackground"></CharacterBackgrounds>
+        <CharacterBackgrounds v-bind:cClass="className" @selected="selectBackground" @updateBackground="updatedBackground"></CharacterBackgrounds>
       </v-flex>
       <v-flex md4 xs12>
         <h5 class="title">Look
@@ -105,7 +105,6 @@
     name: 'CharacterNew',
     data () {
       return {
-        classId: this.$route.params.className,
         classData: '',
         baseClass: '',
         characterName: '',
@@ -122,6 +121,7 @@
         ]
       }
     },
+    props: ['className'],
     components: {
       CharacterDrives,
       CharacterBackgrounds,
@@ -176,7 +176,7 @@
               background: this.background,
               look: this.look,
               className: this.classData.name,
-              classId: this.classId,
+              classId: this.className,
               sampleBonds: this.classData.sampleBonds
             }
             let imageUrl
@@ -221,7 +221,7 @@
         .catch((err) => {
           console.log('Error: ', err)
         })
-      firebase.firestore().doc('characters/' + this.classId).get()
+      firebase.firestore().doc('characters/' + this.className).get()
         .then((doc) => {
           if (doc.exists) {
             this.classData = doc.data()

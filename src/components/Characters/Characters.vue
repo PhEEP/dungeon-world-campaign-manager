@@ -50,6 +50,7 @@
             </v-card-title>
             <v-card-actions v-if="characterCount < 4">
               <v-btn block color="secondary" @click="$router.push('/characters/new/' + cClass.id)">Create {{ cClass.name }}</v-btn>
+              <v-btn color="accent" dark @click="$router.push('/characters/admin/' + cClass.id)" v-if="userIsAdmin">Manage</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -83,6 +84,9 @@ export default {
     },
     error () {
       return this.$store.getters.error
+    },
+    userIsAdmin () {
+      return this.$store.getters.getUserRole
     }
   },
   methods: {
