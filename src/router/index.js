@@ -12,6 +12,7 @@ import Compendium from '@/components/Compendium'
 import Profile from '@/components/Profile'
 import DWCMNav from '@/components/DWCMNav'
 import firebase from 'firebase'
+import AuthGuard from '@/router/auth-guard'
 
 Vue.use(Router)
 
@@ -57,7 +58,8 @@ let router = new Router({
       components: { default: Characters, nav: DWCMNav },
       meta: {
         requiresAuth: true
-      }
+      },
+      beforeEnter: AuthGuard
     },
     {
       path: '/character/:id',
@@ -77,7 +79,8 @@ let router = new Router({
       path: '/characters/admin/:className',
       name: 'CharactersAdmin',
       components: { default: CharactersAdmin, nav: DWCMNav },
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      props: true
     },
     {
       path: '/compendium',

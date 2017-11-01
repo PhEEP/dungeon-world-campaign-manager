@@ -63,15 +63,6 @@ export default {
   methods: {
     signUp () {
       this.$store.dispatch('signUserUp', {email: this.email, password: this.password})
-      // firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-      //   .then(
-      //     (user) => {
-      //       handleUserLogin(user)
-      //       this.$router.replace('hello')
-      //     },
-      //     (err) => {
-      //       alert('Oops, ' + err.message)
-      //     })
     },
     signUpWithGoogle () {
       this.provider = 'google'
@@ -79,15 +70,6 @@ export default {
     },
     signInWithProvider () {
       this.$store.dispatch('signUserInWithProvider', {provider: this.provider})
-      // firebase.auth().signInWithPopup(provider)
-      // .then(
-      //     (user) => {
-      //       handleUserLogin(user)
-      //       this.$router.replace('hello')
-      //     },
-      //     (err) => {
-      //       alert('Oops, ' + err.message)
-      //     })
     },
     onDismissed () {
       this.$store.dispatch('clearError')

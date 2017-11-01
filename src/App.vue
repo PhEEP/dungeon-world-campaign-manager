@@ -13,10 +13,15 @@
           </v-list-tile-action>
           <v-list-tile-content>{{ item.title }}</v-list-tile-content>
         </v-list-tile>
+        <v-list-tile v-if="userIsAuthenticated" @click="onLogOut">
+          <v-list-tile-action>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>Logout</v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar dark fixed color="primary" app>
-
       <v-toolbar-side-icon
         @click.native.stop="sideNav = !sideNav"
         class="hidden-md-and-up"
@@ -25,7 +30,7 @@
         WoACM
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="hidden-sm-only" v-if="loggedIn">
+      <v-toolbar-items class="hidden-sm-only">
         <v-btn
           flat
           v-for="item in menuItems"
@@ -37,12 +42,7 @@
           <v-icon left dark>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
-        <v-btn fab flat @click="$router.push('/profile')">
-          <v-avatar size="36px"  >
-            <img :src="userPhoto" >
-          </v-avatar>
-        </v-btn>
-        <v-btn flat href="#" @click.prevent="logOut">Log Out</v-btn>
+        <v-btn flat @click.prevent="onLogOut" v-if="userIsAuthenticated"><v-icon>exit_to_app</v-icon> Log Out</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <main>
@@ -56,51 +56,46 @@
 </template>
 
 <script>
-import firebase from 'firebase'
 export default {
   name: 'App',
   components: {
   },
   data () {
     return {
-      loggedIn: false,
-      userName: '',
-      userPhoto: '',
-      menuItems: [
-        { icon: 'home', title: 'Home', link: '/hello', active: true },
-        { icon: 'recent_actors', title: 'Characters', link: '/characters', active: true },
-        { icon: 'book', title: 'Compendium', link: '/compendium', active: false },
-        { icon: 'local_library', title: 'Campaigns', link: '/campaigns', active: false }
-      ],
       sideNav: false
     }
   },
   methods: {
-    logOut () {
-      firebase.auth().signOut()
-      .then(() => {
-        this.$router.replace('login')
-        this.userName = ''
-        this.userPhoto = ''
-      })
-    },
-    isLoggedIn () {
-      console.log('mounted')
-      let currentUser = firebase.auth().currentUser
-      if (currentUser) {
-        this.loggedIn = true
-        this.userName = currentUser.displayName
-        this.userPhoto = currentUser.photoURL
-      } else {
-        this.loggedIn = false
-      }
+    onLogOut () {
+      this.$store.dispatch('logout')
     }
   },
   watch: {
-    '$route': 'isLoggedIn'
+    user (value) {
+      if (value !== null && value !== undefined) {
+        this.$router.push('/login')
+      }
+    }
   },
-  mounted () {
-    this.isLoggedIn()
+  computed: {
+    userIsAuthenticated () {
+      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+    },
+    menuItems () {
+      let menuItems = [
+        { icon: 'lock_open', title: 'Sign In', link: '/login', active: true },
+        { icon: 'person', title: 'Sign Up', link: '/signup', active: true }
+      ]
+      if (this.userIsAuthenticated) {
+        menuItems = [
+          { icon: 'home', title: 'Home', link: '/hello', active: true },
+          { icon: 'book', title: 'Compendium', link: '/compendium', active: false },
+          { icon: 'recent_actors', title: 'Characters', link: '/characters', active: true },
+          { icon: 'local_library', title: 'Campaigns', link: '/campaigns', active: false }
+        ]
+      }
+      return menuItems
+    }
   },
   updated () {
   }

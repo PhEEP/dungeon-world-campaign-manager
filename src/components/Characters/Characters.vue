@@ -1,6 +1,10 @@
 <template>
   <v-container fluid grid-list-lg>
+      <span v-if="error">
+        <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+      </span>
       <v-layout row wrap>
+        <v-progress-linear v-bind:indeterminate="true" v-if="loading"></v-progress-linear>
         <v-flex md3 v-for="(character, index) in createdCharacters" v-bind:key="index">
           <v-card>
             <v-card-media :src="character.avatar || 'http://placehold.it/200/200'" height="200px"></v-card-media>
@@ -35,6 +39,7 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap>
+        <v-progress-linear v-bind:indeterminate="true" v-if="loading"></v-progress-linear>
         <v-flex xs12 sm6 md4 lg3 v-for="cClass in characterClasses" v-bind:key="cClass.id">
           <v-card>
             <v-card-media height="200px" :src="cClass.classIcon" :title="cClass.classIconAttribution">
@@ -54,79 +59,41 @@
 
 
 <script>
-import firebase from 'firebase'
-require('firebase/firestore')
-import _ from 'lodash'
-
 export default {
   name: 'Characters',
   data () {
     return {
       characters: '',
-      characterClasses: [],
-      createdCharacters: [],
-      characterCount: 0,
       promptDelete: false,
       deathRow: ''
     }
   },
+  computed: {
+    createdCharacters () {
+      return this.$store.getters.getCreatedCharacters
+    },
+    characterClasses () {
+      return this.$store.getters.getCharacterClasses
+    },
+    loading () {
+      return this.$store.getters.loading
+    },
+    characterCount () {
+      return this.createdCharacters.length
+    },
+    error () {
+      return this.$store.getters.error
+    }
+  },
   methods: {
     deleteCharacter (characterId) {
-      let user = firebase.auth().currentUser
-      firebase.firestore().doc('users/' + user.uid + '/characters/' + characterId).delete().then(() => {
-        this.createdCharacters = _.filter(this.createdCharacters, (o) => {
-          return o.id !== characterId
-        })
-        this.characterCount = this.createdCharacters.length
-      }).catch((error) => {
-        console.error('Error removing document: ', error)
-      })
+      this.$store.dispatch('deleteCharacter', characterId)
       this.promptDelete = false
-    },
-    getUserCharacters (user) {
-      firebase.firestore().collection('users/' + user.uid + '/characters').get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            this.characterCount++
-            this.createdCharacters.push({
-              id: doc.id,
-              name: doc.data().name,
-              avatar: doc.data().avatarUrl,
-              className: doc.data().className
-            })
-          })
-        })
-        .catch((err) => {
-          console.log(err)
-        })
     }
   },
   mounted () {
-    let user = firebase.auth().currentUser
-    this.getUserCharacters(user)
-    firebase.firestore().doc('characters/baseClass').get()
-    .then((doc) => {
-      if (doc.exists) {
-        this.characters = doc.data()
-      } else {
-        console.log('no doc')
-      }
-    })
-    .catch((err) => {
-      console.log('Error: ', err)
-    })
-    firebase.firestore().collection('characters').where('name', '>', '').get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        this.characterClasses.push({
-          id: doc.id,
-          name: doc.data().name,
-          flavorText: doc.data().flavorText,
-          classIcon: doc.data().classIcon.iconUrl,
-          classIconAttribution: doc.data().classIcon.attribution
-        })
-      })
-    })
+    this.$store.dispatch('getCreatedCharacters')
+    this.$store.dispatch('getCharacterClasses')
   }
 }
 </script>

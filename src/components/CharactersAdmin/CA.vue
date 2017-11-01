@@ -86,8 +86,9 @@ export default {
   components: {
     VueEditor
   },
+  props: ['className'],
   mounted () {
-    charRef = firebase.firestore().doc('characters/' + this.$route.params.className)
+    charRef = firebase.firestore().doc('characters/' + this.className)
     charRef.get()
       .then((doc) => {
         if (doc.exists) {

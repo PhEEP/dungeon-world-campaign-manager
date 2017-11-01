@@ -1,11 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import firebase from 'firebase'
+import characterAdmin from '@/store/characterAdmin'
 require('firebase/firestore')
+import _ from 'lodash'
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
+  modules: {
+    characterAdmin
+  },
   state: {
     authError: null,
     authProviders: {
@@ -13,7 +18,9 @@ export const store = new Vuex.Store({
     },
     loading: false,
     error: null,
-    user: null
+    user: null,
+    createdCharacters: [],
+    characterClasses: []
   },
   mutations: {
     setUser (state, payload) {
@@ -27,6 +34,12 @@ export const store = new Vuex.Store({
     },
     clearError (state) {
       state.error = null
+    },
+    setCreatedCharacters (state, payload) {
+      state.createdCharacters = payload
+    },
+    setCharacterClasses (state, payload) {
+      state.characterClasses = payload
     }
   },
   actions: {
@@ -47,7 +60,6 @@ export const store = new Vuex.Store({
           error => {
             commit('setLoading', false)
             commit('setError', error)
-            console.log(error)
           }
         )
     },
@@ -68,7 +80,6 @@ export const store = new Vuex.Store({
           error => {
             commit('setLoading', false)
             commit('setError', error)
-            console.log('error')
           }
         )
     },
@@ -93,8 +104,87 @@ export const store = new Vuex.Store({
           }
         )
     },
+    autoSignIn ({commit}, payload) {
+      commit('setUser', {id: payload.uid})
+    },
+    logout ({commit}) {
+      firebase.auth().signOut()
+      commit('setUser', null)
+    },
     clearError ({commit}) {
       commit('clearError')
+    },
+    getCreatedCharacters ({commit}) {
+      commit('setLoading', true)
+      commit('clearError')
+      firebase.firestore().collection('users/' + this.state.user.id + '/characters').get()
+        .then(
+          (querySnapshot) => {
+            let tempArr = []
+            querySnapshot.forEach(
+              (doc) => {
+                tempArr.push({
+                  id: doc.id,
+                  name: doc.data().name,
+                  avatar: doc.data().avatarUrl,
+                  className: doc.data().className
+                })
+              })
+            commit('setCreatedCharacters', tempArr)
+            commit('setLoading', false)
+          }
+        )
+        .catch(
+          (err) => {
+            commit('setLoading', false)
+            commit('setError', err)
+          }
+        )
+    },
+    getCharacterClasses ({commit}) {
+      commit('setLoading', true)
+      commit('clearError')
+      firebase.firestore().collection('characters').where('name', '>', '').get()
+        .then(
+          (querySnapshot) => {
+            let tempArr = []
+            querySnapshot.forEach(
+              (doc) => {
+                tempArr.push({
+                  id: doc.id,
+                  name: doc.data().name,
+                  flavorText: doc.data().flavorText,
+                  classIcon: doc.data().classIcon.iconUrl,
+                  classIconAttribution: doc.data().classIcon.attribution
+                })
+              })
+            commit('setCharacterClasses', tempArr)
+            commit('setLoading', false)
+          })
+        .catch(
+          (err) => {
+            commit('setLoading', false)
+            commit('setError', err)
+          }
+        )
+    },
+    deleteCharacter ({commit}, payload) {
+      commit('setLoading', true)
+      commit('clearError')
+      firebase.firestore().doc('users/' + this.state.user.id + '/characters/' + payload).delete()
+        .then(
+          () => {
+            const filteredCharacters = _.filter(this.state.createdCharacters, (o) => {
+              return o.id !== payload
+            })
+            commit('setCreatedCharacters', filteredCharacters)
+            commit('setLoading', false)
+          })
+        .catch(
+          (error) => {
+            commit('setLoading', false)
+            commit('setError', error)
+          })
     }
   },
   getters: {
@@ -106,6 +196,12 @@ export const store = new Vuex.Store({
     },
     error (state) {
       return state.error
+    },
+    getCreatedCharacters (state) {
+      return state.createdCharacters
+    },
+    getCharacterClasses (state) {
+      return state.characterClasses
     }
   }
 })

@@ -3,6 +3,10 @@
     <v-layout row wrap align-center>
       <v-flex md4 offset-md4 sm6 offset-sm3>
         <v-card light>
+          <span v-if="error">
+            <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+          </span>
+          <v-progress-linear v-bind:indeterminate="true" v-if="loading"></v-progress-linear>
           <v-card-title primary-title>
             <h3 class="headline mb-2">
               Speak, friend, and enter
@@ -25,43 +29,46 @@
 </template>
 
 <script>
-import firebase from 'firebase'
-import { handleUserLogin } from '../helpers/handleUserLogin'
-const provider = new firebase.auth.GoogleAuthProvider()
 export default {
   name: 'Login',
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      provider: ''
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.getters.user
+    },
+    error () {
+      return this.$store.getters.error
+    },
+    loading () {
+      return this.$store.getters.loading
+    }
+  },
+  watch: {
+    user (value) {
+      if (value !== null && value !== undefined) {
+        this.$router.push('/')
+      }
     }
   },
   methods: {
     login () {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-      .then(
-        (user) => {
-          handleUserLogin(user)
-          this.$router.replace('hello')
-        },
-        (err) => {
-          console.log(err)
-          alert('Oops, ' + err.message)
-        }
-      )
+      this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
     },
     loginWithGoogle () {
-      firebase.auth().signInWithPopup(provider)
-      .then(
-        (user) => {
-          handleUserLogin(user)
-          this.$router.replace('hello')
-        },
-        (err) => {
-          console.log(err)
-          alert('Oops, ' + err.message)
-        }
-      )
+      this.provider = 'google'
+      this.signInWithProvider()
+    },
+    signInWithProvider () {
+      this.$store.dispatch('signUserInWithProvider', {provider: this.provider})
+    },
+    onDismissed () {
+      this.$store.dispatch('clearError')
     }
   }
 }
@@ -76,8 +83,5 @@ export default {
   background-repeat:no-repeat;
   height: 100vh;
   margin: 0;
-}
-.fullHeightLayout {
-  height:100%;
 }
 </style>
