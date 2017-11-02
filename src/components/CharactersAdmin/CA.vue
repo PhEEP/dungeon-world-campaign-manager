@@ -1,44 +1,27 @@
 <template>
   <v-container fluid grid-list-lg>
+    <span v-if="error">
+      <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+    </span>
     <v-layout row wrap>
-      <v-flex md6>
-        <v-text-field v-model="baseData.name" label="Class Name" ></v-text-field>
+      <v-flex md4>
+        <v-text-field v-model="name" label="Class Name" ></v-text-field>
       </v-flex>
-      <v-flex md6>
-        <v-text-field textarea label="Example Names" v-model="baseData.exampleNames"></v-text-field>
+      <v-flex md8>
+        <h5>Example Names <v-btn fab flat small icon @click="editingExampleNames = !editingExampleNames"><v-icon>edit</v-icon></v-btn></h5>
+        <div class="body-1" v-html="exampleNames" v-if="!editingExampleNames"></div>
+        <v-text-field textarea label="Example Names" v-model="exampleNames" v-if="editingExampleNames"></v-text-field>
       </v-flex>
-      <v-flex md6>
-        <vue-editor id="caFlavorText" v-model="baseData.flavorText" :editorToolbar="customToolbar"></vue-editor>
-      </v-flex>
-    </v-layout>
-    <v-layout row wrap>
-      <h3 block>Backgrounds</h3>
-    </v-layout>
-    <v-layout row wrap v-if="backgrounds != {}">
-      <v-flex md4 v-for="(background, index) in backgrounds" :key="index">
-        <v-text-field v-model="background.title"></v-text-field>
-        <vue-editor :id="'background' + index.split(' ').join('_')" v-model="background.text" :editorToolbar="customToolbar"></vue-editor>
-      </v-flex>
-      <v-flex md4 card>
-        <v-text-field v-model="tempBackground.title" label="Background Title" ></v-text-field>
-        <vue-editor id="tempBackground" v-model="tempBackground.text" :editorToolbar="customToolbar" placeholder="Background text"></vue-editor>
-        <v-btn color="secondary" dark @click="addBackground">Add background</v-btn>
+      <v-flex md12>
+        <h5>Flavor Text <v-btn fab flat small icon @click="editingFlavorText = !editingFlavorText"><v-icon>edit</v-icon></v-btn></h5>
+        <div class="body-1" v-html="flavorText" v-if="!editingFlavorText" ></div>
+        <vue-editor id="caFlavorText" v-model="flavorText" :editorToolbar="customToolbar" v-if="editingFlavorText"></vue-editor>
       </v-flex>
     </v-layout>
-    <h3 block>Drives</h3>
-    <v-layout row wrap v-if="drives != {}">
-      <v-flex md4 v-for="(drive, index) in drives" :key="index">
-        <v-text-field v-model="drive.title"></v-text-field>
-        <v-text-field textarea v-model="drive.description"></v-text-field>
-      </v-flex>
-      <v-flex md4 card>
-        <v-text-field v-model="tempDrive.title" label="Drive Title" ></v-text-field>
-        <v-text-field textarea id="tempDrive" v-model="tempDrive.description" label="Drive Text"></v-text-field>
-        <v-btn color="secondary" dark @click="addDrive">Add drive</v-btn>
-      </v-flex>
-    </v-layout>
+    <CABackgrounds></CABackgrounds>
+    <CADrives></CADrives>
     <h3 block>Bonds</h3>
-    <v-layout row wrap v-if="bonds != {}">
+    <v-layout row wrap v-if="bonds">
       <v-flex xs12 sm6 v-for="(bond, index) in bonds" :key="index">
         <v-text-field :value="bond"></v-text-field>
       </v-flex>
@@ -51,113 +34,117 @@
     <v-btn fab fixed bottom right color="primary" dark @click="updateBaseInfo">
       <v-icon>save</v-icon>
     </v-btn>
+    <v-dialog v-model="deleting" color="warning">
+      <v-card>
+          <v-alert color="warning" dark value="true"> Deleting is irreversible!</v-alert>
+        <v-card-title primary-title>
+          <h6 v-if="deleteTarget">Remove {{deleteTarget.id}} from {{deleteTarget.collection}} ?</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn block raised color="success" @click.stop="cancelDelete">Go back</v-btn>
+          <v-btn icon color="error" dark @click="confirmDelete"><v-icon>delete</v-icon></v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
-import firebase from 'firebase'
-require('firebase/firestore')
-
+import CABackgrounds from '@/components/CharactersAdmin/CABackgrounds'
+import CADrives from '@/components/CharactersAdmin/CADrives'
 import { VueEditor } from 'vue2-editor'
-
-let charRef
 
 export default {
   name: 'CharactersAdmin',
   data () {
     return {
-      baseData: {},
-      exampleNames: {},
-      backgrounds: {},
-      drives: {},
-      look: {},
-      bonds: [],
-      tempBackground: { title: '', text: '' },
-      tempDrive: { title: '', description: '' },
       tempBond: '',
-      flavorText: '',
       startingBonds: 0,
       customToolbar: [
           ['bold', 'italic', 'underline'],
           [{'list': 'bullet'}]
-      ]
+      ],
+      editingFlavorText: false,
+      editingExampleNames: false,
+      snackbarObj: {
+        timeout: 5000,
+        color: 'primary'
+      }
+    }
+  },
+  computed: {
+    error () {
+      return this.$store.getters.error
+    },
+    loading () {
+      return this.$store.getters.loading
+    },
+    snackbar () {
+      return this.$store.getters.snackbar
+    },
+    deleteTarget () {
+      return this.$store.getters['characterAdmin/deleteTarget']
+    },
+    deleting: {
+      get () {
+        return this.$store.getters['characterAdmin/deleting']
+      },
+      set () {
+        return this.$store.dispatch('characterAdmin/promptDelete', false)
+      }
+    },
+    name: {
+      get () {
+        return this.$store.getters['characterAdmin/name']
+      },
+      set (newName) {
+        this.$store.dispatch('characterAdmin/setName', newName)
+      }
+    },
+    exampleNames: {
+      get () {
+        return this.$store.getters['characterAdmin/exampleNames']
+      },
+      set (val) {
+        this.$store.dispatch('characterAdmin/setExampleNames', val)
+      }
+    },
+    flavorText: {
+      get () {
+        return this.$store.getters['characterAdmin/flavorText']
+      },
+      set (val) {
+        this.$store.dispatch('characterAdmin/setFlavorText', val)
+      }
+    },
+    bonds () {
+      return this.$store.getters['characterAdmin/bonds']
     }
   },
   components: {
-    VueEditor
+    VueEditor,
+    CABackgrounds,
+    CADrives
   },
-  props: ['className'],
+  props: ['classId'],
   created () {
-    console.log(this.className)
-    this.$store.dispatch('characterAdmin/loadClassData', this.className)
+    this.$store.dispatch('characterAdmin/loadClassData', this.classId)
   },
   mounted () {
-    charRef = firebase.firestore().doc('characters/' + this.className)
-    charRef.get()
-      .then((doc) => {
-        if (doc.exists) {
-          this.baseData = {...doc.data()}
-        }
-      })
-    charRef.collection('backgrounds').get()
-      .then((querySnapshot) => {
-        let tempBGs = {}
-        querySnapshot.forEach((doc) => {
-          tempBGs[doc.id] = { ...doc.data() }
-        })
-        this.backgrounds = { ...tempBGs }
-      })
-    charRef.collection('drives').get()
-      .then((querySnapshot) => {
-        let tempDrives = {}
-        querySnapshot.forEach((doc) => {
-          tempDrives[doc.id] = { ...doc.data() }
-        })
-        this.drives = { ...tempDrives }
-      })
   },
   methods: {
     updateBaseInfo () {
-      let batch = firebase.firestore().batch()
-      let updatedBaseInfo = {
-        exampleNames: this.baseData.exampleNames,
-        name: this.baseData.name,
-        flavorText: this.baseData.flavorText,
-        sampleBonds: this.bonds
-      }
-      batch.update(charRef, updatedBaseInfo)
-
-      for (let background in this.backgrounds) {
-        let bgRef = charRef.collection('backgrounds').doc(background)
-        batch.set(bgRef, this.backgrounds[background])
-      }
-
-      for (let drive in this.drives) {
-        let driveRef = charRef.collection('drives').doc(drive)
-        batch.set(driveRef, this.drives[drive])
-      }
-
-      batch.commit(updatedBaseInfo)
-        .then(() => {
-          console.log('succesfully updated base info')
-        })
-        .catch((error) => {
-          console.log('Error updating document: ' + error)
-        })
-    },
-    addBackground () {
-      this.backgrounds[this.tempBackground.title.replace(/[^\w]/g, '_')] = { ...this.tempBackground }
-      this.tempBackground.title = ''
-      this.tempBackground.text = ''
-    },
-    addDrive () {
-      this.drives[this.tempDrive.title.replace(/[^\w]/g, '_')] = { ...this.tempDrive }
-      this.tempDrive.title = ''
-      this.tempDrive.description = ''
+      this.$store.dispatch('characterAdmin/updateBaseInfo')
     },
     addBond () {
       this.bonds.push(this.tempBond)
       this.tempBond = ''
+    },
+    confirmDelete () {
+      this.$store.dispatch('characterAdmin/delete')
+    },
+    cancelDelete () {
+      this.$store.dispatch('characterAdmin/promptDelete', false)
     }
   }
 }

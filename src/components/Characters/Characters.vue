@@ -24,7 +24,7 @@
                   Delete {{ deathRow }}?
                 </v-card-title>
                 <v-card-text color="warning">
-                  Deleting a character is irreversible!
+                  Deleting a character awefis irreversible!
                 </v-card-text>
                 <v-card-actions>
                   <v-btn block raised color="success" @click.stop="promptDelete=false">Go back</v-btn>

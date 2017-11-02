@@ -60,14 +60,14 @@ let router = new Router({
       beforeEnter: AuthGuard
     },
     {
-      path: '/characters/new/:className',
+      path: '/characters/new/:classId',
       name: 'New Character',
       components: { default: CharacterNew },
       beforeEnter: AuthGuard,
       props: { default: true }
     },
     {
-      path: '/characters/admin/:className',
+      path: '/characters/admin/:classId',
       name: 'CharactersAdmin',
       components: { default: CharactersAdmin },
       beforeEnter: AuthGuard,

@@ -52,6 +52,18 @@
           </v-slide-y-transition>
       </v-content>
     </main>
+    <v-snackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="snackbar.timeout"
+      :top="snackbar.y === 'top'"
+      :bottom="snackbar.y === 'bottom'"
+      :right="snackbar.x === 'right'"
+      :left="snackbar.x === 'left'"
+    >
+      {{ snackbar.text }}
+      <v-btn dark flat @click.native="closeSnackbar">Close</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -68,6 +80,9 @@ export default {
   methods: {
     onLogOut () {
       this.$store.dispatch('logout')
+    },
+    closeSnackbar () {
+      this.$store.dispatch('setSnackbar', {})
     }
   },
   watch: {
@@ -78,6 +93,9 @@ export default {
     }
   },
   computed: {
+    snackbar () {
+      return this.$store.getters.snackbar
+    },
     userIsAuthenticated () {
       return this.$store.getters.user !== null && this.$store.getters.user !== undefined
     },

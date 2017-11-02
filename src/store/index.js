@@ -21,7 +21,13 @@ export const store = new Vuex.Store({
     user: null,
     userIsAdmin: false,
     createdCharacters: [],
-    characterClasses: []
+    characterClasses: [],
+    snackbar: {
+      show: false,
+      timeout: 4000,
+      color: 'primary',
+      text: 'Some Message'
+    }
   },
   mutations: {
     setUser (state, payload) {
@@ -44,6 +50,9 @@ export const store = new Vuex.Store({
     },
     setUserIsAdmin (state, payload) {
       state.userIsAdmin = payload
+    },
+    setSnackbar (state, payload) {
+      state.snackbar = payload
     }
   },
   actions: {
@@ -113,6 +122,9 @@ export const store = new Vuex.Store({
     autoSignIn ({commit}, payload) {
       commit('setUser', {id: payload.uid})
       store.dispatch('setUserRole', payload.uid)
+    },
+    setSnackbar ({commit}, payload) {
+      commit('setSnackbar', payload)
     },
     setUserRole ({commit}, payload) {
       firebase.firestore().doc('users/' + payload).get()
@@ -222,6 +234,9 @@ export const store = new Vuex.Store({
     },
     getUserRole (state) {
       return state.userIsAdmin
+    },
+    snackbar (state) {
+      return state.snackbar
     }
   }
 })
