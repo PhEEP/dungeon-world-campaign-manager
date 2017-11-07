@@ -30,7 +30,7 @@
         WoACM
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="hidden-sm-only">
+      <v-toolbar-items class="hidden-sm-and-down">
         <v-btn
           flat
           v-for="item in menuItems"
