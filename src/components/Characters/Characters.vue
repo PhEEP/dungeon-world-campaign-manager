@@ -42,7 +42,7 @@
         <v-progress-linear v-bind:indeterminate="true" v-if="loading"></v-progress-linear>
         <v-flex xs12 sm6 md4 lg3 v-for="cClass in characterClasses" v-bind:key="cClass.id">
           <v-card>
-            <v-card-media height="200px" :src="cClass.classIcon" :title="cClass.classIconAttribution">
+            <v-card-media contain height="200px" :src="cClass.classIcon" :title="cClass.classIconAttribution">
             </v-card-media>
             <v-card-title primary-title >
               <h4 mb-0>{{ cClass.name }}</h4>
