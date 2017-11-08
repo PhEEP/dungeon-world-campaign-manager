@@ -70,6 +70,7 @@ export default {
     },
     signInWithProvider () {
       this.$store.dispatch('signUserInWithProvider', {provider: this.provider})
+      this.$router.push('/')
     },
     onDismissed () {
       this.$store.dispatch('clearError')
