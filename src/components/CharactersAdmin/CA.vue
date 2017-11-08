@@ -18,8 +18,8 @@
         <vue-editor id="caFlavorText" v-model="flavorText" :editorToolbar="customToolbar" v-if="editingFlavorText"></vue-editor>
       </v-flex>
     </v-layout>
-    <CABackgrounds></CABackgrounds>
-    <CADrives></CADrives>
+    <CABackgrounds />
+    <CADrives />
     <h3 block>Bonds</h3>
     <v-layout row wrap v-if="bonds">
       <v-flex xs12 sm6 v-for="(bond, index) in bonds" :key="index">
