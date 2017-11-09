@@ -16,15 +16,14 @@
     </v-flex>
     <v-flex v-for="(bond, index) in bonds" :key="index">
       <v-layout>
-
-      <v-text-field :value="bond"></v-text-field>
-      <v-btn
-        icon
-        fab
-        small
-        dark
-        color="warning"
-        @click.stop="removeBond(bond)"
+        <v-text-field :value="bond"></v-text-field>
+        <v-btn
+          icon
+          fab
+          small
+          dark
+          color="warning"
+          @click.stop="removeBond(bond)"
       ><v-icon>delete</v-icon></v-btn>
       </v-layout>
     </v-flex>

@@ -22,6 +22,11 @@
         </v-btn>
       </h4>
     </v-flex>
+    <v-flex  card v-if="addingBackground">
+      <v-text-field v-model="tempBackground.title" label="Background Title"></v-text-field>
+      <vue-editor id="tempBackground" v-model="tempBackground.text" :editorToolbar="customToolbar" placeholder="Background text"></vue-editor>
+      <v-btn color="secondary" dark @click="addBackground">Add background</v-btn>
+    </v-flex>
     <v-flex  v-for="(background, index) in backgrounds" :key="index">
       <div v-if="!editingBackground">
         <h5>{{ background.title }}</h5>
@@ -63,11 +68,6 @@
           </v-layout>
         </v-card-text>
       </v-card>
-    </v-flex>
-    <v-flex  card v-if="addingBackground">
-      <v-text-field v-model="tempBackground.title" label="Background Title"></v-text-field>
-      <vue-editor id="tempBackground" v-model="tempBackground.text" :editorToolbar="customToolbar" placeholder="Background text"></vue-editor>
-      <v-btn color="secondary" dark @click="addBackground">Add background</v-btn>
     </v-flex>
   </v-layout>
 </template>

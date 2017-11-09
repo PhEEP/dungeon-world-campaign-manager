@@ -16,6 +16,9 @@
       <v-flex md3>
         <CABonds />
       </v-flex>
+      <!-- <v-flex md3>
+        <CALooks />
+      </v-flex> -->
     </v-layout>
     <v-btn fab fixed bottom right color="primary" dark @click="updateBaseInfo">
       <v-icon>save</v-icon>
@@ -40,6 +43,7 @@ import CABackgrounds from '@/components/CharactersAdmin/CABackgrounds'
 import CADrives from '@/components/CharactersAdmin/CADrives'
 import CADetails from '@/components/CharactersAdmin/CADetails'
 import CABonds from '@/components/CharactersAdmin/CABonds'
+import CALooks from '@/components/CharactersAdmin/CALooks'
 import { VueEditor } from 'vue2-editor'
 
 export default {
@@ -85,7 +89,8 @@ export default {
     CABackgrounds,
     CADrives,
     CADetails,
-    CABonds
+    CABonds,
+    CALooks
   },
   props: ['classId'],
   created () {
