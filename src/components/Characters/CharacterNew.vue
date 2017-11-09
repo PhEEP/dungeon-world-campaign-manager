@@ -179,7 +179,6 @@
               classId: this.classId,
               sampleBonds: this.classData.sampleBonds
             }
-            let imageUrl
             let docId
             firebase.firestore().collection('users/' + userId + '/characters').add(newChar)
               .then((docRef) => {
@@ -196,10 +195,10 @@
                 return firebase.storage().ref('characters/' + docId + ext).put(this.avatar)
               })
               .then(fileData => {
-                if (fileData === null) {
-                  return null
+                let imageUrl = 'https://placehold.it/200/200'
+                if (fileData !== null) {
+                  imageUrl = fileData.metadata.downloadURLs[0]
                 }
-                imageUrl = fileData.metadata.downloadURLs[0]
                 return firebase.firestore().doc('users/' + userId + '/characters/' + docId).update({avatarUrl: imageUrl})
               })
               .then(() => {
