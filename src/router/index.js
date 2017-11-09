@@ -26,22 +26,18 @@ let router = new Router({
     },
     {
       path: '/login',
-      name: 'Login',
       component: Login
     },
     {
       path: '/signup',
-      name: 'SignUp',
       component: SignUp
     },
     {
       path: '/hello',
-      name: 'Hello',
       components: { default: Hello }
     },
     {
       path: '/campaigns',
-      name: 'Campaigns',
       components: { default: Campaigns },
       meta: {
         requiresAuth: true
@@ -49,44 +45,38 @@ let router = new Router({
     },
     {
       path: '/characters',
-      name: 'Characters',
       components: { default: Characters },
       beforeEnter: AuthGuard
     },
     {
       path: '/character/:id',
-      name: 'Character',
       components: { default: Character },
       beforeEnter: AuthGuard
     },
     {
       path: '/characters/new/:classId',
-      name: 'New Character',
       components: { default: CharacterNew },
       beforeEnter: AuthGuard,
       props: { default: true }
     },
     {
       path: '/characters/admin/:classId',
-      name: 'CharactersAdmin',
       components: { default: CharactersAdmin },
       beforeEnter: AuthGuard,
       props: { default: true }
     },
     {
       path: '/compendium',
-      name: 'Compendium',
       components: { default: Compendium }
     },
     {
       path: '/profile',
-      name: 'Profile',
       components: { default: Profile },
       beforeEnter: AuthGuard
     }
   ],
   linkActiveClass: 'active',
-  mode: 'history'
+  mode: 'hash'
 })
 
 export default router
