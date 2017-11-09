@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-media :src="this.avatarUrl" height="200px" contain></v-card-media>
+    <v-card-media :src="this.avatarUrl" height="200px" contain v-if="this.avatarUrl !== 'undefined'"></v-card-media>
     <v-card-title primary-title>
       <div>
         <h1 class="display-1">{{ this.name }}
@@ -49,7 +49,6 @@
 
 <script>
 import { VueEditor } from 'vue2-editor'
-import $ from 'jquery'
 
 export default {
   name: 'CharacterDetails',
@@ -68,12 +67,6 @@ export default {
     }
   },
   methods: {
-    openModal () {
-      $('.ui.modal').modal('show')
-    },
-    closeModal () {
-      $('.ui.modal').modal('hide')
-    }
   }
 }
 </script>

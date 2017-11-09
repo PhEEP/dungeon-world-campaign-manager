@@ -187,11 +187,18 @@
                 return docId
               })
               .then(docId => {
+                if (typeof this.avatar.name === 'undefined') {
+                  return null
+                }
+                console.log(this.avatar.name, 'avatar name')
                 const filename = this.avatar.name
                 const ext = filename.slice(filename.lastIndexOf('.'))
                 return firebase.storage().ref('characters/' + docId + ext).put(this.avatar)
               })
               .then(fileData => {
+                if (fileData === null) {
+                  return null
+                }
                 imageUrl = fileData.metadata.downloadURLs[0]
                 return firebase.firestore().doc('users/' + userId + '/characters/' + docId).update({avatarUrl: imageUrl})
               })
