@@ -16,9 +16,9 @@
       <v-flex md3>
         <CABonds />
       </v-flex>
-      <!-- <v-flex md3>
+      <v-flex md3>
         <CALooks />
-      </v-flex> -->
+      </v-flex>
     </v-layout>
     <v-btn fab fixed bottom right color="primary" dark @click="updateBaseInfo">
       <v-icon>save</v-icon>

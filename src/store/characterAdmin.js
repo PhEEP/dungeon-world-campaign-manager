@@ -10,7 +10,14 @@ const characterAdmin = {
     flavorText: '',
     backgrounds: {},
     drives: {},
-    looks: {},
+    looks: {
+      body: '',
+      decoration: '',
+      eyes: '',
+      garb: '',
+      gender: '',
+      race: ''
+    },
     bonds: [],
     startingBonds: 0,
     deleting: false,
@@ -33,13 +40,24 @@ const characterAdmin = {
       state.drives = payload
     },
     setLooks (state, payload) {
-      state.looks = payload
+      if (typeof payload !== 'undefined') {
+        state.looks = payload
+      } else {
+        state.looks = {
+          body: '',
+          decoration: '',
+          eyes: '',
+          garb: '',
+          gender: '',
+          race: ''
+        }
+      }
     },
     setBonds (state, payload) {
       state.bonds = payload
     },
     setStartingBonds (state, payload) {
-      state.startingBonds = payload
+      state.startingBonds = parseInt(payload)
     },
     setClassId (state, payload) {
       state.classId = payload
@@ -58,7 +76,8 @@ const characterAdmin = {
         name: state.className,
         flavorText: state.flavorText,
         sampleBonds: state.bonds,
-        startingBonds: state.startingBonds
+        startingBonds: state.startingBonds,
+        look: state.looks
       }
       let charRef = firebase.firestore().doc('characters/' + state.classId)
       charRef.update(baseInfo)
@@ -190,6 +209,10 @@ const characterAdmin = {
     },
     setStartingBonds ({commit}, payload) {
       commit('setStartingBonds', payload)
+    },
+    setLook ({commit, state}, payload) {
+      let tempLooks = state.looks
+      commit('setLooks', _.set(tempLooks, _.keys(payload)[0], _.values(payload)[0]))
     }
   },
   getters: {
