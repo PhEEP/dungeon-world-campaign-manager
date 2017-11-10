@@ -1,6 +1,5 @@
 <template>
   <v-container fluid grid-list-lg>
-
     <v-layout row wrap>
       <v-flex md4 v-if="typeof baseClass !== 'string'">
         <h1 class="display-2">{{ characterName }} <h1 class="subheading"> {{ classData.name }}</h1></h1>

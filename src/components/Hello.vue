@@ -1,26 +1,46 @@
 <template>
-<v-container fluid>
+<v-container fluid grid-list-lg>
   <v-parallax :src="hero" >
     <v-layout column align-center justify-center>
-        <h1 display-4>
-          WoACM
-        </h1>
-        <h2>Keep everything in order</h2>
+        <h2>Bring Peace and Order to your Campaign</h2>
     </v-layout>
   </v-parallax>
   <v-layout row wrap mt2>
     <v-flex sm12 md4>
-      <h3 class="display-2">Characters</h3>
-      <p class="body-1">Manage your character sheets, keep track of the small stuff, have fun!</p>
-      <v-btn raised block color="secondary" dark @click="$router.push('/characters')">Create/Manage Characters</v-btn>
+      <v-card>
+        <v-alert color="info" :value="true">In Development</v-alert>
+        <v-card-title>
+          <h3 class="display-2">Characters</h3>
+        </v-card-title>
+        <v-card-text>
+          <p class="body-1">Manage your character sheets, keep track of the small stuff, have fun!</p>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="secondary" dark @click="$router.push('/characters')">Create/Manage Characters</v-btn>
+        </v-card-actions>
+      </v-card>
     </v-flex>
     <v-flex sm12 md4>
-      <h3 class="display-2">Campaigns</h3>
-      <p class="body-1">Keep your notes in order, your players informed, and your creations at your fingertips</p>
+      <v-card>
+        <v-alert color="warning" :value="true">On Deck</v-alert>
+        <v-card-title>
+          <h3 class="display-2">Campaigns</h3>
+        </v-card-title>
+        <v-card-text>
+          <p class="body-1">Keep your notes in order, your players informed, and your creations at your fingertips</p>
+        </v-card-text>
+      </v-card>
     </v-flex>
     <v-flex sm12 md4>
-      <h3 class="display-2">Compendium</h3>
-      <p class="body-1">Browse the accumulated knowledge of the ages, create new NPCs, find treasure</p>
+      <v-card>
+        <v-alert color="error" :value="true">On Deck</v-alert>
+        <v-card-title>
+          <h3 class="display-2">Compendium</h3>
+        </v-card-title>
+        <v-card-text>
+          <p class="body-1">Browse the accumulated knowledge of the ages, create new NPCs, find treasure</p>
+        </v-card-text>
+      </v-card>
     </v-flex>
   </v-layout>
 </v-container>
