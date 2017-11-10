@@ -40,12 +40,20 @@
 </template>
 
 <script>
+import { VueEditor } from 'vue2-editor'
 export default {
   name: 'CADetails',
+  components: {
+    VueEditor
+  },
   data () {
     return {
       editingFlavorText: false,
-      editingExampleNames: false
+      editingExampleNames: false,
+      customToolbar: [
+          ['bold', 'italic', 'underline'],
+          [{ 'list': 'bullet' }]
+      ]
     }
   },
   computed: {
