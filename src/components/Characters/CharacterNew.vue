@@ -20,7 +20,7 @@
           <v-btn color="primary" block @click="onPickFile">Add Image</v-btn>
           <input style="display:none;" type="file" name="characterAvatar" id="" @change="onFilePicked" accept="image/*" ref="avatarInput">
         </v-layout>
-        <p class="body-1">{{ classData.flavorText }}</p>
+        <div v-html="classData.flavorText"></div>
       </v-flex>
       <v-flex md4>
         <h5 class="title">Drive
