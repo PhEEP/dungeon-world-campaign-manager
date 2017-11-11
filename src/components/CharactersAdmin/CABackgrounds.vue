@@ -63,7 +63,6 @@
 
 <script>
 import { VueEditor } from 'vue2-editor'
-import _ from 'lodash'
 
 export default {
   data () {
@@ -95,7 +94,7 @@ export default {
   methods: {
     addBackground () {
       this.$store.dispatch('characterAdmin/add', {...this.tempBackground, collection: 'backgrounds'})
-      this.tempBackground = _.mapValues(this.tempBackground, (o) => { return '' })
+      this.tempBackground = this.$_.mapValues(this.tempBackground, (o) => { return '' })
     },
     saveBackground (bg) {
       this.$store.dispatch('characterAdmin/save', {...bg, collection: 'backgrounds'})

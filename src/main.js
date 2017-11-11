@@ -10,13 +10,13 @@ import { store } from './store'
 import './stylus/main.styl'
 import AlertCmp from './components/Shared/Alert.vue'
 import App from './App'
-import lodash from 'lodash'
+import LodashPlugin from './helpers/lodash.js'
 
 Vue.config.productionTip = false
 Vue.use(Vuetify)
 Vue.use(VeeValidate)
+Vue.use(LodashPlugin)
 Vue.component('app-alert', AlertCmp)
-Object.defineProperty(Vue.prototype, '$_', { value: lodash })
 
 firebase.initializeApp(config)
 

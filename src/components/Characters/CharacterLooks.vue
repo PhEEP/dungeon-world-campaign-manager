@@ -1,7 +1,7 @@
 <template>
 <v-layout row>
   <v-flex md3 v-for="(look, index) in this.classLook" v-bind:key="index">
-    {{ startCase(look) }}
+    <p class="body-2">{{ startCase(index) }}</p>
     <v-checkbox
       v-for="(detail, index) in look.split(',')"
       :key="look + index"
@@ -22,7 +22,7 @@
         looks: []
       }
     },
-    computed: {
+    methods: {
       startCase (str) {
         return this.$_.startCase(str)
       }

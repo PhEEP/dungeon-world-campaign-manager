@@ -24,7 +24,6 @@
 <script>
   import firebase from 'firebase'
   require('firebase/firestore')
-  import _ from 'lodash'
 
   export default {
     name: 'CharacterBonds',
@@ -41,7 +40,7 @@
       updateBonds () {
         this.$emit('updatedBonds', this.bonds)
         this.currentBonds = _.filter(this.bonds, (o) => {
-          return _.has(o, 'bond') && o.bond.length > 0
+          return this.$_.has(o, 'bond') && o.bond.length > 0
         }).length
       }
     },
@@ -53,7 +52,6 @@
           })
         })
         .catch((error) => {
-          console.log('error')
           this.error = error
         })
     },

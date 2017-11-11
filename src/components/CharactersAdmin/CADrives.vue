@@ -63,8 +63,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
-
 export default {
   data () {
     return {
@@ -92,7 +90,7 @@ export default {
   methods: {
     addDrive () {
       this.$store.dispatch('characterAdmin/add', {...this.tempDrive, collection: 'drives'})
-      this.tempDrive = _.mapValues(this.tempDrive, (o) => { return '' })
+      this.tempDrive = this.$_.mapValues(this.tempDrive, (o) => { return '' })
     },
     saveDrive (drive) {
       this.$store.dispatch('characterAdmin/save', {...drive, collection: 'drives'})

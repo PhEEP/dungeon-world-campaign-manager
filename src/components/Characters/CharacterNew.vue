@@ -126,6 +126,7 @@
   import CharacterBackgrounds from '@/components/Characters/CharacterBackgrounds'
   import CharacterLooks from '@/components/Characters/CharacterLooks'
   import { VueEditor } from 'vue2-editor'
+
   export default {
     name: 'CharacterNew',
     data () {

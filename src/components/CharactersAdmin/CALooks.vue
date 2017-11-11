@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
-
 export default {
   name: 'CALooks',
   data () {
@@ -39,7 +37,7 @@ export default {
   },
   methods: {
     startCase (str) {
-      return _.startCase(str)
+      return this.$_.startCase(str)
     },
     emitValue (val) {
       let newLook = {}

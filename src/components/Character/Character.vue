@@ -25,7 +25,6 @@
 <script>
 import firebase from 'firebase'
 require('firebase/firestore')
-import _ from 'lodash'
 import CharacterDetails from '@/components/Character/CharacterDetails'
 
 export default {
@@ -38,7 +37,7 @@ export default {
   },
   computed: {
     attachedBonds () {
-      return _.filter(this.character.bonds, (o) => {
+      return this.$_.filter(this.character.bonds, (o) => {
         return typeof o.bond !== 'undefined'
       })
     }
