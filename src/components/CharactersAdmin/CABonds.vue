@@ -2,13 +2,7 @@
   <v-layout column wrap>
     <v-flex xs12>
       <h4 block>Bonds</h4>
-      <v-text-field
-        type="number"
-        label="Starting Bond Limit"
-        placeholder="#"
-        v-model="startingBonds"
-      >
-      </v-text-field>
+
     </v-flex>
     <v-flex card>
       <v-text-field v-model="tempBond" label="Bond" ></v-text-field>

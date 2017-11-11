@@ -20,6 +20,9 @@ const characterAdmin = {
     },
     bonds: [],
     startingBonds: 0,
+    maximumHP: 0,
+    maximumLoad: 0,
+    damageMod: 0,
     deleting: false,
     deleteTarget: {}
   },
@@ -57,7 +60,16 @@ const characterAdmin = {
       state.bonds = payload
     },
     setStartingBonds (state, payload) {
-      state.startingBonds = parseInt(payload)
+      state.startingBonds = payload
+    },
+    setMaximumHP (state, payload) {
+      state.maximumHP = payload
+    },
+    setMaximumLoad (state, payload) {
+      state.maximumLoad = payload
+    },
+    setDamageMod (state, payload) {
+      state.damageMod = payload
     },
     setClassId (state, payload) {
       state.classId = payload
@@ -77,7 +89,10 @@ const characterAdmin = {
         flavorText: state.flavorText,
         sampleBonds: state.bonds,
         startingBonds: state.startingBonds,
-        look: state.looks
+        look: state.looks,
+        maximumLoad: state.maximumLoad,
+        maximumHP: state.maximumHP,
+        damageMod: state.damageMod
       }
       let charRef = firebase.firestore().doc('characters/' + state.classId)
       charRef.update(baseInfo)
@@ -106,6 +121,9 @@ const characterAdmin = {
               commit('setLooks', charData.look)
               commit('setBonds', charData.sampleBonds || [])
               commit('setStartingBonds', charData.startingBonds)
+              commit('setMaximumHP', charData.maximumHP)
+              commit('setMaximumLoad', charData.maximumLoad)
+              commit('setDamageMod', charData.damageMod)
             }
           }
         )
@@ -210,6 +228,15 @@ const characterAdmin = {
     setStartingBonds ({commit}, payload) {
       commit('setStartingBonds', payload)
     },
+    setMaximumLoad ({commit}, payload) {
+      commit('setMaximumLoad', payload)
+    },
+    setMaximumHP ({commit}, payload) {
+      commit('setMaximumHP', payload)
+    },
+    setDamageMod ({commit}, payload) {
+      commit('setDamageMod', payload)
+    },
     setLook ({commit, state}, payload) {
       let tempLooks = state.looks
       commit('setLooks', _.set(tempLooks, _.keys(payload)[0], _.values(payload)[0]))
@@ -242,6 +269,15 @@ const characterAdmin = {
     },
     startingBonds (state) {
       return state.startingBonds
+    },
+    maximumHP (state) {
+      return state.maximumHP
+    },
+    maximumLoad (state) {
+      return state.maximumLoad
+    },
+    damageMod (state) {
+      return state.damageMod
     },
     deleting (state) {
       return state.deleting
