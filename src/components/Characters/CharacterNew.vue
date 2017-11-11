@@ -1,6 +1,5 @@
 <template>
   <v-container fluid grid-list-lg>
-
     <v-layout row wrap>
       <v-flex md4 v-if="typeof baseClass !== 'string'">
         <h1 class="display-2">{{ characterName }} <h1 class="subheading"> {{ classData.name }}</h1></h1>
@@ -20,7 +19,7 @@
           <v-btn color="primary" block @click="onPickFile">Add Image</v-btn>
           <input style="display:none;" type="file" name="characterAvatar" id="" @change="onFilePicked" accept="image/*" ref="avatarInput">
         </v-layout>
-        <p class="body-1">{{ classData.flavorText }}</p>
+        <div v-html="classData.flavorText"></div>
       </v-flex>
       <v-flex md4>
         <h5 class="title">Drive
@@ -179,7 +178,6 @@
               classId: this.classId,
               sampleBonds: this.classData.sampleBonds
             }
-            let imageUrl
             let docId
             firebase.firestore().collection('users/' + userId + '/characters').add(newChar)
               .then((docRef) => {
@@ -187,12 +185,19 @@
                 return docId
               })
               .then(docId => {
+                if (typeof this.avatar.name === 'undefined') {
+                  return null
+                }
+                console.log(this.avatar.name, 'avatar name')
                 const filename = this.avatar.name
                 const ext = filename.slice(filename.lastIndexOf('.'))
                 return firebase.storage().ref('characters/' + docId + ext).put(this.avatar)
               })
               .then(fileData => {
-                imageUrl = fileData.metadata.downloadURLs[0]
+                let imageUrl = 'https://placehold.it/200/200'
+                if (fileData !== null) {
+                  imageUrl = fileData.metadata.downloadURLs[0]
+                }
                 return firebase.firestore().doc('users/' + userId + '/characters/' + docId).update({avatarUrl: imageUrl})
               })
               .then(() => {

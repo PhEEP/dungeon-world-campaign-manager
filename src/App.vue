@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app dark>
     <v-navigation-drawer temporary v-model="sideNav">
       <v-list>
         <v-list-tile
@@ -27,7 +27,7 @@
         class="hidden-md-and-up"
       ></v-toolbar-side-icon>
       <v-toolbar-title>
-        WoACM
+        Worlds of Adventure Campaign Manager
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">

@@ -10,7 +10,14 @@ const characterAdmin = {
     flavorText: '',
     backgrounds: {},
     drives: {},
-    looks: {},
+    looks: {
+      body: '',
+      decoration: '',
+      eyes: '',
+      garb: '',
+      gender: '',
+      race: ''
+    },
     bonds: [],
     startingBonds: 0,
     deleting: false,
@@ -33,13 +40,24 @@ const characterAdmin = {
       state.drives = payload
     },
     setLooks (state, payload) {
-      state.looks = payload
+      if (typeof payload !== 'undefined') {
+        state.looks = payload
+      } else {
+        state.looks = {
+          body: '',
+          decoration: '',
+          eyes: '',
+          garb: '',
+          gender: '',
+          race: ''
+        }
+      }
     },
     setBonds (state, payload) {
       state.bonds = payload
     },
     setStartingBonds (state, payload) {
-      state.startingBonds = payload
+      state.startingBonds = parseInt(payload)
     },
     setClassId (state, payload) {
       state.classId = payload
@@ -57,7 +75,9 @@ const characterAdmin = {
         exampleNames: state.exampleNames,
         name: state.className,
         flavorText: state.flavorText,
-        sampleBonds: state.bonds
+        sampleBonds: state.bonds,
+        startingBonds: state.startingBonds,
+        look: state.looks
       }
       let charRef = firebase.firestore().doc('characters/' + state.classId)
       charRef.update(baseInfo)
@@ -84,7 +104,8 @@ const characterAdmin = {
               commit('setExampleNames', charData.exampleNames)
               commit('setFlavorText', charData.flavorText)
               commit('setLooks', charData.look)
-              commit('setBonds', charData.sampleBonds)
+              commit('setBonds', charData.sampleBonds || [])
+              commit('setStartingBonds', charData.startingBonds)
             }
           }
         )
@@ -164,7 +185,6 @@ const characterAdmin = {
     },
     delete ({commit, state, dispatch}, payload) {
       commit('clearError', null, { root: true })
-      console.log('characters/' + state.classId + '/' + state.deleteTarget.collection + '/' + state.deleteTarget.id)
       firebase.firestore().doc('characters/' + state.classId + '/' + state.deleteTarget.collection + '/' + state.deleteTarget.id).delete()
         .then(
           () => {
@@ -178,6 +198,21 @@ const characterAdmin = {
             commit('setError', error, { root: true })
           }
         )
+    },
+    addBond ({commit, state}, payload) {
+      let tempBonds = state.bonds
+      tempBonds.push(payload)
+      commit('setBonds', _.uniq(tempBonds))
+    },
+    removeBond ({commit, state}, payload) {
+      commit('setBonds', _.without(state.bonds, payload))
+    },
+    setStartingBonds ({commit}, payload) {
+      commit('setStartingBonds', payload)
+    },
+    setLook ({commit, state}, payload) {
+      let tempLooks = state.looks
+      commit('setLooks', _.set(tempLooks, _.keys(payload)[0], _.values(payload)[0]))
     }
   },
   getters: {

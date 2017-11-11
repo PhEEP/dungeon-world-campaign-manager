@@ -2,7 +2,7 @@
   <v-container fluid fill-height class="signup">
     <v-layout row wrap align-center>
       <v-flex md4 offset-md4 sm6 offset-sm3>
-        <v-card light>
+        <v-card>
           <span v-if="error">
             <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
           </span>
@@ -16,7 +16,7 @@
             <v-text-field label="Email" type="email" id="email" v-model="email"></v-text-field>
             <v-text-field type="password" label="Password" v-model="password" id="password"></v-text-field>
             <v-text-field label="Confirm Password" type="password" v-model="confirmPassword" id="confirmPassword" :rules="[comparePasswords]"></v-text-field>
-            <v-btn flat color="primary"@click="signUp">Log In</v-btn>
+            <v-btn flat @click="signUp">Log In</v-btn>
             <v-btn color="primary" @click="signUpWithGoogle">With Google</v-btn>
             <p>
                 Already have an account? <router-link to="/login">Log in!</router-link>

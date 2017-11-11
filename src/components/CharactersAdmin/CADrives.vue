@@ -1,6 +1,6 @@
 
 <template>
-<v-layout row wrap>
+<v-layout column wrap>
   <v-flex xs12>
     <h4>Drives
       <v-btn
@@ -25,7 +25,7 @@
       </v-btn>
     </h4>
   </v-flex>
-  <v-flex md4 v-for="(drive, index) in drives" :key="index">
+  <v-flex  v-for="(drive, index) in drives" :key="index">
     <div v-if="!editingDrive">
       <h5>{{ drive.title }}</h5>
       <p class="subheading" v-html="drive.description"></p>
@@ -65,7 +65,7 @@
       </v-card-text>
     </v-card>
   </v-flex>
-    <v-flex md4 card v-if="addingDrive">
+    <v-flex  card v-if="addingDrive">
       <v-text-field v-model="tempDrive.title" label="Drive Title" ></v-text-field>
       <v-text-field textarea id="tempDrive" v-model="tempDrive.description" label="Drive Text"></v-text-field>
       <v-btn color="secondary" dark @click="addDrive">Add drive</v-btn>

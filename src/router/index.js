@@ -26,67 +26,67 @@ let router = new Router({
     },
     {
       path: '/login',
-      name: 'Login',
-      component: Login
+      component: Login,
+      name: 'Login'
     },
     {
       path: '/signup',
-      name: 'SignUp',
-      component: SignUp
+      component: SignUp,
+      name: 'SignUp'
     },
     {
       path: '/hello',
-      name: 'Hello',
-      components: { default: Hello }
+      components: { default: Hello },
+      name: 'Hello'
     },
     {
       path: '/campaigns',
-      name: 'Campaigns',
       components: { default: Campaigns },
       meta: {
         requiresAuth: true
-      }
+      },
+      name: 'Campaigns'
     },
     {
       path: '/characters',
-      name: 'Characters',
       components: { default: Characters },
-      beforeEnter: AuthGuard
+      beforeEnter: AuthGuard,
+      name: 'Characters'
     },
     {
       path: '/character/:id',
-      name: 'Character',
       components: { default: Character },
-      beforeEnter: AuthGuard
+      beforeEnter: AuthGuard,
+      name: 'Character'
     },
     {
       path: '/characters/new/:classId',
-      name: 'New Character',
       components: { default: CharacterNew },
       beforeEnter: AuthGuard,
-      props: { default: true }
+      props: { default: true },
+      name: 'CharacterNew'
     },
     {
       path: '/characters/admin/:classId',
-      name: 'CharactersAdmin',
       components: { default: CharactersAdmin },
       beforeEnter: AuthGuard,
-      props: { default: true }
+      props: { default: true },
+      name: 'CharactersAdmin'
     },
     {
       path: '/compendium',
-      name: 'Compendium',
-      components: { default: Compendium }
+      components: { default: Compendium },
+      name: 'Compendium'
     },
     {
       path: '/profile',
-      name: 'Profile',
       components: { default: Profile },
-      beforeEnter: AuthGuard
+      beforeEnter: AuthGuard,
+      name: 'Profile'
     }
   ],
   linkActiveClass: 'active',
-  mode: 'history'
+  mode: 'hash'
 })
 
 export default router

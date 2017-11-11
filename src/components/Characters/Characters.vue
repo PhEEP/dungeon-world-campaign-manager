@@ -4,7 +4,7 @@
         <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
       </span>
       <v-layout row wrap>
-        <v-progress-linear v-bind:indeterminate="true" v-if="loading"></v-progress-linear>
+        <v-progress-linear v-bind:indeterminate="true" v-if="loading" color="accent"></v-progress-linear>
         <v-flex md3 v-for="(character, index) in createdCharacters" v-bind:key="index">
           <v-card>
             <v-card-media :src="character.avatar || 'http://placehold.it/200/200'" height="200px"></v-card-media>
@@ -16,7 +16,7 @@
             </v-card-title>
             <v-card-actions>
               <v-btn block color="secondary" @click="$router.push('/character/' + character.id)">View {{ character.name }}</v-btn>
-              <v-btn icon color="error" outline @click.stop="promptDelete = true, deathRow = character.name, deathRowId = character.id"><v-icon>delete</v-icon></v-btn>
+              <v-btn color="error" @click.stop="promptDelete = true, deathRow = character.name, deathRowId = character.id"><v-icon>delete</v-icon></v-btn>
             </v-card-actions>
             <v-dialog v-model="promptDelete">
               <v-card>
@@ -39,18 +39,21 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap>
-        <v-progress-linear v-bind:indeterminate="true" v-if="loading"></v-progress-linear>
-        <v-flex xs12 sm6 md4 lg3 v-for="cClass in characterClasses" v-bind:key="cClass.id">
+        <v-progress-linear v-bind:indeterminate="true" v-if="loading" color="accent"></v-progress-linear>
+        <v-flex xs12 sm6 md4 lg3 xl2 v-for="cClass in characterClasses" v-bind:key="cClass.id">
           <v-card>
-            <v-card-media height="200px" :src="cClass.classIcon" :title="cClass.classIconAttribution">
-            </v-card-media>
+            <!-- <v-card-media height="200px" :src="cClass.classIcon" :title="cClass.classIconAttribution">
+            </v-card-media> -->
+            <v-layout row justify-space-around align-center>
+              <img :src="cClass.classIcon" style="margin-top:1rem;height:200px;" alt="">
+            </v-layout>
             <v-card-title primary-title >
               <h4 mb-0>{{ cClass.name }}</h4>
-              <div v-html="cClass.flavorText"></div>
             </v-card-title>
             <v-card-actions v-if="characterCount < 4">
-              <v-btn block color="secondary" @click="$router.push('/characters/new/' + cClass.id)">Create {{ cClass.name }}</v-btn>
-              <v-btn color="accent" dark @click="$router.push('/characters/admin/' + cClass.id)" v-if="userIsAdmin">Manage</v-btn>
+              <v-btn color="primary" @click="$router.push('/characters/new/' + cClass.id)">View {{ cClass.name }}</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn color="secondary" dark @click="$router.push('/characters/admin/' + cClass.id)" v-if="userIsAdmin">Manage</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
