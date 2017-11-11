@@ -19,13 +19,16 @@
       <v-flex md3>
         <CALooks />
       </v-flex>
+      <v-flex md3>
+        <CAFlatStats />
+      </v-flex>
     </v-layout>
-    <v-btn fab fixed bottom right color="primary" dark @click="updateBaseInfo">
+    <v-btn fab fixed bottom right color="accent" @click="updateBaseInfo">
       <v-icon>save</v-icon>
     </v-btn>
     <v-dialog v-model="deleting" color="warning">
       <v-card>
-          <v-alert color="warning" dark value="true"> Deleting is irreversible!</v-alert>
+        <v-alert color="warning" dark value="true"> Deleting is irreversible!</v-alert>
         <v-card-title primary-title>
           <h6 v-if="deleteTarget">Remove {{deleteTarget.id}} from {{deleteTarget.collection}} ?</h6>
         </v-card-title>
@@ -44,6 +47,7 @@ import CADrives from '@/components/CharactersAdmin/CADrives'
 import CADetails from '@/components/CharactersAdmin/CADetails'
 import CABonds from '@/components/CharactersAdmin/CABonds'
 import CALooks from '@/components/CharactersAdmin/CALooks'
+import CAFlatStats from '@/components/CharactersAdmin/CAFlatStats'
 import { VueEditor } from 'vue2-editor'
 
 export default {
@@ -90,7 +94,8 @@ export default {
     CADrives,
     CADetails,
     CABonds,
-    CALooks
+    CALooks,
+    CAFlatStats
   },
   props: ['classId'],
   created () {

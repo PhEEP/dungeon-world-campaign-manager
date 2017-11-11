@@ -3,19 +3,11 @@
     <v-flex xs12>
       <h4 >Backgrounds
         <v-btn
-          fab
-          outline
-          flat
-          small
           icon
           @click="editingBackground = !editingBackground">
           <v-icon>edit</v-icon>
         </v-btn>
         <v-btn
-          fab
-          outline
-          flat
-          small
           icon
           @click="addingBackground = !addingBackground">
           <v-icon>add</v-icon>
@@ -48,7 +40,7 @@
           </vue-editor>
           <v-layout>
             <v-btn
-              color="primary"
+              color="accent"
               @click="saveBackground(background)"
             >
             <v-icon>save</v-icon>
@@ -56,9 +48,6 @@
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn
-              fab
-              outline
-              small
               icon
               color="warning"
               @click="bgToDelete = background.id, promptDelete()"

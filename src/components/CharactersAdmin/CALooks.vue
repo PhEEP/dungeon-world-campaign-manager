@@ -1,11 +1,20 @@
 <template>
   <v-layout column>
-    <h5>Looks</h5>
+    <h4>Looks
+      <v-btn
+          icon
+          @click="editingLooks = !editingLooks"
+        >
+        <v-icon>edit</v-icon>
+      </v-btn>
+    </h4>
     <v-flex v-for='category in categories' :key='category' >
       <h6>{{ startCase(category) }}</h6>
+      <p v-if="!editingLooks">{{ looks[category] }}</p>
       <v-text-field
         v-model='looks[category]'
         @change.native='emitValue(category)'
+        v-if="editingLooks"
       >
       </v-text-field>
     </v-flex>
@@ -19,7 +28,8 @@ export default {
   name: 'CALooks',
   data () {
     return {
-      categories: ['body', 'eyes', 'decoration', 'gender', 'race', 'garb']
+      categories: ['body', 'eyes', 'decoration', 'gender', 'race', 'garb'],
+      editingLooks: false
     }
   },
   computed: {

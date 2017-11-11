@@ -1,21 +1,31 @@
 <template>
   <v-layout column wrap>
     <v-flex xs12>
-      <h4 block>Bonds</h4>
-      <v-text-field
-        type="number"
-        label="Starting Bond Limit"
-        placeholder="#"
-        v-model="startingBonds"
-      >
-      </v-text-field>
+      <h4 block>Bonds
+        <v-btn
+          icon
+          @click="editingBonds = !editingBonds"
+        >
+          <v-icon>edit</v-icon>
+        </v-btn>
+        <v-btn
+          icon
+          @click="addingBonds = !addingBonds"
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+      </h4>
+
     </v-flex>
-    <v-flex card>
+    <v-flex card v-if="addingBonds">
       <v-text-field v-model="tempBond" label="Bond" ></v-text-field>
       <v-btn color="secondary" dark @click="addBond">Add bond</v-btn>
     </v-flex>
     <v-flex v-for="(bond, index) in bonds" :key="index">
-      <v-layout>
+      <v-layout v-if="!editingBonds">
+        <p>{{ bond }}</p>
+      </v-layout>
+      <v-layout v-if="editingBonds">
         <v-text-field :value="bond"></v-text-field>
         <v-btn
           icon
@@ -35,7 +45,9 @@ export default {
   name: 'CABonds',
   data () {
     return {
-      tempBond: ''
+      tempBond: '',
+      editingBonds: false,
+      addingBonds: false
     }
   },
   computed: {
