@@ -10,9 +10,10 @@ const playerCharacter = {
     flavorText: null,
     background: null,
     drive: null,
-    look: null,
+    looks: null,
     bonds: [],
     startingBonds: 0,
+    sampleBonds: [],
     maximumHP: 0,
     maximumLoad: 0,
     damageMod: 0,
@@ -22,14 +23,17 @@ const playerCharacter = {
     setClassName (state, payload) {
       state.className = payload
     },
+    setName (state, payload) {
+      state.name = payload
+    },
     setFlavorText (state, payload) {
       state.flavorText = payload
     },
-    setBackgrounds (state, payload) {
-      state.backgrounds = payload
+    setBackground (state, payload) {
+      state.background = payload
     },
-    setDrives (state, payload) {
-      state.drives = payload
+    setDrive (state, payload) {
+      state.drive = payload
     },
     setLooks (state, payload) {
       if (typeof payload !== 'undefined') {
@@ -47,6 +51,9 @@ const playerCharacter = {
     },
     setBonds (state, payload) {
       state.bonds = payload
+    },
+    setSampleBonds (state, payload) {
+      state.sampleBonds = payload
     },
     // if payload can be interpreted as Integer, use it
     // otherwise default to `0`
@@ -78,7 +85,6 @@ const playerCharacter = {
         exampleNames: state.exampleNames,
         name: state.className,
         flavorText: state.flavorText,
-        sampleBonds: state.bonds,
         startingBonds: state.startingBonds,
         look: state.looks,
         maximumLoad: state.maximumLoad,
@@ -98,59 +104,44 @@ const playerCharacter = {
           }
         )
     },
-    loadClassData ({commit, dispatch}, payload) {
-      let charRef = firebase.firestore().doc('character/' + payload)
+    loadPC ({commit, dispatch}, payload) {
+      console.log('users/' + payload.userID + '/characters/' + payload.charID)
+      let charRef = firebase.firestore().doc('users/' + payload.userID + '/characters/' + payload.charID)
       charRef.get()
         .then(
           (doc) => {
             if (doc.exists) {
               let charData = doc.data()
-              commit('setClassName', charData.name)
+              console.log(charData)
+              commit('setClassName', charData.className)
+              commit('setName', charData.name)
               commit('setClassId', doc.id)
               commit('setFlavorText', charData.flavorText)
               commit('setLooks', charData.look)
-              commit('setBonds', charData.sampleBonds || [])
+              commit('setBonds', charData.bonds || [])
+              commit('setSampleBonds', charData.sampleBonds)
               commit('setStartingBonds', charData.startingBonds)
               commit('setMaximumHP', charData.maximumHP)
               commit('setMaximumLoad', charData.maximumLoad)
               commit('setDamageMod', charData.damageMod)
+              commit('setBackground', charData.background)
+              commit('setDrive', charData.drive)
+            } else {
+              console.log('no doc exists')
             }
           }
         )
-      dispatch('loadBackgrounds', payload)
-      dispatch('loadDrives', payload)
-    },
-    loadBackgrounds ({commit}, payload) {
-      let bgRef = firebase.firestore().collection('characters/' + payload + '/backgrounds')
-      bgRef.get()
-        .then(
-          (querySnapshot) => {
-            let tempBGs = {}
-            querySnapshot.forEach((doc) => {
-              tempBGs[doc.id] = {...doc.data(), id: doc.id}
-            })
-            commit('setBackgrounds', tempBGs)
-          }
-        )
-    },
-    loadDrives ({commit}, payload) {
-      let drivesRef = firebase.firestore().collection('characters/' + payload + '/drives')
-      drivesRef.get()
-        .then(
-          (querySnapshot) => {
-            let tempDrives = {}
-            querySnapshot.forEach((doc) => {
-              tempDrives[doc.id] = { ...doc.data(), id: doc.id }
-            })
-            commit('setDrives', tempDrives)
-          }
-        )
+      .catch(
+        (error) => {
+          commit('setError', error, { root: true })
+        }
+      )
     },
     setName ({commit}, payload) {
-      commit('setClassName', payload)
+      commit('setName', payload)
     },
-    setExampleNames ({commit}, payload) {
-      commit('setExampleNames', payload)
+    setClassName ({commit}, payload) {
+      commit('setClassName', payload)
     },
     setFlavorText ({commit}, payload) {
       commit('setFlavorText', payload)
@@ -234,6 +225,9 @@ const playerCharacter = {
   },
   getters: {
     name (state) {
+      return state.name
+    },
+    className (state) {
       return state.className
     },
     classId (state) {
@@ -245,17 +239,20 @@ const playerCharacter = {
     flavorText (state) {
       return state.flavorText
     },
-    backgrounds (state) {
-      return state.backgrounds
+    background (state) {
+      return state.background
     },
-    drives (state) {
-      return state.drives
+    drive (state) {
+      return state.drive
     },
     looks (state) {
       return state.looks
     },
     bonds (state) {
       return state.bonds
+    },
+    sampleBonds (state) {
+      return state.sampleBonds
     },
     startingBonds (state) {
       return state.startingBonds

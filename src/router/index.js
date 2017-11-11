@@ -8,6 +8,7 @@ import Characters from '@/components/Characters/Characters'
 import CharactersAdmin from '@/components/CharactersAdmin/CA'
 import CharacterNew from '@/components/Characters/CharacterNew'
 import Character from '@/components/Character/Character'
+import PlayerCharacter from '@/components/PlayerCharacter/PlayerCharacter'
 import Compendium from '@/components/Compendium'
 import Profile from '@/components/Profile'
 import AuthGuard from '@/router/auth-guard'
@@ -58,6 +59,12 @@ let router = new Router({
       components: { default: Character },
       beforeEnter: AuthGuard,
       name: 'Character'
+    },
+    {
+      path: '/playerCharacter/:id',
+      components: { default: PlayerCharacter },
+      beforeEnter: AuthGuard,
+      name: 'PlayerCharacter'
     },
     {
       path: '/characters/new/:classId',

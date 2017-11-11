@@ -15,7 +15,7 @@
               </div>
             </v-card-title>
             <v-card-actions>
-              <v-btn block color="secondary" @click="$router.push('/character/' + character.id)">View {{ character.name }}</v-btn>
+              <v-btn block color="secondary" @click="$router.push('/playerCharacter/' + character.id)">View {{ character.name }}</v-btn>
               <v-btn color="error" @click.stop="promptDelete = true, deathRow = character.name, deathRowId = character.id"><v-icon>delete</v-icon></v-btn>
             </v-card-actions>
             <v-dialog v-model="promptDelete">
