@@ -10,9 +10,6 @@
         ></v-text-field>
         <h5>Example Names
           <v-btn
-            fab
-            flat
-            small
             icon
             @click="editingExampleNames = !editingExampleNames"
           >
@@ -32,7 +29,7 @@
         ></v-text-field>
       </v-flex>
       <v-flex>
-        <h5>Flavor Text <v-btn fab flat small icon @click="editingFlavorText = !editingFlavorText"><v-icon>edit</v-icon></v-btn></h5>
+        <h5>Flavor Text <v-btn icon @click="editingFlavorText = !editingFlavorText"><v-icon>edit</v-icon></v-btn></h5>
         <div class="body-1" v-html="flavorText" v-if="!editingFlavorText" ></div>
         <vue-editor id="caFlavorText" v-model="flavorText" :editorToolbar="customToolbar" v-if="editingFlavorText"></vue-editor>
       </v-flex>

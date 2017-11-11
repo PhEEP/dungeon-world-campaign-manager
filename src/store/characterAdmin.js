@@ -59,17 +59,19 @@ const characterAdmin = {
     setBonds (state, payload) {
       state.bonds = payload
     },
+    // if payload can be interpreted as Integer, use it
+    // otherwise default to `0`
     setStartingBonds (state, payload) {
-      state.startingBonds = payload
+      state.startingBonds = _.defaultTo(_.toInteger(payload), 0)
     },
     setMaximumHP (state, payload) {
-      state.maximumHP = payload
+      state.maximumHP = _.defaultTo(_.toInteger(payload), 0)
     },
     setMaximumLoad (state, payload) {
-      state.maximumLoad = payload
+      state.maximumLoad = _.defaultTo(_.toInteger(payload), 0)
     },
     setDamageMod (state, payload) {
-      state.damageMod = payload
+      state.damageMod = _.defaultTo(_.toInteger(payload), 0)
     },
     setClassId (state, payload) {
       state.classId = payload

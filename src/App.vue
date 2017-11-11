@@ -121,5 +121,7 @@ export default {
 </script>
 
 <style>
-
+.ql-toolbar.ql-snow {
+  background: #ccc;
+}
 </style>

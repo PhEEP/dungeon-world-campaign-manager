@@ -4,20 +4,12 @@
   <v-flex xs12>
     <h4>Drives
       <v-btn
-        fab
-        outline
-        flat
-        small
         icon
         @click="editingDrive = !editingDrive"
       >
         <v-icon>edit</v-icon>
       </v-btn>
       <v-btn
-        fab
-        outline
-        flat
-        small
         icon
         @click="addingDrive = !addingDrive"
       >
@@ -44,7 +36,7 @@
         </v-text-field>
         <v-layout>
             <v-btn
-              color="primary"
+              color="accent"
               @click="saveDrive(drive)"
             >
             <v-icon>save</v-icon>
@@ -52,9 +44,6 @@
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn
-              fab
-              outline
-              small
               icon
               color="warning"
               @click="driveToDelete = drive.id, promptDelete()"

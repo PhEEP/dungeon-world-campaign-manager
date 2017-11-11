@@ -51,9 +51,9 @@
               <h4 mb-0>{{ cClass.name }}</h4>
             </v-card-title>
             <v-card-actions v-if="characterCount < 4">
-              <v-btn color="primary" @click="$router.push('/characters/new/' + cClass.id)">View {{ cClass.name }}</v-btn>
+              <v-btn color="secondary" @click="$router.push('/characters/new/' + cClass.id)">View {{ cClass.name }}</v-btn>
               <v-spacer></v-spacer>
-              <v-btn color="secondary" dark @click="$router.push('/characters/admin/' + cClass.id)" v-if="userIsAdmin">Manage</v-btn>
+              <v-btn color="accent" dark @click="$router.push('/characters/admin/' + cClass.id)" v-if="userIsAdmin">Manage</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
