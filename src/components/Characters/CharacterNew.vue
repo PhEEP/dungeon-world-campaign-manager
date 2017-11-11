@@ -232,7 +232,7 @@
                 return firebase.firestore().doc('users/' + userId + '/characters/' + docId).update({avatarUrl: imageUrl})
               })
               .then(() => {
-                this.$router.push({ name: 'Character', params: {id: docId} })
+                this.$router.push({ name: 'PlayerCharacter', params: {id: docId} })
               })
               .catch((error) => {
                 this.submitting = false
