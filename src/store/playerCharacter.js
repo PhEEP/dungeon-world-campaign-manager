@@ -5,6 +5,7 @@ const playerCharacter = {
   namespaced: true,
   state: {
     name: null,
+    avatar: null,
     className: null,
     classId: null,
     flavorText: null,
@@ -25,6 +26,9 @@ const playerCharacter = {
     },
     setName (state, payload) {
       state.name = payload
+    },
+    setAvatar (state, payload) {
+      state.avatar = payload
     },
     setFlavorText (state, payload) {
       state.flavorText = payload
@@ -89,7 +93,8 @@ const playerCharacter = {
         look: state.looks,
         maximumLoad: state.maximumLoad,
         maximumHP: state.maximumHP,
-        damageMod: state.damageMod
+        damageMod: state.damageMod,
+        avatar: state.avatar
       }
       let charRef = firebase.firestore().doc('characters/' + state.classId)
       charRef.update(baseInfo)
@@ -126,6 +131,7 @@ const playerCharacter = {
               commit('setDamageMod', charData.damageMod)
               commit('setBackground', charData.background)
               commit('setDrive', charData.drive)
+              commit('setAvatar', charData.avatarUrl)
             } else {
               console.log('no doc exists')
             }
@@ -226,6 +232,9 @@ const playerCharacter = {
   getters: {
     name (state) {
       return state.name
+    },
+    avatar (state) {
+      return state.avatar
     },
     className (state) {
       return state.className

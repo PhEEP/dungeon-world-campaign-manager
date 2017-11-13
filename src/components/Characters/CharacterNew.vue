@@ -225,7 +225,7 @@
                 return firebase.storage().ref('characters/' + docId + ext).put(this.avatar)
               })
               .then(fileData => {
-                let imageUrl = 'https://placehold.it/200/200'
+                let imageUrl = this.classData.classIcon.iconUrl
                 if (fileData !== null) {
                   imageUrl = fileData.metadata.downloadURLs[0]
                 }

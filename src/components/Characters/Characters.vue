@@ -7,7 +7,7 @@
         <v-progress-linear v-bind:indeterminate="true" v-if="loading" color="accent"></v-progress-linear>
         <v-flex md3 v-for="(character, index) in createdCharacters" v-bind:key="index">
           <v-card>
-            <v-card-media :src="character.avatar || 'http://placehold.it/200/200'" height="200px"></v-card-media>
+            <v-card-media :src="character.avatar || classAvatar(character.classId)" height="200px"></v-card-media>
             <v-card-title primary-title>
               <div>
                 <h3 class="headline mb-0">{{ character.name }}</h3>
@@ -96,6 +96,11 @@ export default {
     deleteCharacter (characterId) {
       this.$store.dispatch('deleteCharacter', characterId)
       this.promptDelete = false
+    },
+    classAvatar (classId) {
+      return this.$_.find(this.characterClasses, (o) => {
+        return o.id === classId
+      }).classIcon
     }
   },
   mounted () {

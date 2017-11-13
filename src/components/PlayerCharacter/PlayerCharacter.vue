@@ -4,6 +4,7 @@
         <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
       </span>
     <h1>{{ name }}: {{ className }}</h1>
+    <img :src="avatar" alt="" style="height:200px;">
     <v-layout row wrap>
       <v-flex v-if="background">
         <v-card>
@@ -58,6 +59,9 @@ export default {
     },
     drive () {
       return this.$store.getters['playerCharacter/drive']
+    },
+    avatar () {
+      return this.$store.getters['playerCharacter/avatar']
     }
   }
 }

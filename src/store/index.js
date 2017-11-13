@@ -158,7 +158,8 @@ export const store = new Vuex.Store({
                   id: doc.id,
                   name: doc.data().name,
                   avatar: doc.data().avatarUrl,
-                  className: doc.data().className
+                  className: doc.data().className,
+                  classId: doc.data().classId
                 })
               })
             commit('setCreatedCharacters', tempArr)
