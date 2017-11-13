@@ -8,10 +8,6 @@ test/unit/coverage
 test/e2e/reports
 selenium-debug.log
 src/helpers/firebaseConfig.js
-semantic/*
-.firebaserc
-database.rules.json
-firebase.json
 functions/*
 # Editor directories and files
 .idea
