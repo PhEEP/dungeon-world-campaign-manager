@@ -1,6 +1,13 @@
 <template>
   <v-container fluid grid-list-lg>
-    <v-layout row wrap>
+      <v-alert
+        :value="true"
+        v-if="aboveCharacterCount"
+        color="info"
+      >
+      Not sure how you got here, but you're above the Character Limit!
+    </v-alert>
+    <v-layout row wrap v-if="!aboveCharacterCount">
       <v-flex md4 v-if="typeof baseClass !== 'string'">
         <v-card>
           <v-card-title>
@@ -112,7 +119,16 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-btn fab fixed bottom right icon :color="errors.items.length > 0 ? 'error' : 'accent'" @click="saveCharacter" :disabled="submitting || aboveCharacterCount">
+      <v-btn
+        fab
+        fixed
+        bottom
+        right
+        icon
+        :color="errors.items.length > 0 ? 'error' : 'accent'"
+        @click="saveCharacter"
+        :disabled="submitting || aboveCharacterCount"
+      >
         <v-icon>save</v-icon>
       </v-btn>
     </v-layout>
@@ -156,7 +172,7 @@
     },
     computed: {
       aboveCharacterCount () {
-        return this.characterCount >= 5
+        return this.characterCount >= 4
       }
     },
     methods: {

@@ -1,13 +1,30 @@
 <template>
   <v-container fluid grid-list-lg>
       <span v-if="error">
-        <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+        <app-alert
+          @dismissed="onDismissed"
+          :text="error.message"
+        ></app-alert>
       </span>
-      <v-layout row wrap>
-        <v-progress-linear v-bind:indeterminate="true" v-if="loading" color="accent"></v-progress-linear>
-        <v-flex md3 v-for="(character, index) in createdCharacters" v-bind:key="index">
+      <v-layout
+        row
+        wrap
+      >
+        <v-progress-linear
+          v-bind:indeterminate="true"
+          v-if="loading"
+          color="accent"
+        ></v-progress-linear>
+        <v-flex
+          md3
+          v-for="(character, index) in createdCharacters"
+          :key="index"
+        >
           <v-card>
-            <v-card-media :src="character.avatar || classAvatar(character.classId)" height="200px"></v-card-media>
+            <v-card-media
+              :src="character.avatar"
+              height="200px"
+            ></v-card-media>
             <v-card-title primary-title>
               <div>
                 <h3 class="headline mb-0">{{ character.name }}</h3>
@@ -15,8 +32,19 @@
               </div>
             </v-card-title>
             <v-card-actions>
-              <v-btn block color="secondary" @click="$router.push('/playerCharacter/' + character.id)">View {{ character.name }}</v-btn>
-              <v-btn color="error" @click.stop="promptDelete = true, deathRow = character.name, deathRowId = character.id"><v-icon>delete</v-icon></v-btn>
+              <v-btn
+                block
+                color="secondary"
+                @click="$router.push('/playerCharacter/' + character.id)"
+              >
+                View {{ character.name }}
+              </v-btn>
+              <v-btn
+                color="error"
+                @click.stop="promptDelete = true, deathRow = character.name, deathRowId = character.id"
+              >
+                <v-icon>delete</v-icon>
+              </v-btn>
             </v-card-actions>
             <v-dialog v-model="promptDelete">
               <v-card>
@@ -27,15 +55,31 @@
                   Deleting a character awefis irreversible!
                 </v-card-text>
                 <v-card-actions>
-                  <v-btn block raised color="success" @click.stop="promptDelete=false">Go back</v-btn>
-                  <v-btn icon color="error" dark @click="deleteCharacter(deathRowId)"><v-icon>delete</v-icon></v-btn>
+                  <v-btn
+                    block
+                    raised
+                    color="success"
+                    @click.stop="promptDelete=false"
+                  >Go back</v-btn>
+                  <v-btn
+                    icon
+                    color="error"
+                    dark
+                    @click="deleteCharacter(deathRowId)"
+                    >
+                      <v-icon>delete</v-icon>
+                    </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
           </v-card>
         </v-flex>
         <v-flex xs12 >
-          <v-card dark tile color="error" v-if="characterCount >= 4"><v-card-text>You've hit max characters, kill one to give another life!</v-card-text></v-card>
+          <v-card
+            dark
+            tile
+            color="warning"
+            v-if="characterCount >= 4"><v-card-text>You've hit max characters, kill one to give another life!</v-card-text></v-card>
         </v-flex>
       </v-layout>
       <v-layout row wrap>
