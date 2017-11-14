@@ -18,7 +18,8 @@ const playerCharacter = {
     maximumHP: 0,
     maximumLoad: 0,
     damageMod: 0,
-    deleting: false
+    deleting: false,
+    loaded: false
   },
   mutations: {
     setClassName (state, payload) {
@@ -81,6 +82,9 @@ const playerCharacter = {
     },
     setDeleteTarget (state, payload) {
       state.deleteTarget = payload
+    },
+    setLoaded (state, payload) {
+      state.loaded = payload
     }
   },
   actions: {
@@ -132,6 +136,7 @@ const playerCharacter = {
               commit('setBackground', charData.background)
               commit('setDrive', charData.drive)
               commit('setAvatar', charData.avatarUrl)
+              commit('setLoaded', true)
             } else {
               console.log('no doc exists')
             }
@@ -140,6 +145,7 @@ const playerCharacter = {
       .catch(
         (error) => {
           commit('setError', error, { root: true })
+          commit('setLoaded', false)
         }
       )
     },
@@ -230,6 +236,9 @@ const playerCharacter = {
     }
   },
   getters: {
+    loaded (state) {
+      return state.loaded
+    },
     name (state) {
       return state.name
     },

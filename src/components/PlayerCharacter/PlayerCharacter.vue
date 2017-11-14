@@ -1,44 +1,25 @@
 <template>
-  <v-container fluid grid-list-lg>
+  <v-container fluid grid-list-md>
     <span v-if="error">
-        <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
-      </span>
-    <h1>{{ name }}: {{ className }}</h1>
-    <img :src="avatar" alt="" style="height:200px;">
-    <v-layout row wrap>
-      <v-flex v-if="background">
-        <v-card>
-          <v-card-title>
-            {{ background.title }}
-          </v-card-title>
-          <v-card-text>
-            <div v-html="background.text"></div>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-      <v-flex v-if="drive">
-        <v-card>
-          <v-card-title>
-            {{ drive.title }}
-          </v-card-title>
-          <v-card-text>
-            <div v-html="drive.description"></div>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
+      <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+    </span>
+    <PCDetails v-if="loaded"/>
   </v-container>
 </template>
 
 <script>
+import PCDetails from '@/components/PlayerCharacter/PCDetails'
 export default {
   name: 'PlayerCharacter',
+  components: {
+    PCDetails
+  },
   data () {
     return {
       pcID: this.$route.params.id
     }
   },
-  mounted () {
+  created () {
     this.$store.dispatch('playerCharacter/loadPC', { userID: this.userID, charID: this.pcID })
   },
   computed: {
@@ -48,20 +29,8 @@ export default {
     userID () {
       return this.$store.getters.user.id
     },
-    name () {
-      return this.$store.getters['playerCharacter/name']
-    },
-    className () {
-      return this.$store.getters['playerCharacter/className']
-    },
-    background () {
-      return this.$store.getters['playerCharacter/background']
-    },
-    drive () {
-      return this.$store.getters['playerCharacter/drive']
-    },
-    avatar () {
-      return this.$store.getters['playerCharacter/avatar']
+    loaded () {
+      return this.$store.getters['playerCharacter/loaded']
     }
   }
 }
