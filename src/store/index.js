@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import firebase from 'firebase'
 import characterAdmin from '@/store/characterAdmin'
 import playerCharacter from '@/store/playerCharacter'
+import equipmentAdmin from '@/store/equipmentAdmin'
 require('firebase/firestore')
 import _ from 'lodash'
 
@@ -11,7 +12,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   modules: {
     characterAdmin,
-    playerCharacter
+    playerCharacter,
+    equipmentAdmin
   },
   state: {
     authError: null,
