@@ -1,8 +1,21 @@
 <template>
+<v-card>
+    <v-card-title>
+      Equipment
+      <v-spacer></v-spacer>
+      <v-text-field
+        append-icon="search"
+        label="Search"
+        single-line
+        hide-details
+        v-model="search"
+      ></v-text-field>
+    </v-card-title>
   <v-data-table
     :headers="headers"
     :items="items"
     :pagination.sync="pagination"
+    :search="search"
   >
     <template
       slot="items"
@@ -23,6 +36,7 @@
       </v-alert>
     </template>
   </v-data-table>
+</v-card>
 </template>
 
 <script>
@@ -33,6 +47,7 @@ export default {
       pagination: {
         sortBy: 'name'
       },
+      search: '',
       headers: [
         {
           text: 'Item Name',
