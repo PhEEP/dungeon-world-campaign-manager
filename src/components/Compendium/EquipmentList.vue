@@ -1,32 +1,28 @@
 <template>
-  <div
-    v-if="items"
+  <v-data-table
+    :headers="headers"
+    :items="items"
+    :pagination.sync="pagination"
   >
-    <v-data-table
-      :headers="headers"
-      :items="items"
-      hide-actions
+    <template
+      slot="items"
+      slot-scope="props"
     >
-      <template
-        slot="items"
-        slot-scope="props"
-      >
-        <td>{{ props.item.name }}</td>
-        <td>{{ props.item.weight }}</td>
-        <td>{{ props.item.price }}</td>
-        <td>{{ props.item.damage }}</td>
-        <td>{{ props.item.piercing }}</td>
-        <td>{{ props.item.ammo }}</td>
-        <td>{{ props.item.armor }}</td>
-        <td>{{ props.item.tags }}</td>
-      </template>
-      <template slot="no-data">
-        <v-alert :value="true" color="error" icon="warning">
-          Sorry, nothing to display here :(
-        </v-alert>
-      </template>
-    </v-data-table>
-  </div>
+      <td>{{ props.item.name }}</td>
+      <td>{{ props.item.weight }}</td>
+      <td>{{ props.item.price }}</td>
+      <td>{{ props.item.damage }}</td>
+      <td>{{ props.item.piercing }}</td>
+      <td>{{ props.item.ammo }}</td>
+      <td>{{ props.item.armor }}</td>
+      <td>{{ props.item.tags }}</td>
+    </template>
+    <template slot="no-data">
+      <v-alert :value="true" color="error" icon="warning">
+        Sorry, nothing to display here :(
+      </v-alert>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
@@ -34,6 +30,9 @@ export default {
   name: 'EquipmentList',
   data () {
     return {
+      pagination: {
+        sortBy: 'name'
+      },
       headers: [
         {
           text: 'Item Name',
