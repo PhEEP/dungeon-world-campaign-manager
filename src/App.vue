@@ -107,7 +107,7 @@ export default {
       if (this.userIsAuthenticated) {
         menuItems = [
           { icon: 'home', title: 'Home', link: '/hello', active: true },
-          { icon: 'book', title: 'Compendium', link: '/compendium', active: false },
+          { icon: 'book', title: 'Compendium', link: '/compendium', active: true },
           { icon: 'recent_actors', title: 'Characters', link: '/characters', active: true },
           { icon: 'local_library', title: 'Campaigns', link: '/campaigns', active: false }
         ]

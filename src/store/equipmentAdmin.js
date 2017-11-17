@@ -1,13 +1,12 @@
 import * as firebase from 'firebase'
-import _ from 'lodash'
-const equipmentDB = firebase.firestore().collection('equipment')
 
 const equipmentAdmin = {
   namespaced: true,
   state: {
-    equipment: null,
+    equipment: {},
     deleting: false,
-    deleteTarget: {}
+    deleteTarget: {},
+    banana: 'banana'
   },
   mutations: {
     promptDelete (state, payload) {
@@ -22,12 +21,13 @@ const equipmentAdmin = {
   },
   actions: {
     loadEquipment ({commit, dispatch}) {
-      equipmentDB.get()
+      firebase.firestore().collection('equipment').get()
         .then(
           (querySnapshot) => {
-            let tempEquipment = []
+            let tempEquipment = {}
             querySnapshot.forEach(
               (doc) => {
+                console.log(doc.data())
                 tempEquipment[doc.id] = {...doc.data(), id: doc.id}
               }
             )
@@ -43,7 +43,7 @@ const equipmentAdmin = {
     },
     add ({commit, dispatch, state}, payload) {
       commit('clearError', null, { root: true })
-      equipmentDB.doc(_.camelCase(payload.title)).set(payload)
+      firebase.firestore().collection('equipment').doc(payload.id).set(payload)
         .then(
           (docRef) => {
             dispatch('loadEquipment')
@@ -52,13 +52,14 @@ const equipmentAdmin = {
         )
         .catch(
           (error) => {
+            console.log(error)
             commit('setError', error, { root: true })
           }
         )
     },
     save ({commit, state, dispatch}, payload) {
       commit('clearError', null, { root: true })
-      equipmentDB.doc(payload.id).set(payload)
+      firebase.firestore().collection('equipment').doc(payload.id).set(payload)
       .then(
         (docRef) => {
           dispatch('loadEquipment')
@@ -73,7 +74,7 @@ const equipmentAdmin = {
     },
     delete ({commit, state, dispatch}, payload) {
       commit('clearError', null, { root: true })
-      equipmentDB.doc(state.deleteTarget.id).delete()
+      firebase.firestore().collection('equipment').doc(state.deleteTarget.id).delete()
         .then(
           () => {
             commit('setSnackbar', { show: true, color: 'success', text: 'Removal successful', timeout: 4000 }, { root: true })
@@ -97,6 +98,9 @@ const equipmentAdmin = {
     },
     deleteTarget (state) {
       return state.deleteTarget
+    },
+    banana (state) {
+      return state.banana
     }
   }
 }

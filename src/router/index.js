@@ -9,7 +9,9 @@ import CharactersAdmin from '@/components/CharactersAdmin/CA'
 import CharacterNew from '@/components/Characters/CharacterNew'
 import Character from '@/components/Character/Character'
 import PlayerCharacter from '@/components/PlayerCharacter/PlayerCharacter'
-import Compendium from '@/components/Compendium'
+import Compendium from '@/components/Compendium/Compendium'
+import EquipmentView from '@/components/Compendium/EquipmentView'
+import EquipmentAdmin from '@/components/Compendium/EquipmentAdmin'
 import Profile from '@/components/Profile'
 import AuthGuard from '@/router/auth-guard'
 
@@ -79,6 +81,18 @@ let router = new Router({
       beforeEnter: AuthGuard,
       props: { default: true },
       name: 'CharactersAdmin'
+    },
+    {
+      path: '/compendium/equipment/admin/',
+      components: { default: EquipmentAdmin },
+      beforeEnter: AuthGuard,
+      name: 'EquipmentAdmin'
+    },
+    {
+      path: '/compendium/equipment/',
+      components: { default: EquipmentView },
+      beforeEnter: AuthGuard,
+      name: 'EquipmentView'
     },
     {
       path: '/compendium',
