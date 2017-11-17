@@ -1,12 +1,25 @@
 <template>
-  <v-container fluid fill-height class="login">
-    <v-layout row wrap align-center>
-      <v-flex md4 offset-md4 sm6 offset-sm3>
-        <v-card light>
+  <v-container
+    fluid
+    fill-height
+    class="login"
+  >
+    <v-layout
+      row
+      wrap
+      align-center
+    >
+      <v-flex
+        md4
+        offset-md4
+        sm6
+        offset-sm3
+      >
+        <v-card>
           <span v-if="error">
             <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
           </span>
-          <v-progress-linear v-bind:indeterminate="true" v-if="loading"></v-progress-linear>
+          <v-progress-linear v-bind:indeterminate="true" v-if="loading" color="accent"></v-progress-linear>
           <v-card-title primary-title>
             <h3 class="headline mb-2">
               Speak, friend, and enter
@@ -16,10 +29,10 @@
 
           <v-text-field label="Email" placeholder="Email" v-model="email"></v-text-field>
           <v-text-field type="password" label="Password" placeholder="Password" v-model="password"></v-text-field>
-          <v-btn flat color="primary"@click="login">Log In</v-btn>
+          <v-btn flat dark @click="login">Log In</v-btn>
           <v-btn color="primary"@click="loginWithGoogle">With Google</v-btn>
           <div>
-              Don't have an account?<router-link to="/signup">Create one!</router-link>
+              Don't have an account? <router-link to="/signup">Create one!</router-link>
           </div>
           </v-card-text>
         </v-card>

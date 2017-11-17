@@ -1,46 +1,44 @@
 import * as firebase from 'firebase'
 import _ from 'lodash'
 
-const characterAdmin = {
+const playerCharacter = {
   namespaced: true,
   state: {
-    className: '',
-    classId: '',
-    exampleNames: '',
-    flavorText: '',
-    backgrounds: {},
-    drives: {},
-    looks: {
-      body: '',
-      decoration: '',
-      eyes: '',
-      garb: '',
-      gender: '',
-      race: ''
-    },
+    name: null,
+    avatar: null,
+    className: null,
+    classId: null,
+    flavorText: null,
+    background: null,
+    drive: null,
+    looks: null,
     bonds: [],
     startingBonds: 0,
+    sampleBonds: [],
     maximumHP: 0,
     maximumLoad: 0,
     damageMod: 0,
     deleting: false,
-    deleteTarget: {}
+    loaded: false
   },
   mutations: {
     setClassName (state, payload) {
       state.className = payload
     },
-    setExampleNames (state, payload) {
-      state.exampleNames = payload
+    setName (state, payload) {
+      state.name = payload
+    },
+    setAvatar (state, payload) {
+      state.avatar = payload
     },
     setFlavorText (state, payload) {
       state.flavorText = payload
     },
-    setBackgrounds (state, payload) {
-      state.backgrounds = payload
+    setBackground (state, payload) {
+      state.background = payload
     },
-    setDrives (state, payload) {
-      state.drives = payload
+    setDrive (state, payload) {
+      state.drive = payload
     },
     setLooks (state, payload) {
       if (typeof payload !== 'undefined') {
@@ -58,6 +56,9 @@ const characterAdmin = {
     },
     setBonds (state, payload) {
       state.bonds = payload
+    },
+    setSampleBonds (state, payload) {
+      state.sampleBonds = payload
     },
     // if payload can be interpreted as Integer, use it
     // otherwise default to `0`
@@ -81,6 +82,9 @@ const characterAdmin = {
     },
     setDeleteTarget (state, payload) {
       state.deleteTarget = payload
+    },
+    setLoaded (state, payload) {
+      state.loaded = payload
     }
   },
   actions: {
@@ -89,12 +93,12 @@ const characterAdmin = {
         exampleNames: state.exampleNames,
         name: state.className,
         flavorText: state.flavorText,
-        sampleBonds: state.bonds,
         startingBonds: state.startingBonds,
         look: state.looks,
         maximumLoad: state.maximumLoad,
         maximumHP: state.maximumHP,
-        damageMod: state.damageMod
+        damageMod: state.damageMod,
+        avatar: state.avatar
       }
       let charRef = firebase.firestore().doc('characters/' + state.classId)
       charRef.update(baseInfo)
@@ -109,60 +113,47 @@ const characterAdmin = {
           }
         )
     },
-    loadClassData ({commit, dispatch}, payload) {
-      let charRef = firebase.firestore().doc('characters/' + payload)
+    loadPC ({commit, dispatch}, payload) {
+      console.log('users/' + payload.userID + '/characters/' + payload.charID)
+      let charRef = firebase.firestore().doc('users/' + payload.userID + '/characters/' + payload.charID)
       charRef.get()
         .then(
           (doc) => {
             if (doc.exists) {
               let charData = doc.data()
-              commit('setClassName', charData.name)
+              console.log(charData)
+              commit('setClassName', charData.className)
+              commit('setName', charData.name)
               commit('setClassId', doc.id)
-              commit('setExampleNames', charData.exampleNames)
               commit('setFlavorText', charData.flavorText)
               commit('setLooks', charData.look)
-              commit('setBonds', charData.sampleBonds || [])
+              commit('setBonds', charData.bonds || [])
+              commit('setSampleBonds', charData.sampleBonds)
               commit('setStartingBonds', charData.startingBonds)
               commit('setMaximumHP', charData.maximumHP)
               commit('setMaximumLoad', charData.maximumLoad)
               commit('setDamageMod', charData.damageMod)
+              commit('setBackground', charData.background)
+              commit('setDrive', charData.drive)
+              commit('setAvatar', charData.avatarUrl)
+              commit('setLoaded', true)
+            } else {
+              console.log('no doc exists')
             }
           }
         )
-      dispatch('loadBackgrounds', payload)
-      dispatch('loadDrives', payload)
-    },
-    loadBackgrounds ({commit}, payload) {
-      let bgRef = firebase.firestore().collection('characters/' + payload + '/backgrounds')
-      bgRef.get()
-        .then(
-          (querySnapshot) => {
-            let tempBGs = {}
-            querySnapshot.forEach((doc) => {
-              tempBGs[doc.id] = {...doc.data(), id: doc.id}
-            })
-            commit('setBackgrounds', tempBGs)
-          }
-        )
-    },
-    loadDrives ({commit}, payload) {
-      let drivesRef = firebase.firestore().collection('characters/' + payload + '/drives')
-      drivesRef.get()
-        .then(
-          (querySnapshot) => {
-            let tempDrives = {}
-            querySnapshot.forEach((doc) => {
-              tempDrives[doc.id] = { ...doc.data(), id: doc.id }
-            })
-            commit('setDrives', tempDrives)
-          }
-        )
+      .catch(
+        (error) => {
+          commit('setError', error, { root: true })
+          commit('setLoaded', false)
+        }
+      )
     },
     setName ({commit}, payload) {
-      commit('setClassName', payload)
+      commit('setName', payload)
     },
-    setExampleNames ({commit}, payload) {
-      commit('setExampleNames', payload)
+    setClassName ({commit}, payload) {
+      commit('setClassName', payload)
     },
     setFlavorText ({commit}, payload) {
       commit('setFlavorText', payload)
@@ -245,7 +236,16 @@ const characterAdmin = {
     }
   },
   getters: {
+    loaded (state) {
+      return state.loaded
+    },
     name (state) {
+      return state.name
+    },
+    avatar (state) {
+      return state.avatar
+    },
+    className (state) {
       return state.className
     },
     classId (state) {
@@ -257,17 +257,20 @@ const characterAdmin = {
     flavorText (state) {
       return state.flavorText
     },
-    backgrounds (state) {
-      return state.backgrounds
+    background (state) {
+      return state.background
     },
-    drives (state) {
-      return state.drives
+    drive (state) {
+      return state.drive
     },
     looks (state) {
       return state.looks
     },
     bonds (state) {
       return state.bonds
+    },
+    sampleBonds (state) {
+      return state.sampleBonds
     },
     startingBonds (state) {
       return state.startingBonds
@@ -290,4 +293,4 @@ const characterAdmin = {
   }
 }
 
-export default characterAdmin
+export default playerCharacter

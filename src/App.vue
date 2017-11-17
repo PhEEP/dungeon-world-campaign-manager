@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app dark>
     <v-navigation-drawer temporary v-model="sideNav">
       <v-list>
         <v-list-tile
@@ -27,7 +27,7 @@
         class="hidden-md-and-up"
       ></v-toolbar-side-icon>
       <v-toolbar-title>
-        WoACM
+        Worlds of Adventure Campaign Manager
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
@@ -107,7 +107,7 @@ export default {
       if (this.userIsAuthenticated) {
         menuItems = [
           { icon: 'home', title: 'Home', link: '/hello', active: true },
-          { icon: 'book', title: 'Compendium', link: '/compendium', active: false },
+          { icon: 'book', title: 'Compendium', link: '/compendium', active: true },
           { icon: 'recent_actors', title: 'Characters', link: '/characters', active: true },
           { icon: 'local_library', title: 'Campaigns', link: '/campaigns', active: false }
         ]
@@ -121,5 +121,7 @@ export default {
 </script>
 
 <style>
-
+.ql-toolbar.ql-snow {
+  background: #ccc;
+}
 </style>

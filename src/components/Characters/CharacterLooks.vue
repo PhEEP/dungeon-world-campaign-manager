@@ -1,9 +1,14 @@
 <template>
 <v-layout row>
   <v-flex md3 v-for="(look, index) in this.classLook" v-bind:key="index">
-      <v-card-text >
-        <v-checkbox v-for="(detail, index) in look.split(',')" :key="look + index" v-model="looks" :value="detail" :label="detail"></v-checkbox>
-      </v-card-text>
+    <p class="body-2">{{ startCase(index) }}</p>
+    <v-checkbox
+      v-for="(detail, index) in look.split(',')"
+      :key="look + index"
+      v-model="looks"
+      :value="detail"
+      :label="detail"
+    ></v-checkbox>
   </v-flex>
 </v-layout>
 </template>
@@ -17,7 +22,10 @@
         looks: []
       }
     },
-    computed: {
+    methods: {
+      startCase (str) {
+        return this.$_.startCase(str)
+      }
     },
     components: {
     },

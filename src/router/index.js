@@ -8,7 +8,10 @@ import Characters from '@/components/Characters/Characters'
 import CharactersAdmin from '@/components/CharactersAdmin/CA'
 import CharacterNew from '@/components/Characters/CharacterNew'
 import Character from '@/components/Character/Character'
-import Compendium from '@/components/Compendium'
+import PlayerCharacter from '@/components/PlayerCharacter/PlayerCharacter'
+import Compendium from '@/components/Compendium/Compendium'
+import EquipmentView from '@/components/Compendium/EquipmentView'
+import EquipmentAdmin from '@/components/Compendium/EquipmentAdmin'
 import Profile from '@/components/Profile'
 import AuthGuard from '@/router/auth-guard'
 
@@ -26,67 +29,85 @@ let router = new Router({
     },
     {
       path: '/login',
-      name: 'Login',
-      component: Login
+      component: Login,
+      name: 'Login'
     },
     {
       path: '/signup',
-      name: 'SignUp',
-      component: SignUp
+      component: SignUp,
+      name: 'SignUp'
     },
     {
       path: '/hello',
-      name: 'Hello',
-      components: { default: Hello }
+      components: { default: Hello },
+      name: 'Hello'
     },
     {
       path: '/campaigns',
-      name: 'Campaigns',
       components: { default: Campaigns },
       meta: {
         requiresAuth: true
-      }
+      },
+      name: 'Campaigns'
     },
     {
       path: '/characters',
-      name: 'Characters',
       components: { default: Characters },
-      beforeEnter: AuthGuard
+      beforeEnter: AuthGuard,
+      name: 'Characters'
     },
     {
       path: '/character/:id',
-      name: 'Character',
       components: { default: Character },
-      beforeEnter: AuthGuard
+      beforeEnter: AuthGuard,
+      name: 'Character'
+    },
+    {
+      path: '/playerCharacter/:id',
+      components: { default: PlayerCharacter },
+      beforeEnter: AuthGuard,
+      name: 'PlayerCharacter'
     },
     {
       path: '/characters/new/:classId',
-      name: 'New Character',
       components: { default: CharacterNew },
       beforeEnter: AuthGuard,
-      props: { default: true }
+      props: { default: true },
+      name: 'CharacterNew'
     },
     {
       path: '/characters/admin/:classId',
-      name: 'CharactersAdmin',
       components: { default: CharactersAdmin },
       beforeEnter: AuthGuard,
-      props: { default: true }
+      props: { default: true },
+      name: 'CharactersAdmin'
+    },
+    {
+      path: '/compendium/equipment/admin/',
+      components: { default: EquipmentAdmin },
+      beforeEnter: AuthGuard,
+      name: 'EquipmentAdmin'
+    },
+    {
+      path: '/compendium/equipment/',
+      components: { default: EquipmentView },
+      beforeEnter: AuthGuard,
+      name: 'EquipmentView'
     },
     {
       path: '/compendium',
-      name: 'Compendium',
-      components: { default: Compendium }
+      components: { default: Compendium },
+      name: 'Compendium'
     },
     {
       path: '/profile',
-      name: 'Profile',
       components: { default: Profile },
-      beforeEnter: AuthGuard
+      beforeEnter: AuthGuard,
+      name: 'Profile'
     }
   ],
   linkActiveClass: 'active',
-  mode: 'history'
+  mode: 'hash'
 })
 
 export default router

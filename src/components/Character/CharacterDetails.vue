@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-media :src="this.avatarUrl" height="200px" contain></v-card-media>
+    <v-card-media :src="this.avatarUrl" height="200px" contain v-if="this.avatarUrl !== 'undefined'"></v-card-media>
     <v-card-title primary-title>
       <div>
         <h1 class="display-1">{{ this.name }}
@@ -23,7 +23,7 @@
       </div>
       <div>
         <h3 class="title">Bonds
-          <v-btn flat icon color="primary" dark @click.native="dialog = true" class="text-xs-right">
+          <v-btn icon @click.native="dialog = true" class="text-xs-right">
             <v-icon>add</v-icon>
           </v-btn>
         </h3>
@@ -31,7 +31,7 @@
       </div>
         <v-dialog fullscreen transition="dialog-bottom-transition" :overlay="false" v-model="dialog">
           <v-card>
-            <v-toolbar color="accent">
+            <v-toolbar>
               <v-btn icon @click.native="dialog = false">
                 <v-icon>close</v-icon>
               </v-btn>
@@ -39,7 +39,7 @@
             </v-toolbar>
             <v-card-text>
               <vue-editor v-model="bonds" :editorToolbar="customToolbar" id="bondsEditor"></vue-editor>
-              <div v-for="(bond, index) in this.sampleBonds" :key="index"><v-btn icon flat color="primary" @click="bonds += bond"><v-icon>add</v-icon> </v-btn>{{ bond }}</div>
+              <div v-for="(bond, index) in this.sampleBonds" :key="index"><v-btn icon @click="bonds += bond"><v-icon>add</v-icon> </v-btn>{{ bond }}</div>
             </v-card-text>
           </v-card>
         </v-dialog>
@@ -49,7 +49,6 @@
 
 <script>
 import { VueEditor } from 'vue2-editor'
-import $ from 'jquery'
 
 export default {
   name: 'CharacterDetails',
@@ -68,12 +67,6 @@ export default {
     }
   },
   methods: {
-    openModal () {
-      $('.ui.modal').modal('show')
-    },
-    closeModal () {
-      $('.ui.modal').modal('hide')
-    }
   }
 }
 </script>

@@ -1,28 +1,25 @@
 <template>
-  <v-layout row wrap>
+  <v-layout column wrap>
     <v-flex xs12>
       <h4 >Backgrounds
         <v-btn
-          fab
-          outline
-          flat
-          small
           icon
           @click="editingBackground = !editingBackground">
           <v-icon>edit</v-icon>
         </v-btn>
         <v-btn
-          fab
-          outline
-          flat
-          small
           icon
           @click="addingBackground = !addingBackground">
           <v-icon>add</v-icon>
         </v-btn>
       </h4>
     </v-flex>
-    <v-flex md4 v-for="(background, index) in backgrounds" :key="index">
+    <v-flex  card v-if="addingBackground">
+      <v-text-field v-model="tempBackground.title" label="Background Title"></v-text-field>
+      <vue-editor id="tempBackground" v-model="tempBackground.text" :editorToolbar="customToolbar" placeholder="Background text"></vue-editor>
+      <v-btn color="secondary" dark @click="addBackground">Add background</v-btn>
+    </v-flex>
+    <v-flex  v-for="(background, index) in backgrounds" :key="index">
       <div v-if="!editingBackground">
         <h5>{{ background.title }}</h5>
         <div v-html="background.text"></div>
@@ -43,7 +40,7 @@
           </vue-editor>
           <v-layout>
             <v-btn
-              color="primary"
+              color="accent"
               @click="saveBackground(background)"
             >
             <v-icon>save</v-icon>
@@ -51,9 +48,6 @@
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn
-              fab
-              outline
-              small
               icon
               color="warning"
               @click="bgToDelete = background.id, promptDelete()"
@@ -64,17 +58,11 @@
         </v-card-text>
       </v-card>
     </v-flex>
-    <v-flex md4 card v-if="addingBackground">
-      <v-text-field v-model="tempBackground.title" label="Background Title"></v-text-field>
-      <vue-editor id="tempBackground" v-model="tempBackground.text" :editorToolbar="customToolbar" placeholder="Background text"></vue-editor>
-      <v-btn color="secondary" dark @click="addBackground">Add background</v-btn>
-    </v-flex>
   </v-layout>
 </template>
 
 <script>
 import { VueEditor } from 'vue2-editor'
-import _ from 'lodash'
 
 export default {
   data () {
@@ -106,7 +94,7 @@ export default {
   methods: {
     addBackground () {
       this.$store.dispatch('characterAdmin/add', {...this.tempBackground, collection: 'backgrounds'})
-      this.tempBackground = _.mapValues(this.tempBackground, (o) => { return '' })
+      this.tempBackground = this.$_.mapValues(this.tempBackground, (o) => { return '' })
     },
     saveBackground (bg) {
       this.$store.dispatch('characterAdmin/save', {...bg, collection: 'backgrounds'})

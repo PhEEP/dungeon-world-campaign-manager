@@ -4,39 +4,31 @@
       <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
     </span>
     <v-layout row wrap>
-      <v-flex md4>
-        <v-text-field v-model="name" label="Class Name" ></v-text-field>
+      <v-flex md3>
+        <CADetails />
       </v-flex>
-      <v-flex md8>
-        <h5>Example Names <v-btn fab flat small icon @click="editingExampleNames = !editingExampleNames"><v-icon>edit</v-icon></v-btn></h5>
-        <div class="body-1" v-html="exampleNames" v-if="!editingExampleNames"></div>
-        <v-text-field textarea label="Example Names" v-model="exampleNames" v-if="editingExampleNames"></v-text-field>
+      <v-flex md3>
+        <CABackgrounds />
       </v-flex>
-      <v-flex md12>
-        <h5>Flavor Text <v-btn fab flat small icon @click="editingFlavorText = !editingFlavorText"><v-icon>edit</v-icon></v-btn></h5>
-        <div class="body-1" v-html="flavorText" v-if="!editingFlavorText" ></div>
-        <vue-editor id="caFlavorText" v-model="flavorText" :editorToolbar="customToolbar" v-if="editingFlavorText"></vue-editor>
+      <v-flex md3>
+        <CADrives />
       </v-flex>
-    </v-layout>
-    <CABackgrounds />
-    <CADrives />
-    <h3 block>Bonds</h3>
-    <v-layout row wrap v-if="bonds">
-      <v-flex xs12 sm6 v-for="(bond, index) in bonds" :key="index">
-        <v-text-field :value="bond"></v-text-field>
+      <v-flex md3>
+        <CABonds />
       </v-flex>
-      <v-flex xs12 sm6 card>
-        <v-text-field v-model="tempBond" label="Bond" ></v-text-field>
-        <v-btn color="secondary" dark @click="addBond">Add bond</v-btn>
+      <v-flex md3>
+        <CALooks />
+      </v-flex>
+      <v-flex md3>
+        <CAFlatStats />
       </v-flex>
     </v-layout>
-
-    <v-btn fab fixed bottom right color="primary" dark @click="updateBaseInfo">
+    <v-btn fab fixed bottom right color="accent" @click="updateBaseInfo">
       <v-icon>save</v-icon>
     </v-btn>
     <v-dialog v-model="deleting" color="warning">
       <v-card>
-          <v-alert color="warning" dark value="true"> Deleting is irreversible!</v-alert>
+        <v-alert color="warning" dark value="true"> Deleting is irreversible!</v-alert>
         <v-card-title primary-title>
           <h6 v-if="deleteTarget">Remove {{deleteTarget.id}} from {{deleteTarget.collection}} ?</h6>
         </v-card-title>
@@ -52,6 +44,10 @@
 <script>
 import CABackgrounds from '@/components/CharactersAdmin/CABackgrounds'
 import CADrives from '@/components/CharactersAdmin/CADrives'
+import CADetails from '@/components/CharactersAdmin/CADetails'
+import CABonds from '@/components/CharactersAdmin/CABonds'
+import CALooks from '@/components/CharactersAdmin/CALooks'
+import CAFlatStats from '@/components/CharactersAdmin/CAFlatStats'
 import { VueEditor } from 'vue2-editor'
 
 export default {
@@ -64,8 +60,6 @@ export default {
           ['bold', 'italic', 'underline'],
           [{'list': 'bullet'}]
       ],
-      editingFlavorText: false,
-      editingExampleNames: false,
       snackbarObj: {
         timeout: 5000,
         color: 'primary'
@@ -92,39 +86,16 @@ export default {
       set () {
         return this.$store.dispatch('characterAdmin/promptDelete', false)
       }
-    },
-    name: {
-      get () {
-        return this.$store.getters['characterAdmin/name']
-      },
-      set (newName) {
-        this.$store.dispatch('characterAdmin/setName', newName)
-      }
-    },
-    exampleNames: {
-      get () {
-        return this.$store.getters['characterAdmin/exampleNames']
-      },
-      set (val) {
-        this.$store.dispatch('characterAdmin/setExampleNames', val)
-      }
-    },
-    flavorText: {
-      get () {
-        return this.$store.getters['characterAdmin/flavorText']
-      },
-      set (val) {
-        this.$store.dispatch('characterAdmin/setFlavorText', val)
-      }
-    },
-    bonds () {
-      return this.$store.getters['characterAdmin/bonds']
     }
   },
   components: {
     VueEditor,
     CABackgrounds,
-    CADrives
+    CADrives,
+    CADetails,
+    CABonds,
+    CALooks,
+    CAFlatStats
   },
   props: ['classId'],
   created () {
@@ -135,10 +106,6 @@ export default {
   methods: {
     updateBaseInfo () {
       this.$store.dispatch('characterAdmin/updateBaseInfo')
-    },
-    addBond () {
-      this.bonds.push(this.tempBond)
-      this.tempBond = ''
     },
     confirmDelete () {
       this.$store.dispatch('characterAdmin/delete')

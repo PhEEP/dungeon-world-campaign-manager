@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import firebase from 'firebase'
 import characterAdmin from '@/store/characterAdmin'
+import playerCharacter from '@/store/playerCharacter'
+import equipmentAdmin from '@/store/equipmentAdmin'
 require('firebase/firestore')
 import _ from 'lodash'
 
@@ -9,7 +11,9 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   modules: {
-    characterAdmin
+    characterAdmin,
+    playerCharacter,
+    equipmentAdmin
   },
   state: {
     authError: null,
@@ -156,7 +160,8 @@ export const store = new Vuex.Store({
                   id: doc.id,
                   name: doc.data().name,
                   avatar: doc.data().avatarUrl,
-                  className: doc.data().className
+                  className: doc.data().className,
+                  classId: doc.data().classId
                 })
               })
             commit('setCreatedCharacters', tempArr)

@@ -1,23 +1,15 @@
 
 <template>
-<v-layout row wrap>
+<v-layout column wrap>
   <v-flex xs12>
     <h4>Drives
       <v-btn
-        fab
-        outline
-        flat
-        small
         icon
         @click="editingDrive = !editingDrive"
       >
         <v-icon>edit</v-icon>
       </v-btn>
       <v-btn
-        fab
-        outline
-        flat
-        small
         icon
         @click="addingDrive = !addingDrive"
       >
@@ -25,7 +17,7 @@
       </v-btn>
     </h4>
   </v-flex>
-  <v-flex md4 v-for="(drive, index) in drives" :key="index">
+  <v-flex  v-for="(drive, index) in drives" :key="index">
     <div v-if="!editingDrive">
       <h5>{{ drive.title }}</h5>
       <p class="subheading" v-html="drive.description"></p>
@@ -44,7 +36,7 @@
         </v-text-field>
         <v-layout>
             <v-btn
-              color="primary"
+              color="accent"
               @click="saveDrive(drive)"
             >
             <v-icon>save</v-icon>
@@ -52,9 +44,6 @@
             </v-btn>
             <v-spacer></v-spacer>
             <v-btn
-              fab
-              outline
-              small
               icon
               color="warning"
               @click="driveToDelete = drive.id, promptDelete()"
@@ -65,7 +54,7 @@
       </v-card-text>
     </v-card>
   </v-flex>
-    <v-flex md4 card v-if="addingDrive">
+    <v-flex  card v-if="addingDrive">
       <v-text-field v-model="tempDrive.title" label="Drive Title" ></v-text-field>
       <v-text-field textarea id="tempDrive" v-model="tempDrive.description" label="Drive Text"></v-text-field>
       <v-btn color="secondary" dark @click="addDrive">Add drive</v-btn>
@@ -74,8 +63,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
-
 export default {
   data () {
     return {
@@ -103,7 +90,7 @@ export default {
   methods: {
     addDrive () {
       this.$store.dispatch('characterAdmin/add', {...this.tempDrive, collection: 'drives'})
-      this.tempDrive = _.mapValues(this.tempDrive, (o) => { return '' })
+      this.tempDrive = this.$_.mapValues(this.tempDrive, (o) => { return '' })
     },
     saveDrive (drive) {
       this.$store.dispatch('characterAdmin/save', {...drive, collection: 'drives'})
