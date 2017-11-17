@@ -3,10 +3,18 @@ import * as firebase from 'firebase'
 const equipmentAdmin = {
   namespaced: true,
   state: {
-    equipment: {},
+    equipment: [],
     deleting: false,
     deleteTarget: {},
-    banana: 'banana'
+    baseItem: {
+      name: 'null',
+      weight: 0,
+      price: 0,
+      tags: ['none'],
+      damage: 0,
+      armor: 0,
+      piercing: 0
+    }
   },
   mutations: {
     promptDelete (state, payload) {
@@ -24,11 +32,10 @@ const equipmentAdmin = {
       firebase.firestore().collection('equipment').get()
         .then(
           (querySnapshot) => {
-            let tempEquipment = {}
+            let tempEquipment = []
             querySnapshot.forEach(
               (doc) => {
-                console.log(doc.data())
-                tempEquipment[doc.id] = {...doc.data(), id: doc.id}
+                tempEquipment.push({...doc.data(), id: doc.id, value: false, ...this.baseItem})
               }
             )
             commit('setEquipment', tempEquipment)
@@ -52,7 +59,6 @@ const equipmentAdmin = {
         )
         .catch(
           (error) => {
-            console.log(error)
             commit('setError', error, { root: true })
           }
         )
@@ -98,9 +104,6 @@ const equipmentAdmin = {
     },
     deleteTarget (state) {
       return state.deleteTarget
-    },
-    banana (state) {
-      return state.banana
     }
   }
 }

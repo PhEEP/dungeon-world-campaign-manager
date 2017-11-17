@@ -74,6 +74,16 @@
                   sm6
                 >
                   <v-text-field
+                    v-model="tempItem.piercing"
+                    label="Item piercing"
+                    type="number"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex
+                  xs12
+                  sm6
+                >
+                  <v-text-field
                     v-model="tempItem.ammo"
                     label="Item ammo"
                     type="number"
@@ -97,56 +107,8 @@
           </v-card-actions>
         </v-card>
       </v-flex>
-      <v-flex xs12 md3 v-for="(item, index) in equipment" :key="index">
-        <v-card>
-          <v-card-title>
-            <h5>{{item.name}}</h5>
-          </v-card-title>
-            <v-list>
-              <v-list-tile v-if="item.price">
-                <v-list-tile-avatar>
-                  <v-icon>toll</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ item.price }} coin</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile v-if="item.tags">
-                <v-list-tile-avatar>
-                  <v-icon>label</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title><span v-for="tag in item.tags" :key="index + tag">{{ startCase(tag) }} </span></v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile v-if="item.weight">
-                <v-list-tile-avatar>
-                  <v-icon>work</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ item.weight }} weight</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile v-if="item.ammo">
-                <v-list-tile-avatar>
-                  <v-icon>font_download</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ item.ammo }} ammo</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-list-tile v-if="item.damage">
-                <v-list-tile-avatar>
-                  <v-icon>add</v-icon>
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>{{ item.damage }} damage</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list>
-        </v-card>
-      </v-flex>
     </v-layout>
+    <EquipmentList />
     <v-dialog v-model="deleting" color="warning">
       <v-card>
         <v-alert color="warning" dark value="true"> Deleting is irreversible!</v-alert>
@@ -163,6 +125,8 @@
 </template>
 
 <script>
+import EquipmentList from '@/components/Compendium/EquipmentList'
+
 export default {
   name: 'EquipmentAdmin',
   data () {
@@ -172,8 +136,10 @@ export default {
         name: '',
         weight: 0,
         price: 0,
-        tags: '',
-        damage: 0
+        tags: [],
+        damage: 0,
+        armor: 0,
+        piercing: 0
       },
       valid: false,
       nameRules: [
@@ -190,6 +156,9 @@ export default {
       ]
     }
   },
+  components: {
+    EquipmentList
+  },
   created () {
     this.$store.dispatch('equipmentAdmin/loadEquipment')
   },
@@ -202,9 +171,6 @@ export default {
     },
     cancelDelete () {
       this.$store.dispatch('equipmentAdmin/promptDelete', false)
-    },
-    startCase (str) {
-      return this.$_.startCase(str)
     },
     saveItem () {
       if (this.$refs.form.validate()) {
@@ -225,9 +191,6 @@ export default {
     }
   },
   computed: {
-    equipment () {
-      return this.$store.getters['equipmentAdmin/equipment']
-    },
     error () {
       return this.$store.getters.error
     },
