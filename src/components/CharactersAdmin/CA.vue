@@ -22,6 +22,9 @@
       <v-flex md3>
         <CAFlatStats />
       </v-flex>
+      <v-flex md12>
+        <CAEquipment />
+      </v-flex>
     </v-layout>
     <v-btn fab fixed bottom right color="accent" @click="updateBaseInfo">
       <v-icon>save</v-icon>
@@ -48,6 +51,7 @@ import CADetails from '@/components/CharactersAdmin/CADetails'
 import CABonds from '@/components/CharactersAdmin/CABonds'
 import CALooks from '@/components/CharactersAdmin/CALooks'
 import CAFlatStats from '@/components/CharactersAdmin/CAFlatStats'
+import CAEquipment from '@/components/CharactersAdmin/CAEquipment'
 import { VueEditor } from 'vue2-editor'
 
 export default {
@@ -95,7 +99,8 @@ export default {
     CADetails,
     CABonds,
     CALooks,
-    CAFlatStats
+    CAFlatStats,
+    CAEquipment
   },
   props: ['classId'],
   created () {

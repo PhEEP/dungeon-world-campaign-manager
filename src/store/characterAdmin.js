@@ -24,7 +24,8 @@ const characterAdmin = {
     maximumLoad: 0,
     damageMod: 0,
     deleting: false,
-    deleteTarget: {}
+    deleteTarget: {},
+    equipment: {}
   },
   mutations: {
     setClassName (state, payload) {
@@ -76,6 +77,9 @@ const characterAdmin = {
     setClassId (state, payload) {
       state.classId = payload
     },
+    setEquipment (state, payload) {
+      state.equipment = payload
+    },
     promptDelete (state, payload) {
       state.deleting = payload
     },
@@ -94,7 +98,8 @@ const characterAdmin = {
         look: state.looks,
         maximumLoad: state.maximumLoad,
         maximumHP: state.maximumHP,
-        damageMod: state.damageMod
+        damageMod: state.damageMod,
+        equipment: state.equipment
       }
       let charRef = firebase.firestore().doc('characters/' + state.classId)
       charRef.update(baseInfo)
@@ -131,6 +136,7 @@ const characterAdmin = {
         )
       dispatch('loadBackgrounds', payload)
       dispatch('loadDrives', payload)
+      dispatch('loadEquipment', payload)
     },
     loadBackgrounds ({commit}, payload) {
       let bgRef = firebase.firestore().collection('characters/' + payload + '/backgrounds')
@@ -143,7 +149,7 @@ const characterAdmin = {
             })
             commit('setBackgrounds', tempBGs)
           }
-        )
+        ).catch((err) => { commit('setError', err, { root: true }) })
     },
     loadDrives ({commit}, payload) {
       let drivesRef = firebase.firestore().collection('characters/' + payload + '/drives')
@@ -156,7 +162,22 @@ const characterAdmin = {
             })
             commit('setDrives', tempDrives)
           }
-        )
+        ).catch((err) => { commit('setError', err, { root: true }) })
+    },
+    loadEquipment ({commit}, payload) {
+      let equipmentRef = firebase.firestore().collection('characters/' + payload + '/equipment')
+      equipmentRef.get()
+        .then(
+          (querySnapshot) => {
+            let tempEquipment = {}
+            querySnapshot.forEach(
+              (doc) => {
+                tempEquipment[doc.id] = {...doc.data(), id: doc.id}
+              }
+            )
+            commit('setEquipment', tempEquipment)
+          }
+        ).catch((err) => { commit('setError', err, { root: true }) })
     },
     setName ({commit}, payload) {
       commit('setClassName', payload)
@@ -280,6 +301,9 @@ const characterAdmin = {
     },
     damageMod (state) {
       return state.damageMod
+    },
+    equipment (state) {
+      return state.equipment
     },
     deleting (state) {
       return state.deleting
