@@ -3,7 +3,7 @@
     <v-btn
       color="secondary"
       dark
-      @click="$router.push('/compendium/equipment/admin')"
+      @click="$router.push('/compendium/equipment')"
       v-if="userIsAdmin"
     >Equipment</v-btn>
     <v-btn
