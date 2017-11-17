@@ -1,7 +1,11 @@
 <template>
 <v-card>
   <v-card-text>
-
+    <pre>
+      // @TODO convert this to modular system
+      // track number of multi-selects and dynamically add new ones
+      // use vuex for state management
+    </pre>
   <v-layout row wrap>
     <v-flex xs12>
       <h4>
