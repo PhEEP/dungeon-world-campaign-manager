@@ -13,7 +13,6 @@
             <v-form
               v-model="valid"
               ref="form"
-              lazy-validation
             >
             <v-layout row wrap>
                 <v-flex
@@ -89,6 +88,37 @@
                     type="number"
                   ></v-text-field>
                 </v-flex>
+                <v-flex
+                  xs12
+                  sm6
+                >
+                  <v-text-field
+                    v-model="tempItem.uses"
+                    label="Item uses"
+                    type="number"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex
+                  xs12
+                  sm6
+                >
+                  <v-text-field
+                    v-model="tempItem.armor"
+                    label="Item armor"
+                    type="number"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex
+                  xs12
+                  sm6
+                >
+                  <v-text-field
+                    textarea
+                    v-model="tempItem.text"
+                    label="Item text"
+                    type="number"
+                  ></v-text-field>
+                </v-flex>
               </v-layout>
             </v-form>
           </v-card-text>
@@ -132,19 +162,9 @@ export default {
   data () {
     return {
       tempItem: {},
-      baseItem: {
-        name: '',
-        weight: 0,
-        price: 0,
-        tags: [],
-        damage: 0,
-        armor: 0,
-        piercing: 0
-      },
       valid: false,
       nameRules: [
-        (v) => !!v || 'Name is required',
-        (v) => v.length >= 2 || 'Name must be longer than 1 character'
+        (v) => !!v || 'Name is required'
       ],
       priceRules: [
         (v) => !!v || 'Price is required',
@@ -160,11 +180,11 @@ export default {
     EquipmentList
   },
   created () {
-    this.$store.dispatch('equipmentAdmin/loadEquipment')
+    this.$store.dispatch('equipmentAdmin/loadEquipment', true)
   },
   methods: {
     loadEquipment () {
-      this.$store.dispatch('equipmentAdmin/loadEquipment')
+      this.$store.dispatch('equipmentAdmin/loadEquipment', true)
     },
     confirmDelete () {
       this.$store.dispatch('equipmentAdmin/delete')
@@ -175,16 +195,18 @@ export default {
     saveItem () {
       if (this.$refs.form.validate()) {
         let newItem = {...this.tempItem, id: this.$_.camelCase(this.tempItem.name)}
-        if (newItem.tags) {
+        if (typeof newItem.tags !== 'undefined') {
+          console.log(newItem)
           newItem.tags = newItem.tags.split(',')
         }
         this.$store.dispatch('equipmentAdmin/add', newItem)
-        this.tempItem = {...this.baseItem}
+        this.$refs.form.reset()
+        this.tempItem = {}
       }
     },
     clear () {
       this.$refs.form.reset()
-      this.tempItem = {...this.baseItem}
+      this.tempItem = {}
     },
     onDismissed () {
       this.$store.dispatch('clearError')

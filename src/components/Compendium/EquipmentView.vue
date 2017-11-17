@@ -19,11 +19,11 @@ export default {
     return {}
   },
   created () {
-    this.$store.dispatch('equipmentAdmin/loadEquipment')
+    this.$store.dispatch('equipmentAdmin/loadEquipment', true)
   },
   methods: {
     loadEquipment () {
-      this.$store.dispatch('equipmentAdmin/loadEquipment')
+      this.$store.dispatch('equipmentAdmin/loadEquipment', true)
     },
     onDismissed () {
       this.$store.dispatch('clearError')

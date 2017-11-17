@@ -27,8 +27,10 @@
       <td>{{ props.item.damage }}</td>
       <td>{{ props.item.piercing }}</td>
       <td>{{ props.item.ammo }}</td>
+      <td>{{ props.item.uses }}</td>
       <td>{{ props.item.armor }}</td>
       <td>{{ props.item.tags }}</td>
+      <td>{{ props.item.text }}</td>
     </template>
     <template slot="no-data">
       <v-alert :value="true" color="error" icon="warning">
@@ -86,6 +88,12 @@ export default {
           value: 'ammo'
         },
         {
+          text: 'Uses',
+          align: 'left',
+          sortable: true,
+          value: 'uses'
+        },
+        {
           text: 'Armor',
           align: 'left',
           sortable: true,
@@ -96,6 +104,12 @@ export default {
           align: 'left',
           sortable: true,
           value: 'tags'
+        },
+        {
+          text: 'Description',
+          align: 'left',
+          sortable: true,
+          value: 'text'
         }
       ]
     }

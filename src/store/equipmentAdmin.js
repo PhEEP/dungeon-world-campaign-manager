@@ -5,16 +5,7 @@ const equipmentAdmin = {
   state: {
     equipment: [],
     deleting: false,
-    deleteTarget: {},
-    baseItem: {
-      name: 'null',
-      weight: 0,
-      price: 0,
-      tags: ['none'],
-      damage: 0,
-      armor: 0,
-      piercing: 0
-    }
+    deleteTarget: {}
   },
   mutations: {
     promptDelete (state, payload) {
@@ -28,14 +19,22 @@ const equipmentAdmin = {
     }
   },
   actions: {
-    loadEquipment ({commit, dispatch}) {
+    loadEquipment ({commit, dispatch}, tagsToStrings) {
       firebase.firestore().collection('equipment').get()
         .then(
           (querySnapshot) => {
             let tempEquipment = []
             querySnapshot.forEach(
               (doc) => {
-                tempEquipment.push({...doc.data(), id: doc.id, value: false, ...this.baseItem})
+                if (tagsToStrings) {
+                  let tagsToStrings = ''
+                  if (doc.data().tags) {
+                    tagsToStrings = doc.data().tags.join(', ')
+                  }
+                  tempEquipment.push({...doc.data(), id: doc.id, value: false, tags: tagsToStrings})
+                } else {
+                  tempEquipment.push({...doc.data(), id: doc.id, value: false})
+                }
               }
             )
             commit('setEquipment', tempEquipment)
