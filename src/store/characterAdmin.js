@@ -25,7 +25,12 @@ const characterAdmin = {
     damageMod: 0,
     deleting: false,
     deleteTarget: {},
-    equipment: {}
+    equipment: {
+      startingEquipment: { id: 'startingEquipment', list: [[], [], [], [], []], text: '', limit: 0 },
+      group1: { id: 'group1', list: [[], [], [], [], []], text: '', limit: 0 },
+      group2: { id: 'group2', list: [[], [], [], [], []], text: '', limit: 0 },
+      group3: { id: 'group3', list: [[], [], [], [], []], text: '', limit: 0 }
+    }
   },
   mutations: {
     setClassName (state, payload) {
@@ -78,7 +83,7 @@ const characterAdmin = {
       state.classId = payload
     },
     setEquipment (state, payload) {
-      state.equipment = payload
+      state.equipment[payload.id] = payload
     },
     promptDelete (state, payload) {
       state.deleting = payload
@@ -88,7 +93,7 @@ const characterAdmin = {
     }
   },
   actions: {
-    updateBaseInfo ({commit, dispatch, state}, payload) {
+    updateBaseInfo ({ commit, dispatch, state }, payload) {
       let baseInfo = {
         exampleNames: state.exampleNames,
         name: state.className,
@@ -102,165 +107,174 @@ const characterAdmin = {
         equipment: state.equipment
       }
       let charRef = firebase.firestore().doc('characters/' + state.classId)
-      charRef.update(baseInfo)
-        .then(
-          () => {
-            commit('setSnackbar', { show: true, color: 'success', timeout: 4000, text: 'Updates made' }, { root: true })
-          }
-        )
-        .catch(
-          (error) => {
-            commit('setError', error)
-          }
-        )
+      charRef
+        .update(baseInfo)
+        .then(() => {
+          commit('setSnackbar', { show: true, color: 'success', timeout: 4000, text: 'Updates made' }, { root: true })
+        })
+        .catch(error => {
+          commit('setError', error)
+        })
     },
-    loadClassData ({commit, dispatch}, payload) {
+    loadClassData ({ commit, dispatch }, payload) {
       let charRef = firebase.firestore().doc('characters/' + payload)
-      charRef.get()
-        .then(
-          (doc) => {
-            if (doc.exists) {
-              let charData = doc.data()
-              commit('setClassName', charData.name)
-              commit('setClassId', doc.id)
-              commit('setExampleNames', charData.exampleNames)
-              commit('setFlavorText', charData.flavorText)
-              commit('setLooks', charData.look)
-              commit('setBonds', charData.sampleBonds || [])
-              commit('setStartingBonds', charData.startingBonds)
-              commit('setMaximumHP', charData.maximumHP)
-              commit('setMaximumLoad', charData.maximumLoad)
-              commit('setDamageMod', charData.damageMod)
-            }
-          }
-        )
+      charRef.get().then(doc => {
+        if (doc.exists) {
+          let charData = doc.data()
+          commit('setClassName', charData.name)
+          commit('setClassId', doc.id)
+          commit('setExampleNames', charData.exampleNames)
+          commit('setFlavorText', charData.flavorText)
+          commit('setLooks', charData.look)
+          commit('setBonds', charData.sampleBonds || [])
+          commit('setStartingBonds', charData.startingBonds)
+          commit('setMaximumHP', charData.maximumHP)
+          commit('setMaximumLoad', charData.maximumLoad)
+          commit('setDamageMod', charData.damageMod)
+        }
+      })
       dispatch('loadBackgrounds', payload)
       dispatch('loadDrives', payload)
       dispatch('loadEquipment', payload)
     },
-    loadBackgrounds ({commit}, payload) {
+    loadBackgrounds ({ commit }, payload) {
       let bgRef = firebase.firestore().collection('characters/' + payload + '/backgrounds')
-      bgRef.get()
-        .then(
-          (querySnapshot) => {
-            let tempBGs = {}
-            querySnapshot.forEach((doc) => {
-              tempBGs[doc.id] = {...doc.data(), id: doc.id}
-            })
-            commit('setBackgrounds', tempBGs)
-          }
-        ).catch((err) => { commit('setError', err, { root: true }) })
+      bgRef
+        .get()
+        .then(querySnapshot => {
+          let tempBGs = {}
+          querySnapshot.forEach(doc => {
+            tempBGs[doc.id] = { ...doc.data(), id: doc.id }
+          })
+          commit('setBackgrounds', tempBGs)
+        })
+        .catch(err => {
+          commit('setError', err, { root: true })
+        })
     },
-    loadDrives ({commit}, payload) {
+    loadDrives ({ commit }, payload) {
       let drivesRef = firebase.firestore().collection('characters/' + payload + '/drives')
-      drivesRef.get()
-        .then(
-          (querySnapshot) => {
-            let tempDrives = {}
-            querySnapshot.forEach((doc) => {
-              tempDrives[doc.id] = { ...doc.data(), id: doc.id }
-            })
-            commit('setDrives', tempDrives)
-          }
-        ).catch((err) => { commit('setError', err, { root: true }) })
+      drivesRef
+        .get()
+        .then(querySnapshot => {
+          let tempDrives = {}
+          querySnapshot.forEach(doc => {
+            tempDrives[doc.id] = { ...doc.data(), id: doc.id }
+          })
+          commit('setDrives', tempDrives)
+        })
+        .catch(err => {
+          commit('setError', err, { root: true })
+        })
     },
-    loadEquipment ({commit}, payload) {
+    loadEquipment ({ commit }, payload) {
       let equipmentRef = firebase.firestore().collection('characters/' + payload + '/equipment')
-      equipmentRef.get()
-        .then(
-          (querySnapshot) => {
-            let tempEquipment = {}
-            querySnapshot.forEach(
-              (doc) => {
-                tempEquipment[doc.id] = {...doc.data(), id: doc.id}
-              }
-            )
-            commit('setEquipment', tempEquipment)
-          }
-        ).catch((err) => { commit('setError', err, { root: true }) })
+      equipmentRef
+        .get()
+        .then(querySnapshot => {
+          let tempEquipment
+          querySnapshot.forEach(doc => {
+            tempEquipment[doc.id] = { ...doc.data(), id: doc.id }
+            commit('setEquipment', tempEquipment[doc.id])
+          })
+        })
+        .catch(err => {
+          commit('setError', err, { root: true })
+        })
     },
-    setName ({commit}, payload) {
+    setName ({ commit }, payload) {
       commit('setClassName', payload)
     },
-    setExampleNames ({commit}, payload) {
+    setExampleNames ({ commit }, payload) {
       commit('setExampleNames', payload)
     },
-    setFlavorText ({commit}, payload) {
+    setFlavorText ({ commit }, payload) {
       commit('setFlavorText', payload)
     },
-    promptDelete ({commit}, payload) {
+    promptDelete ({ commit }, payload) {
       commit('promptDelete', payload)
     },
-    setDeleteTarget ({commit}, payload) {
+    setDeleteTarget ({ commit }, payload) {
       commit('setDeleteTarget', payload)
     },
-    add ({commit, dispatch, state}, payload) {
+    add ({ commit, dispatch, state }, payload) {
       commit('clearError', null, { root: true })
-      firebase.firestore().collection('characters/' + state.classId + '/' + payload.collection).doc(_.camelCase(payload.title)).set(payload)
-        .then(
-          (docRef) => {
-            dispatch('load' + _.startCase(payload.collection), state.classId)
-            commit('setSnackbar', { show: true, color: 'success', text: 'Addition successful', timeout: 4000 }, { root: true })
-          }
-        )
-        .catch(
-          (error) => {
-            commit('setError', error, { root: true })
-          }
-        )
-    },
-    save ({commit, state, dispatch}, payload) {
-      commit('clearError', null, { root: true })
-      firebase.firestore().collection('characters/' + state.classId + '/' + payload.collection).doc(payload.id).set(payload)
-      .then(
-        (docRef) => {
+      firebase
+        .firestore()
+        .collection('characters/' + state.classId + '/' + payload.collection)
+        .doc(_.camelCase(payload.title))
+        .set(payload)
+        .then(docRef => {
           dispatch('load' + _.startCase(payload.collection), state.classId)
-          commit('setSnackbar', { show: true, color: 'success', text: 'Save successful', timeout: 4000 }, { root: true })
-        }
-      )
-      .catch(
-        (error) => {
+          commit(
+            'setSnackbar',
+            { show: true, color: 'success', text: 'Addition successful', timeout: 4000 },
+            { root: true }
+          )
+        })
+        .catch(error => {
           commit('setError', error, { root: true })
-        }
-      )
+        })
     },
-    delete ({commit, state, dispatch}, payload) {
+    save ({ commit, state, dispatch }, payload) {
       commit('clearError', null, { root: true })
-      firebase.firestore().doc('characters/' + state.classId + '/' + state.deleteTarget.collection + '/' + state.deleteTarget.id).delete()
-        .then(
-          () => {
-            commit('setSnackbar', { show: true, color: 'success', text: 'Removal successful', timeout: 4000 }, { root: true })
-            dispatch('load' + _.startCase(state.deleteTarget.collection), state.classId)
-            commit('promptDelete', false)
-          }
-        )
-        .catch(
-          (error) => {
-            commit('setError', error, { root: true })
-          }
-        )
+      firebase
+        .firestore()
+        .collection('characters/' + state.classId + '/' + payload.collection)
+        .doc(payload.id)
+        .set(payload)
+        .then(docRef => {
+          dispatch('load' + _.startCase(payload.collection), state.classId)
+          commit(
+            'setSnackbar',
+            { show: true, color: 'success', text: 'Save successful', timeout: 4000 },
+            { root: true }
+          )
+        })
+        .catch(error => {
+          commit('setError', error, { root: true })
+        })
     },
-    addBond ({commit, state}, payload) {
+    delete ({ commit, state, dispatch }, payload) {
+      commit('clearError', null, { root: true })
+      firebase
+        .firestore()
+        .doc('characters/' + state.classId + '/' + state.deleteTarget.collection + '/' + state.deleteTarget.id)
+        .delete()
+        .then(() => {
+          commit(
+            'setSnackbar',
+            { show: true, color: 'success', text: 'Removal successful', timeout: 4000 },
+            { root: true }
+          )
+          dispatch('load' + _.startCase(state.deleteTarget.collection), state.classId)
+          commit('promptDelete', false)
+        })
+        .catch(error => {
+          commit('setError', error, { root: true })
+        })
+    },
+    addBond ({ commit, state }, payload) {
       let tempBonds = state.bonds
       tempBonds.push(payload)
       commit('setBonds', _.uniq(tempBonds))
     },
-    removeBond ({commit, state}, payload) {
+    removeBond ({ commit, state }, payload) {
       commit('setBonds', _.without(state.bonds, payload))
     },
-    setStartingBonds ({commit}, payload) {
+    setStartingBonds ({ commit }, payload) {
       commit('setStartingBonds', payload)
     },
-    setMaximumLoad ({commit}, payload) {
+    setMaximumLoad ({ commit }, payload) {
       commit('setMaximumLoad', payload)
     },
-    setMaximumHP ({commit}, payload) {
+    setMaximumHP ({ commit }, payload) {
       commit('setMaximumHP', payload)
     },
-    setDamageMod ({commit}, payload) {
+    setDamageMod ({ commit }, payload) {
       commit('setDamageMod', payload)
     },
-    setLook ({commit, state}, payload) {
+    setLook ({ commit, state }, payload) {
       let tempLooks = state.looks
       commit('setLooks', _.set(tempLooks, _.keys(payload)[0], _.values(payload)[0]))
     }
@@ -302,8 +316,17 @@ const characterAdmin = {
     damageMod (state) {
       return state.damageMod
     },
-    equipment (state) {
-      return state.equipment
+    equipmentGroup1 (state) {
+      return state.equipment.group1
+    },
+    equipmentGroup2 (state) {
+      return state.equipment.group2
+    },
+    equipmentGroup3 (state) {
+      return state.equipment.group3
+    },
+    equipmentStartingEquipment (state) {
+      return state.equipment.startingEquipment
     },
     deleting (state) {
       return state.deleting

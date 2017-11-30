@@ -23,7 +23,7 @@
         <CAFlatStats />
       </v-flex>
       <v-flex md12>
-        <CAEquipment />
+        <CAEquipmentList />
       </v-flex>
     </v-layout>
     <v-btn fab fixed bottom right color="accent" @click="updateBaseInfo">
@@ -51,7 +51,7 @@ import CADetails from '@/components/CharactersAdmin/CADetails'
 import CABonds from '@/components/CharactersAdmin/CABonds'
 import CALooks from '@/components/CharactersAdmin/CALooks'
 import CAFlatStats from '@/components/CharactersAdmin/CAFlatStats'
-import CAEquipment from '@/components/CharactersAdmin/CAEquipment'
+import CAEquipmentList from '@/components/CharactersAdmin/CAEquipmentList'
 import { VueEditor } from 'vue2-editor'
 
 export default {
@@ -100,7 +100,7 @@ export default {
     CABonds,
     CALooks,
     CAFlatStats,
-    CAEquipment
+    CAEquipmentList
   },
   props: ['classId'],
   created () {
@@ -117,6 +117,9 @@ export default {
     },
     cancelDelete () {
       this.$store.dispatch('characterAdmin/promptDelete', false)
+    },
+    onDismissed () {
+      this.$store.dispatch('clearError')
     }
   }
 }
