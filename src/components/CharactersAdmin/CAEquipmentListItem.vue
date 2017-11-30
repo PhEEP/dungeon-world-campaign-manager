@@ -3,7 +3,6 @@
       xs12
       sm6
       md3
-      v-if="classEquipmentGroup"
     >
       <h5>
         {{ this.name }}
@@ -24,7 +23,7 @@
         v-for="n in 5"
         :key="classEquipmentGroup.id + 'line' + n"
         v-bind:items="equipment"
-        v-model="classEquipmentGroup.list[n]"
+        v-model="classEquipmentGroup.list[n-1]"
         item-text="name"
         item-value="id"
         multiple
@@ -44,6 +43,12 @@
           </v-chip>
         </template>
       </v-select>
+      <v-btn
+        @click="saveEquipment(classEquipmentGroup)"
+        color="success"
+      >
+        Save group
+      </v-btn>
     </v-flex>
 </template>
 
@@ -59,7 +64,12 @@ export default {
       return this.$store.getters['equipmentAdmin/equipment']
     },
     classEquipmentGroup () {
-      return this.$store.getters['characterAdmin/equipment' + this.$_.startCase(this.id)]
+      return this.$store.getters['characterAdmin/equipment' + this.id]
+    }
+  },
+  methods: {
+    saveEquipment (val) {
+      this.$store.dispatch('characterAdmin/save', {...val, collection: 'equipment'})
     }
   }
 }

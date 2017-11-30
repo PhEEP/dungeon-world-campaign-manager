@@ -26,10 +26,54 @@ const characterAdmin = {
     deleting: false,
     deleteTarget: {},
     equipment: {
-      startingEquipment: { id: 'startingEquipment', list: [[], [], [], [], []], text: '', limit: 0 },
-      group1: { id: 'group1', list: [[], [], [], [], []], text: '', limit: 0 },
-      group2: { id: 'group2', list: [[], [], [], [], []], text: '', limit: 0 },
-      group3: { id: 'group3', list: [[], [], [], [], []], text: '', limit: 0 }
+      startingEquipment: {
+        id: 'startingEquipment',
+        list: {
+          0: [],
+          1: [],
+          2: [],
+          3: [],
+          4: []
+        },
+        text: '',
+        limit: 0
+      },
+      group1: {
+        id: 'group1',
+        list: {
+          0: [],
+          1: [],
+          2: [],
+          3: [],
+          4: []
+        },
+        text: '',
+        limit: 0
+      },
+      group2: {
+        id: 'group2',
+        list: {
+          0: [],
+          1: [],
+          2: [],
+          3: [],
+          4: []
+        },
+        text: '',
+        limit: 0
+      },
+      group3: {
+        id: 'group3',
+        list: {
+          0: [],
+          1: [],
+          2: [],
+          3: [],
+          4: []
+        },
+        text: '',
+        limit: 0
+      }
     }
   },
   mutations: {
@@ -65,8 +109,8 @@ const characterAdmin = {
     setBonds (state, payload) {
       state.bonds = payload
     },
-    // if payload can be interpreted as Integer, use it
-    // otherwise default to `0`
+        // if payload can be interpreted as Integer, use it
+        // otherwise default to `0`
     setStartingBonds (state, payload) {
       state.startingBonds = _.defaultTo(_.toInteger(payload), 0)
     },
@@ -108,13 +152,24 @@ const characterAdmin = {
       }
       let charRef = firebase.firestore().doc('characters/' + state.classId)
       charRef
-        .update(baseInfo)
-        .then(() => {
-          commit('setSnackbar', { show: true, color: 'success', timeout: 4000, text: 'Updates made' }, { root: true })
-        })
-        .catch(error => {
-          commit('setError', error)
-        })
+                .update(baseInfo)
+                .then(() => {
+                  commit(
+                        'setSnackbar',
+                    {
+                      show: true,
+                      color: 'success',
+                      timeout: 4000,
+                      text: 'Updates made'
+                    },
+                    {
+                      root: true
+                    }
+                    )
+                })
+                .catch(error => {
+                  commit('setError', error)
+                })
     },
     loadClassData ({ commit, dispatch }, payload) {
       let charRef = firebase.firestore().doc('characters/' + payload)
@@ -140,47 +195,62 @@ const characterAdmin = {
     loadBackgrounds ({ commit }, payload) {
       let bgRef = firebase.firestore().collection('characters/' + payload + '/backgrounds')
       bgRef
-        .get()
-        .then(querySnapshot => {
-          let tempBGs = {}
-          querySnapshot.forEach(doc => {
-            tempBGs[doc.id] = { ...doc.data(), id: doc.id }
-          })
-          commit('setBackgrounds', tempBGs)
-        })
-        .catch(err => {
-          commit('setError', err, { root: true })
-        })
+                .get()
+                .then(querySnapshot => {
+                  let tempBGs = {}
+                  querySnapshot.forEach(doc => {
+                    tempBGs[doc.id] = {
+                      ...doc.data(),
+                      id: doc.id
+                    }
+                  })
+                  commit('setBackgrounds', tempBGs)
+                })
+                .catch(err => {
+                  commit('setError', err, {
+                    root: true
+                  })
+                })
     },
     loadDrives ({ commit }, payload) {
       let drivesRef = firebase.firestore().collection('characters/' + payload + '/drives')
       drivesRef
-        .get()
-        .then(querySnapshot => {
-          let tempDrives = {}
-          querySnapshot.forEach(doc => {
-            tempDrives[doc.id] = { ...doc.data(), id: doc.id }
-          })
-          commit('setDrives', tempDrives)
-        })
-        .catch(err => {
-          commit('setError', err, { root: true })
-        })
+                .get()
+                .then(querySnapshot => {
+                  let tempDrives = {}
+                  querySnapshot.forEach(doc => {
+                    tempDrives[doc.id] = {
+                      ...doc.data(),
+                      id: doc.id
+                    }
+                  })
+                  commit('setDrives', tempDrives)
+                })
+                .catch(err => {
+                  commit('setError', err, {
+                    root: true
+                  })
+                })
     },
     loadEquipment ({ commit }, payload) {
       let equipmentRef = firebase.firestore().collection('characters/' + payload + '/equipment')
       equipmentRef
-        .get()
-        .then(querySnapshot => {
-          let tempEquipment
-          querySnapshot.forEach(doc => {
-            tempEquipment[doc.id] = { ...doc.data(), id: doc.id }
-            commit('setEquipment', tempEquipment[doc.id])
-          })
-        })
-        .catch(err => {
-          commit('setError', err, { root: true })
-        })
+                .get()
+                .then(querySnapshot => {
+                  let tempEquipment
+                  querySnapshot.forEach(doc => {
+                    tempEquipment[doc.id] = {
+                      ...doc.data(),
+                      id: doc.id
+                    }
+                    commit('setEquipment', tempEquipment[doc.id])
+                  })
+                })
+                .catch(err => {
+                  commit('setError', err, {
+                    root: true
+                  })
+                })
     },
     setName ({ commit }, payload) {
       commit('setClassName', payload)
@@ -198,61 +268,94 @@ const characterAdmin = {
       commit('setDeleteTarget', payload)
     },
     add ({ commit, dispatch, state }, payload) {
-      commit('clearError', null, { root: true })
+      commit('clearError', null, {
+        root: true
+      })
       firebase
-        .firestore()
-        .collection('characters/' + state.classId + '/' + payload.collection)
-        .doc(_.camelCase(payload.title))
-        .set(payload)
-        .then(docRef => {
-          dispatch('load' + _.startCase(payload.collection), state.classId)
-          commit(
-            'setSnackbar',
-            { show: true, color: 'success', text: 'Addition successful', timeout: 4000 },
-            { root: true }
-          )
-        })
-        .catch(error => {
-          commit('setError', error, { root: true })
-        })
+                .firestore()
+                .collection('characters/' + state.classId + '/' + payload.collection)
+                .doc(_.camelCase(payload.title))
+                .set(payload)
+                .then(docRef => {
+                  dispatch('load' + _.startCase(payload.collection), state.classId)
+                  commit(
+                        'setSnackbar',
+                    {
+                      show: true,
+                      color: 'success',
+                      text: 'Addition successful',
+                      timeout: 4000
+                    },
+                    {
+                      root: true
+                    }
+                    )
+                })
+                .catch(error => {
+                  commit('setError', error, {
+                    root: true
+                  })
+                })
     },
     save ({ commit, state, dispatch }, payload) {
-      commit('clearError', null, { root: true })
+      commit('clearError', null, {
+        root: true
+      })
       firebase
-        .firestore()
-        .collection('characters/' + state.classId + '/' + payload.collection)
-        .doc(payload.id)
-        .set(payload)
-        .then(docRef => {
-          dispatch('load' + _.startCase(payload.collection), state.classId)
-          commit(
-            'setSnackbar',
-            { show: true, color: 'success', text: 'Save successful', timeout: 4000 },
-            { root: true }
-          )
-        })
-        .catch(error => {
-          commit('setError', error, { root: true })
-        })
+                .firestore()
+                .collection('characters/' + state.classId + '/' + payload.collection)
+                .doc(payload.id)
+                .set(payload)
+                .then(docRef => {
+                  dispatch('load' + _.startCase(payload.collection), state.classId)
+                  commit(
+                        'setSnackbar',
+                    {
+                      show: true,
+                      color: 'success',
+                      text: 'Save successful',
+                      timeout: 4000
+                    },
+                    {
+                      root: true
+                    }
+                    )
+                })
+                .catch(error => {
+                  commit('setError', error, {
+                    root: true
+                  })
+                })
     },
     delete ({ commit, state, dispatch }, payload) {
-      commit('clearError', null, { root: true })
+      commit('clearError', null, {
+        root: true
+      })
       firebase
-        .firestore()
-        .doc('characters/' + state.classId + '/' + state.deleteTarget.collection + '/' + state.deleteTarget.id)
-        .delete()
-        .then(() => {
-          commit(
-            'setSnackbar',
-            { show: true, color: 'success', text: 'Removal successful', timeout: 4000 },
-            { root: true }
-          )
-          dispatch('load' + _.startCase(state.deleteTarget.collection), state.classId)
-          commit('promptDelete', false)
-        })
-        .catch(error => {
-          commit('setError', error, { root: true })
-        })
+                .firestore()
+                .doc('characters/' + state.classId + '/' + state.deleteTarget.collection + '/' + state.deleteTarget.id)
+                .delete()
+                .then(() => {
+                  commit(
+                        'setSnackbar',
+                    {
+                      show: true,
+                      color: 'success',
+                      text: 'Removal successful',
+                      timeout: 4000
+                    },
+                    {
+                      root: true
+                    }
+                    )
+                  dispatch('load' + _.startCase(state.deleteTarget.collection), state.classId)
+                  commit('promptDelete', false)
+                })
+                .catch(error => {
+                  commit('setError', error, {
+                    root: true
+                  })
+                })
     },
     addBond ({ commit, state }, payload) {
       let tempBonds = state.bonds
@@ -316,16 +419,16 @@ const characterAdmin = {
     damageMod (state) {
       return state.damageMod
     },
-    equipmentGroup1 (state) {
+    equipmentgroup1 (state) {
       return state.equipment.group1
     },
-    equipmentGroup2 (state) {
+    equipmentgroup2 (state) {
       return state.equipment.group2
     },
-    equipmentGroup3 (state) {
+    equipmentgroup3 (state) {
       return state.equipment.group3
     },
-    equipmentStartingEquipment (state) {
+    equipmentstartingEquipment (state) {
       return state.equipment.startingEquipment
     },
     deleting (state) {
